@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Среда TARIS: узлы и кластеры</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7F6; --panel:#FFFFFF; --ink:#1C2430; --muted:#5F6B78; --line:#D5DBE0;
+  --cluster:#D2332F; --cluster-soft:rgba(210,51,47,.08);
+  --risk-low:#BFE3D6; --risk-mid:#F1E2A8; --risk-high:#F3B49C;
+  --down:#8A96A3; --accent:#2C5FA8;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14181D; --panel:#1B2027; --ink:#E5E9ED; --muted:#9AA6B2; --line:#2D353F;
+    --cluster:#FF6A5E; --cluster-soft:rgba(255,106,94,.09);
+    --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
+    --down:#6E7A87; --accent:#7EA8E6; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --panel:#1B2027; --ink:#E5E9ED; --muted:#9AA6B2; --line:#2D353F;
+  --cluster:#FF6A5E; --cluster-soft:rgba(255,106,94,.09);
+  --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
+  --down:#6E7A87; --accent:#7EA8E6; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Golos Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size:15px; line-height:1.45; font-feature-settings:"tnum" 1}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--panel)}
+button,select,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--panel);
+  border-bottom:1px solid var(--line); padding:12px clamp(12px,3vw,28px)}
+.bar h1{font-size:20px; font-weight:600; margin:0 0 8px; letter-spacing:-.01em}
+.controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px}
+.btn{border:1.5px solid var(--ink); background:transparent; border-radius:999px; padding:5px 14px; cursor:pointer}
+.btn.primary{background:var(--ink); color:var(--panel); min-width:84px}
+.btn:disabled{opacity:.4; cursor:default}
+.clock{font-weight:600; min-width:150px}
+.slider{flex:1 1 220px; min-width:160px; accent-color:var(--ink)}
+label.check{display:flex; align-items:center; gap:6px; cursor:pointer}
+select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel); padding:4px 8px}
+.summary{margin:8px 0 0; color:var(--muted); font-size:14px}
+
+.layout{display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:18px; padding:18px clamp(12px,3vw,28px) 8px}
+@media (max-width:980px){ .layout{grid-template-columns:minmax(0,1fr)} }
+.map{display:flex; flex-wrap:wrap; gap:26px 30px; align-items:flex-start; min-width:0}
+
+.cluster{position:relative; padding:44px 16px 22px 18px; min-width:300px}
+.cluster .outline{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
+.cluster .outline path{fill:var(--cluster-soft); stroke:var(--cluster); stroke-width:2.2; stroke-linejoin:round}
+.cluster.off .outline path{stroke-dasharray:7 6}
+.cl-head{position:absolute; top:6px; left:150px; color:var(--cluster); line-height:1.3; white-space:nowrap}
+.cl-name{font-weight:600}
+.cl-sub{font-size:13px}
+.cl-toggle{border:1.5px solid var(--cluster); color:var(--cluster); background:var(--panel); border-radius:999px; padding:1px 10px; margin-left:6px; cursor:pointer; font-size:13px}
+.cluster.off .cl-toggle{background:var(--cluster); color:var(--panel)}
+
+.node{display:flex; align-items:center; gap:12px; margin:10px 0; position:relative; z-index:1}
+.node:nth-child(even){margin-left:58px}
+.solo .node{margin-left:0}
+.dot{flex:0 0 auto; width:54px; height:44px; overflow:visible}
+.dot .fill{fill:var(--risk-mid); transition:fill .3s}
+.dot .ring{fill:none; stroke:var(--ink); stroke-width:2.4; stroke-linecap:round}
+.node.r-low .dot .fill{fill:var(--risk-low)} .node.r-high .dot .fill{fill:var(--risk-high)}
+.node.down .dot .fill{fill:transparent}
+.node.down .dot .ring{stroke:var(--down); stroke-dasharray:4 5}
+.node.gone{opacity:.45} .node.gone .dot .ring{stroke:var(--down)}
+.node.notyet{opacity:.35}
+.dot .cross{stroke:var(--down); stroke-width:2; display:none} .node.gone .dot .cross{display:block}
+.card{font-size:13.5px; line-height:1.35; background:color-mix(in srgb, var(--paper) 82%, transparent); border-radius:6px; padding:2px 4px}
+.l1{display:flex; align-items:center; gap:8px}
+.nm{font-weight:600; font-size:14.5px}
+.tg{border:1.5px solid var(--ink); background:transparent; border-radius:999px; padding:0 9px; font-size:12.5px; cursor:pointer}
+.tg[aria-pressed="true"]{background:var(--ink); color:var(--panel)}
+.tg:disabled{opacity:.35; cursor:default}
+.state.isdown{color:var(--cluster); font-weight:500}
+.muted{color:var(--muted)}
+.truth{display:none; color:var(--accent)}
+body.truth-on .truth{display:inline}
+
+.log{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; align-self:start;
+  position:sticky; top:calc(env(safe-area-inset-top,0px) + 130px); max-height:calc(100vh - 160px); overflow:auto}
+@media (max-width:980px){ .log{position:static; max-height:none} }
+.log h2{font-size:15px; margin:0 0 6px}
+.log ol{list-style:none; margin:0; padding:0; font-size:13px}
+.log li{padding:5px 0; border-top:1px solid var(--line)}
+.log li:first-child{border-top:none}
+.log .t{color:var(--muted); display:block; font-size:12px}
+.log li.hot{color:var(--cluster)}
+.log li.me{color:var(--accent)}
+.legend{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:13px; color:var(--muted); margin-top:12px}
+.sw{display:inline-block; width:12px; height:12px; border-radius:50%; vertical-align:-1px; margin-right:5px; border:1.5px solid var(--ink)}
+.notes{padding:4px clamp(12px,3vw,28px) 28px; color:var(--muted); font-size:13.5px; max-width:900px}
+.notes p{margin:6px 0}
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>Среда TARIS: узлы и кластеры</h1>
+  <div class="controls">
+    <button class="btn primary" id="play">Пуск</button>
+    <select id="speed" aria-label="Скорость времени">
+      <option value="0.0416667">1 час в секунду</option>
+      <option value="0.25" selected>6 часов в секунду</option>
+      <option value="1">1 сутки в секунду</option>
+      <option value="7">1 неделя в секунду</option>
+    </select>
+    <span class="clock" id="clock">сутки 0, 00:00</span>
+    <input class="slider" id="slider" type="range" min="0" max="365" step="0.01" value="0" aria-label="Время">
+    <button class="btn" id="nextShock">К следующему шоку</button>
+    <label class="check"><input type="checkbox" id="truth"> Показать истину</label>
+    <button class="btn" id="reset">Сбросить вмешательства</button>
+  </div>
+  <p class="summary" id="summary"></p>
+</header>
+<main class="layout">
+  <section class="map" id="map" aria-label="Узлы и кластеры"></section>
+  <aside class="log" aria-live="polite">
+    <h2>Журнал событий</h2>
+    <ol id="log"><li class="muted">Нажмите «Пуск» или выключите узел или кластер.</li></ol>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--risk-low)"></span>риск ниже среднего</span>
+      <span><span class="sw" style="background:var(--risk-mid)"></span>около среднего</span>
+      <span><span class="sw" style="background:var(--risk-high)"></span>выше среднего</span>
+      <span><span class="sw" style="background:transparent;border-style:dashed;border-color:var(--down)"></span>в простое</span>
+    </div>
+  </aside>
+</main>
+<footer class="notes">
+  <p>Страховой случай — простой длиннее франшизы (15 минут). Более короткие сбои считаются микропрерываниями: они снижают время работы узла, но случаем не являются. Простой дольше 24 часов (порог переразмещения) сеть приравнивает к утрате фрагментов узла.</p>
+  <p>Оценка узла — наблюдаемая частота страховых случаев, сглаженная по Бюльману–Штраубу к среднему по сети: у нового узла доверие к собственной истории близко к нулю и растёт с опытом. «Показать истину» открывает то, чего сеть не видит: истинную частоту, владельца и провайдера узла.</p>
+  <p id="origin"></p>
+</footer>
+<script id="world" type="application/json">__DATA__</script>
+<script>
+(() => {
+"use strict";
+const W = JSON.parse(document.getElementById("world").textContent);
+const D = W.cfg.d, TREP = W.cfg.T_rep, H = W.cfg.horizon, K = 1 / W.cfg.a;
+const PRIO = {micro:1, own:2, storm:3, shock:4, cluster:5, manual:6, leave:7};
+const SRC = {micro:"микропрерывание", own:"собственный простой", storm:"буря в кластере", shock:"шок кластера",
+             cluster:"кластер выключен вручную", manual:"выключен вручную", leave:"ушёл из сети"};
+const nodes = W.nodes;
+const byId = new Map(nodes.map(n => [n.id, n]));
+nodes.forEach(n => { n.manual = []; n.clusterOff = []; rebuild(n); });
+
+// ---------- интервалы
+function rebuild(n){
+  const all = n.iv.map(v => ({s:v[0], e:v[1], src:v[2]}))
+    .concat(n.manual.map(v => ({s:v.s, e:v.e ?? H, src:"manual"})))
+    .concat(n.clusterOff.map(v => ({s:v.s, e:v.e ?? H, src:"cluster"})));
+  all.sort((a,b) => a.s - b.s);
+  const m = [];
+  for (const x of all){
+    const last = m[m.length-1];
+    if (last && x.s <= last.e){ if (x.e > last.e) last.e = x.e; if (PRIO[x.src] > PRIO[last.src]) last.src = x.src; }
+    else m.push({s:x.s, e:x.e, src:x.src});
+  }
+  n.m = m;
+  n.S = Float64Array.from(m, x => x.s); n.E = Float64Array.from(m, x => Math.min(x.e, H));
+  n.P = new Float64Array(m.length + 1);
+  for (let k = 0; k < m.length; k++) n.P[k+1] = n.P[k] + (m[k].src === "leave" ? 0 : n.E[k] - n.S[k]);
+}
+function lastStart(n, t){ let lo = 0, hi = n.S.length - 1, r = -1; while (lo <= hi){ const mid = (lo+hi) >> 1; if (n.S[mid] <= t){ r = mid; lo = mid+1; } else hi = mid-1; } return r; }
+
+function nodeState(n, t){
+  const from = Math.max(0, n.join), to = n.leave ?? Infinity;
+  if (t < n.join) return {notyet:true};
+  const tt = Math.min(t, to);
+  const k = lastStart(n, tt);
+  let down = false, src = null, since;
+  if (k >= 0 && tt < n.E[k] && n.m[k].src !== "leave"){ down = true; src = n.m[k].src; since = n.S[k]; }
+  else since = k >= 0 ? Math.max(n.E[k], from) : from;
+  let downtime = k >= 0 ? n.P[k] + (n.m[k].src === "leave" ? 0 : Math.min(tt, n.E[k]) - n.S[k]) : 0;
+  let events = 0;
+  for (let j = 0; j <= k; j++){ if (n.m[j].src === "leave") continue; if (Math.min(n.E[j], tt) - n.S[j] > D) events++; }
+  const alive = Math.max(tt - from, 0);
+  return {gone: t >= to, down, src, since, streak: tt - since, downtime, events, years: alive / 365, alive};
+}
+
+// ---------- форматирование
+const nf1 = new Intl.NumberFormat("ru-RU", {minimumFractionDigits:1, maximumFractionDigits:1});
+function dur(x){
+  const m = Math.round(x * 1440);
+  if (m < 60) return `${m} мин`;
+  if (m < 1440) return `${Math.floor(m/60)} ч ${m % 60} мин`;
+  return `${Math.floor(m/1440)} д ${Math.floor((m % 1440)/60)} ч`;
+}
+function clock(t){ const d = Math.floor(t), m = Math.floor((t - d) * 1440); return `сутки ${d}, ${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`; }
+
+// ---------- рисованные контуры
+function rnd(seed){ let s = seed * 9301 + 49297; return () => (s = (s * 9301 + 49297) % 233280) / 233280; }
+function dotPath(seed){
+  const r = rnd(seed), cx = 27, cy = 22, R = 17, a0 = r() * 6.28, pts = [];
+  for (let i = 0; i <= 40; i++){ const a = a0 + i / 40 * (6.28 + .45), rr = R * (1 + .06 * Math.sin(a * 2 + seed) + (i > 36 ? .08 : 0));
+    pts.push(`${(cx + rr * Math.cos(a) * 1.08).toFixed(1)},${(cy + rr * Math.sin(a) * .92).toFixed(1)}`); }
+  return "M" + pts.join(" L");
+}
+function blobPath(x, y, w, h, seed){
+  const r = rnd(seed), N = 14, cx = x + w/2, cy = y + h/2, P = [];
+  for (let i = 0; i < N; i++){ const a = i / N * Math.PI * 2, f = 1 + .05 * Math.sin(3*a + seed) + .03 * (r() - .5);
+    P.push([cx + w/2 * f * Math.cos(a), cy + h/2 * f * Math.sin(a)]); }
+  let d = `M${P[0][0].toFixed(1)},${P[0][1].toFixed(1)}`;
+  for (let i = 0; i < N; i++){
+    const p0 = P[(i-1+N)%N], p1 = P[i], p2 = P[(i+1)%N], p3 = P[(i+2)%N];
+    const c1 = [p1[0] + (p2[0]-p0[0])/6, p1[1] + (p2[1]-p0[1])/6], c2 = [p2[0] - (p3[0]-p1[0])/6, p2[1] - (p3[1]-p1[1])/6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d + "Z";
+}
+
+// ---------- построение карты
+const map = document.getElementById("map");
+const dcs = new Map();
+nodes.forEach(n => { if (!dcs.has(n.dc)) dcs.set(n.dc, []); dcs.get(n.dc).push(n); });
+const order = [...dcs.entries()].sort((a,b) => b[1].length - a[1].length);
+const NS = "http://www.w3.org/2000/svg";
+const clusters = [];
+function nodeEl(n){
+  const el = document.createElement("div"); el.className = "node"; n.el = el;
+  el.innerHTML = `<svg class="dot" viewBox="0 0 54 44" aria-hidden="true"><ellipse class="fill" cx="27" cy="22" rx="17" ry="15"/><path class="ring" d="${dotPath(n.id + 3)}"/><path class="cross" d="M12,8 L42,36 M42,8 L12,36"/></svg>
+  <div class="card"><div class="l1"><span class="nm">Узел ${n.id}</span><button class="tg" aria-pressed="false">выключить</button></div>
+  <div class="l2"><span class="state"></span> <span class="muted">|</span> <span class="tot muted"></span></div>
+  <div class="l3"><span class="score"></span><span class="truth"></span></div></div>`;
+  el.title = `${n.hw}`;
+  n.$state = el.querySelector(".state"); n.$tot = el.querySelector(".tot"); n.$score = el.querySelector(".score");
+  n.$truth = el.querySelector(".truth"); n.$tg = el.querySelector(".tg");
+  n.$tg.addEventListener("click", () => toggleNode(n));
+  return el;
+}
+for (const [dc, list] of order){
+  list.sort((a,b) => a.id - b.id);
+  const box = document.createElement("div");
+  if (list.length > 1){
+    box.className = "cluster";
+    box.innerHTML = `<svg class="outline" aria-hidden="true"><path/></svg>
+      <div class="cl-head"><span class="cl-name">Кластер: дата-центр ${dc}</span><button class="cl-toggle" aria-pressed="false">выключить кластер</button><br><span class="cl-sub"></span></div>`;
+    const c = {dc, list, box, off:false, $btn: box.querySelector(".cl-toggle"), $sub: box.querySelector(".cl-sub"), $path: box.querySelector(".outline path")};
+    c.$btn.addEventListener("click", () => toggleCluster(c));
+    clusters.push(c);
+  } else {
+    box.className = "solo"; box.style.paddingTop = "44px";
+    list[0].solo = dc;
+  }
+  list.forEach(n => box.appendChild(nodeEl(n)));
+  map.appendChild(box);
+}
+function drawOutlines(){
+  for (const c of clusters){
+    const br = c.box.getBoundingClientRect();
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    c.list.forEach(n => { const r = n.el.querySelector(".dot").getBoundingClientRect();
+      x0 = Math.min(x0, r.left - br.left); y0 = Math.min(y0, r.top - br.top); x1 = Math.max(x1, r.right - br.left); y1 = Math.max(y1, r.bottom - br.top); });
+    const padX = 34, padY = 26;
+    c.$path.setAttribute("d", blobPath(x0 - padX, y0 - padY, (x1 - x0) + 2*padX + 40, (y1 - y0) + 2*padY, c.dc + 1));
+  }
+}
+new ResizeObserver(drawOutlines).observe(map);
+
+// ---------- вмешательства
+let t = 0, tPrev = 0, playing = false;
+const logEl = document.getElementById("log");
+function log(text, cls){
+  if (logEl.firstElementChild && logEl.firstElementChild.classList.contains("muted")) logEl.innerHTML = "";
+  const li = document.createElement("li"); if (cls) li.className = cls;
+  li.innerHTML = `<span class="t">${clock(t)}</span>${text}`;
+  logEl.prepend(li); while (logEl.children.length > 60) logEl.lastElementChild.remove();
+}
+function openIv(arr){ return arr.find(v => v.e === null); }
+function toggleNode(n){
+  const o = openIv(n.manual);
+  if (o){ o.e = t; log(`Узел ${n.id} включён вручную`, "me"); }
+  else { n.manual.push({s:t, e:null}); log(`Узел ${n.id} выключен вручную`, "me"); }
+  rebuild(n); render();
+}
+function toggleCluster(c){
+  if (c.off){ c.list.forEach(n => { const o = openIv(n.clusterOff); if (o) o.e = t; rebuild(n); }); c.off = false; log(`Кластер «дата-центр ${c.dc}» включён вручную`, "me"); }
+  else { c.list.forEach(n => { n.clusterOff.push({s:t, e:null}); rebuild(n); }); c.off = true; log(`Кластер «дата-центр ${c.dc}» выключен вручную: ${c.list.length} узл.`, "me"); }
+  render();
+}
+document.getElementById("reset").addEventListener("click", () => {
+  nodes.forEach(n => { n.manual = []; n.clusterOff = []; rebuild(n); }); clusters.forEach(c => c.off = false);
+  log("Все ручные вмешательства сброшены", "me"); render();
+});
+
+// ---------- журнал естественных событий
+const nodeEvents = [];
+nodes.forEach(n => {
+  if (n.join > 0) nodeEvents.push({t:n.join, text:`Узел ${n.id} подключился к сети`});
+  if (n.leave !== null) nodeEvents.push({t:n.leave, text:`Узел ${n.id} ушёл из сети`, hot:true});
+});
+W.shocks.forEach(s => {
+  const kind = s.ctype === "dc" ? `дата-центра ${s.cluster}` : (s.ctype === "provider" ? `провайдера ${s.cluster}` : `региона ${s.cluster}`);
+  nodeEvents.push({t:s.start, text:`Шок ${kind}: в простое ${s.n} узл.` + (s.destroyed ? ", данные уничтожены" : ""), hot:true});
+});
+function naturalLog(a, b){
+  if (b <= a || b - a > 10) return;
+  const items = [];
+  nodeEvents.forEach(e => { if (e.t > a && e.t <= b) items.push(e); });
+  nodes.forEach(n => n.m.forEach(x => {
+    if (x.src === "leave" || x.src === "manual" || x.src === "cluster") return;
+    const len = x.e - x.s;
+    if (len > D && x.s + D > a && x.s + D <= b) items.push({t:x.s + D, text:`Узел ${n.id}: простой дольше франшизы (${SRC[x.src]})`});
+    if (len > TREP && x.s + TREP > a && x.s + TREP <= b) items.push({t:x.s + TREP, text:`Узел ${n.id} в простое дольше 24 ч: сеть признаёт его фрагменты утраченными`, hot:true});
+    if (len > D && x.e > a && x.e <= b && x.e < H) items.push({t:x.e, text:`Узел ${n.id} вернулся после простоя ${dur(len)}`});
+  }));
+  items.sort((p,q) => p.t - q.t).forEach(e => { const keep = t; t = e.t; log(e.text, e.hot ? "hot" : ""); t = keep; });
+}
+
+// ---------- отрисовка
+const $clock = document.getElementById("clock"), $slider = document.getElementById("slider"), $summary = document.getElementById("summary");
+function render(){
+  $clock.textContent = clock(t); $slider.value = t;
+  const st = nodes.map(n => nodeState(n, t));
+  let ev = 0, yrs = 0, up = 0, dn = 0, gone = 0, here = 0;
+  st.forEach(s => { if (s.notyet) return; ev += s.events; yrs += s.years; if (s.gone) gone++; else { here++; if (s.down) dn++; else up++; } });
+  const prior = 12.2, rate = (ev + prior * 2) / (yrs + 2);
+  nodes.forEach((n, i) => {
+    const s = st[i], el = n.el;
+    el.classList.toggle("notyet", !!s.notyet); el.classList.toggle("gone", !!s.gone); el.classList.toggle("down", !!s.down && !s.gone);
+    n.$tg.disabled = !!(s.notyet || s.gone);
+    const manualOn = !!openIv(n.manual);
+    n.$tg.textContent = manualOn ? "включить" : "выключить"; n.$tg.setAttribute("aria-pressed", manualOn);
+    if (s.notyet){ n.$state.textContent = `подключится на сутках ${Math.ceil(n.join)}`; n.$state.className = "state"; n.$tot.textContent = ""; n.$score.textContent = ""; n.$truth.textContent = ""; el.classList.remove("r-low","r-high"); return; }
+    if (s.gone){ n.$state.textContent = "ушёл из сети"; n.$state.className = "state"; }
+    else if (s.down){ n.$state.textContent = `простой ${dur(s.streak)}: ${SRC[s.src]}` + (s.streak > TREP ? ", дольше 24 ч" : ""); n.$state.className = "state isdown"; }
+    else { n.$state.textContent = `работает ${dur(s.streak)}`; n.$state.className = "state"; }
+    const upShare = s.alive > 0 ? 100 * (1 - s.downtime / s.alive) : 100;
+    n.$tot.textContent = `в простое всего ${dur(s.downtime)}, работа ${nf1.format(upShare)}%`;
+    const w = s.years * rate, Z = w / (w + K), est = rate * (1 - Z) + (s.years > 0 ? Z * s.events / s.years : 0);
+    n.$score.textContent = `оценка ${nf1.format(est)} случая в год, доверие ${Math.round(Z * 100)}%`;
+    n.$truth.textContent = `; истина ${nf1.format(n.lam)} в год, владелец ${n.owner}, провайдер ${n.prov}` + (n.solo !== undefined ? `, дата-центр ${n.solo}` : "");
+    const r = est / rate; el.classList.toggle("r-low", r < 0.8); el.classList.toggle("r-high", r > 1.25);
+  });
+  clusters.forEach(c => {
+    const s = c.list.map(n => st[nodes.indexOf(n)]).filter(x => !x.notyet && !x.gone);
+    c.box.classList.toggle("off", c.off);
+    c.$btn.textContent = c.off ? "включить кластер" : "выключить кластер"; c.$btn.setAttribute("aria-pressed", c.off);
+    c.$sub.textContent = `в работе ${s.filter(x => !x.down).length} из ${s.length} узл.`;
+  });
+  $summary.textContent = `В сети ${here} узл.: работают ${up}, в простое ${dn}. Ушли из сети: ${gone}. Страховых случаев с начала года: ${ev}; средняя частота по сети ${nf1.format(rate)} в год.`;
+}
+
+// ---------- управление временем
+const $play = document.getElementById("play"), $speed = document.getElementById("speed");
+let lastFrame = null;
+function frame(ts){
+  if (!playing){ lastFrame = null; return; }
+  if (lastFrame !== null){
+    const dt = (ts - lastFrame) / 1000 * parseFloat($speed.value);
+    tPrev = t; t = Math.min(H, t + dt); naturalLog(tPrev, t); render();
+    if (t >= H){ playing = false; $play.textContent = "Пуск"; }
+  }
+  lastFrame = ts; requestAnimationFrame(frame);
+}
+$play.addEventListener("click", () => { playing = !playing; $play.textContent = playing ? "Пауза" : "Пуск"; if (playing) requestAnimationFrame(frame); });
+$slider.addEventListener("input", () => { t = parseFloat($slider.value); render(); });
+document.getElementById("truth").addEventListener("change", e => document.body.classList.toggle("truth-on", e.target.checked));
+document.getElementById("nextShock").addEventListener("click", () => {
+  const next = W.shocks.map(s => s.start).filter(x => x > t + 0.05).sort((a,b) => a - b)[0];
+  if (next === undefined){ log("Дальше шоков в этом году нет"); return; }
+  t = Math.max(0, next - 2/24); render(); log(`Перемотка: до шока 2 часа`, "me");
+});
+document.getElementById("origin").textContent = `Естественные события (простои, шоки, микропрерывания, уход узлов) сгенерированы Python-симулятором TARIS: сценарий S2, согласованный мир, зерно ${W.cfg.seed}, хэш конфигурации ${W.cfg.hash}. Страница добавляет к ним только ваши вмешательства.`;
+render(); requestAnimationFrame(drawOutlines);
+})();
+</script>
+</body>
+</html>
