@@ -95,7 +95,18 @@ class OraclePolicy(UniformPolicy):
         self.n_dc, self.n_prov, self.n_reg = world.cfg.n_dc, world.cfg.n_providers, world.cfg.n_regions
 
     def _choose_spread(self, rng, cand, m, held=()):
-        r = min(self.n - self.k, self.k - 1)
+        """Выбор с разнесением. Если при лимите r на регион и провайдера не набрать m узлов
+        (например, кластер-цель кризиса исключён), лимит ослабляется на 1, 2, ... — лучше
+        лишний фрагмент в регионе, чем недоразмещённый объект. Лимиты на дата-центр и на владельца
+        не ослабляются (общий владелец — это риск раскрытия)."""
+        r0 = min(self.n - self.k, self.k - 1)
+        for relax in range(self.n + 1):
+            out = self._choose_spread_r(rng, cand, m, held, r0 + relax, r0)
+            if out:
+                return out
+        return []
+
+    def _choose_spread_r(self, rng, cand, m, held, r, r_own):
         held = np.fromiter(held, int) if len(held) else np.empty(0, int)
         used_dc = np.zeros(self.n_dc, bool); used_dc[self.dc[held]] = True
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
@@ -109,7 +120,7 @@ class OraclePolicy(UniformPolicy):
         for _ in range(m):
             ok = (~used_dc[self.dc[cand]]) & (cp[self.prov[cand]] < r) & (cr[self.reg[cand]] < r)
             if co:
-                ok &= np.array([co.get(o, 0) < r for o in self.own[cand]]) if len(co) else ok
+                ok &= np.array([co.get(o, 0) < r_own for o in self.own[cand]]) if len(co) else ok
             ww = w * ok
             tot = ww.sum()
             if tot <= 0:
@@ -122,12 +133,15 @@ class OraclePolicy(UniformPolicy):
             w[j] = 0.0
         return out
 
+    def _cand(self, t, view):
+        return view.candidates()
+
     def place(self, obj, t, view):
-        return self._choose_spread(self._g if hasattr(self, "_g") else self._rng(view), view.candidates(), self.n)
+        return self._choose_spread(self._g if hasattr(self, "_g") else self._rng(view), self._cand(t, view), self.n)
 
     def on_epoch(self, t, view):
         self._g = self._rng(view)
-        cand = view.candidates()
+        cand = self._cand(t, view)
         reqs = []
         for obj in view.needs_repair():
             idx = sorted(view.missing(obj))
@@ -135,3 +149,55 @@ class OraclePolicy(UniformPolicy):
             if nodes:
                 reqs.append((obj, idx, nodes))
         return reqs
+
+
+class CrisisOraclePolicy(OraclePolicy):
+    """Оракул кризисов (пункт 3.9): оракул, который с начала окна предвестника знает тип, кластер-цель
+    и момент каждого предсказуемого кризиса. Пока кризис известен и не закончился, он поднимает тревогу,
+    не кладёт новые фрагменты на узлы-цели, а до момента кризиса переносит с них фрагменты.
+    О внезапных кризисах не знает, ложные тревоги отличает от кризисов. Верхняя граница для H8."""
+
+    def __init__(self, world, n: int = 15, gamma: float = 1.0):
+        super().__init__(world, n, gamma)
+        self.name = f"Оракул кризисов, n={n}"
+        cr = world.crises
+        self.known = cr[cr["predictable"] & ~cr["false_alarm"]].reset_index(drop=True)
+        self.targets = {e["id"]: e["targets"] for e in world.crisis.episodes}
+
+    def _active(self, t):
+        k = self.known
+        return k[(k["w0"] <= t) & (k["end"] > t)]
+
+    def _avoid(self, t) -> np.ndarray:
+        a = self._active(t)
+        if a.empty:
+            return np.empty(0, int)
+        return np.unique(np.concatenate([self.targets[i] for i in a["id"]]))
+
+    def _cand(self, t, view):
+        cand = view.candidates()
+        avoid = self._avoid(t)
+        return cand[~np.isin(cand, avoid)] if len(avoid) else cand
+
+    def alarm(self, t, view):
+        a = self._active(t)
+        a = a[a["tau"] > t]
+        return [dict(type=r.type, ctype=r.ctype, cluster=r.cluster, prob=1.0, horizon=r.tau - t + 1e-6)
+                for r in a.itertuples()]
+
+    def migrate(self, t, view):
+        a = self._active(t)
+        a = a[a["tau"] > t]
+        if a.empty:
+            return []
+        cand = self._cand(t, view)
+        out = []
+        for node in np.unique(np.concatenate([self.targets[i] for i in a["id"]])):
+            for obj, idx in view.on_node(int(node)):
+                if idx in view.migrating(obj):
+                    continue
+                held = view.holders(obj) | {to for o, _, to in out if o == obj}
+                to = self._choose_spread(self._g, cand, 1, held=held - {int(node)})
+                if to:
+                    out.append((obj, idx, to[0]))
+        return out

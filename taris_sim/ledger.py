@@ -149,6 +149,8 @@ class Ledger:
         self.owner_idx = {}
         self.mig_pending = {}                                    # объект -> номера фрагментов в переносе
         self.log_loss, self.log_repair, self.log_disc, self.log_migr, self.log_alarm = [], [], [], [], []
+        self.log_short = []                   # объекты, размещённые не полностью: (объект, t, размещено, нужно)
+        self.stalled = 0                      # объекто-эпохи, когда объект ждал восстановления, а политика его не запросила
         self.heap, self.seq = [], 0
 
     def _push(self, t, kind, payload):
@@ -313,13 +315,23 @@ class Ledger:
             for a in policy.alarm(float(t), view):
                 self.log_alarm.append((float(t), a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
                                        float(a.get("horizon", 1.0))))
-            self._repair(float(t), policy.on_epoch(float(t), view))
+            reqs = policy.on_epoch(float(t), view)
+            asked = {r[0] for r in reqs if r[1] and r[2]}
+            self.stalled += sum(1 for o in view.needs_repair() if o not in asked and view.missing(o))
+            self._repair(float(t), reqs)
             self._migrate(float(t), policy.migrate(float(t), view))
+            want = getattr(policy, "n", None)
             for obj in self.data.new_objects(t):
                 nodes = policy.place(int(obj), float(t), view)
                 self.obj_n[obj] = len(nodes)
                 for i, n in enumerate(nodes):
                     self._add_fragment(int(obj), i, int(n), float(t))
+                if want is not None and len(nodes) < want:
+                    self.log_short.append((int(obj), float(t), len(nodes), int(want)))
+                if len(nodes) < self.cfg.k and self.obj_lost_t[obj] == np.inf:
+                    # меньше k фрагментов с самого начала: объект не сохранён — это потеря
+                    self.obj_lost_t[obj] = float(t)
+                    self.log_loss.append((int(obj), float(t)))
             self._process(t + 1.0)
             n_created += int((created == t).sum())
             alive_objs = n_created - len(self.log_loss)
@@ -341,6 +353,8 @@ class RunResult:
         self.disclosures = pd.DataFrame(L.log_disc, columns=["obj", "owner", "t"])
         self.migrations = pd.DataFrame(L.log_migr, columns=["obj", "idx", "from", "to", "t", "traffic", "t_done", "ok"])
         self.alarms = pd.DataFrame(L.log_alarm, columns=["t", "type", "ctype", "cluster", "prob", "horizon"])
+        self.short_placements = pd.DataFrame(L.log_short, columns=["obj", "t", "placed", "wanted"])
+        self.stalled = L.stalled
         self.objects = L.data.objects.assign(n=L.obj_n, lost_t=L.obj_lost_t)
         self._L = L
 
@@ -367,6 +381,9 @@ class RunResult:
             "Трафик восстановления в год": float(self.repairs["traffic"].sum() / (T / 365)),
             "Операций восстановления": len(self.repairs),
             "Раскрытий": len(self.disclosures),
+            "Размещено не полностью": len(self.short_placements),
+            "Не сохранено (меньше k фрагментов)": int((self.short_placements["placed"] < c.k).sum()),
+            "Объекто-суток без запроса восстановления": int(self.stalled),
             "Переносов (удачных)": int(self.migrations["ok"].sum()),
             "Трафик переносов в год": float(self.migrations["traffic"].sum() / (T / 365)),
         }
