@@ -1,0 +1,10 @@
+{
+  "userIgnoreFilters": [
+    ".venv/",
+    "taris_sim/",
+    "scripts/",
+    "viewer/",
+    "runs/"
+  ],
+  "showUnsupportedFiles": false
+}
