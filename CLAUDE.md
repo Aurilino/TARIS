@@ -27,7 +27,7 @@
 
 ## Состояние кода
 
-Готово (шаг 3): `config`, `rng`, `world` (узлы, истинный риск, простои, шоки/бури, уход, тихие потери), `data`, `chain` (микропрерывания, пинги, аудиты, `reset()`/`step()`), `ledger` (сквозной прогон, потери, восстановление, метрики), `policy` (равномерное размещение и оракул). Проверки: `scripts/check_world.py`, `check_chain.py`, `check_ledger.py`. Графики: `scripts/plot_*.py`. Демонстрация среды: `viewer/env_demo_template.html` + `scripts/build_demo.py`.
+Готово (шаг 3): `config`, `rng`, `world` (узлы, истинный риск, простои, шоки/бури, уход, тихие потери), `data`, `chain` (микропрерывания, пинги, аудиты, `reset()`/`step()`), `ledger` (сквозной прогон, потери, восстановление, метрики), `policy` (равномерное размещение и оракул). Проверки: `scripts/check_world.py`, `check_chain.py`, `check_ledger.py`; общие случайные числа при правках — `scripts/crn_hashes.py --save/--compare runs/crn_base.json` (эталон снят до шага В). Графики: `scripts/plot_*.py`. Демонстрация среды: `viewer/env_demo_template.html` + `scripts/build_demo.py`.
 
 Не сделано: предвестники кризисов и библиотека кризисов в мире; модуль `reserve` (уравнение Тиле, минимальный резерв, IBNR); `adversary`; `validate`; агент TARIS (шаг 5).
 

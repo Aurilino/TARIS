@@ -59,7 +59,8 @@ class Chain:
         d, mean = c.d, c.micro_mean_minutes * MINUTE
         parts = []
         for i in range(len(nd)):
-            a0, a1 = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            # генерация по базовой жизни, обрезка по итоговой (общие случайные числа, пункт 3.9)
+            a0, a1 = nd["alive_from"].iat[i], nd["alive_to_base"].iat[i]
             if a1 <= a0:
                 continue
             g = R.stream(c.seed, R.MICRO, i)
@@ -68,7 +69,8 @@ class Chain:
             # экспоненциальная длительность, усечённая до d (микропрерывание короче франшизы)
             u = g.random(m)
             dur = -mean * np.log(1 - u * (1 - np.exp(-d / mean)))
-            parts.append(pd.DataFrame({"node": i, "start": st, "end": st + dur}))
+            keep = st < nd["alive_to"].iat[i]
+            parts.append(pd.DataFrame({"node": i, "start": st[keep], "end": (st + dur)[keep]}))
         return pd.concat(parts, ignore_index=True)
 
     def _true_down(self) -> pd.DataFrame:
@@ -102,7 +104,7 @@ class Chain:
         # ложные провалы пингов: шум сети — одиночные проваленные пинги
         parts = []
         for i in range(len(nd)):
-            a0, a1 = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            a0, a1 = nd["alive_from"].iat[i], nd["alive_to_base"].iat[i]
             if a1 <= a0:
                 continue
             g = R.stream(c.seed, R.NOISE, i)
@@ -110,6 +112,7 @@ class Chain:
             m = g.binomial(n_p, c.ping_noise)
             idx = np.floor((a0 - self.phase[i]) / P) + 1 + g.integers(0, n_p, m)
             st = self.phase[i] + idx * P
+            st = st[st < nd["alive_to"].iat[i]]
             parts.append(pd.DataFrame({"node": i, "start": st, "end": st + P, "source": "noise"}))
         self.n_noise_pings = int(sum(len(p_) for p_ in parts))
         obs = pd.concat([obs] + parts, ignore_index=True)
@@ -134,7 +137,7 @@ class Chain:
         by_node = {i: (g["start"].to_numpy(), g["end"].to_numpy()) for i, g in merged.groupby("node")}
         parts = []
         for i in range(len(nd)):
-            a0, a1 = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            a0, a1 = nd["alive_from"].iat[i], nd["alive_to_base"].iat[i]
             if a1 <= a0:
                 continue
             g = R.stream(c.seed, R.AUDIT, i)
@@ -142,10 +145,12 @@ class Chain:
             ep = np.repeat(np.arange(e0, e1), c.audits_per_epoch)
             t = ep + g.random(len(ep))
             t = t[(t >= a0) & (t < a1)]
+            noise = g.random(len(t)) < c.audit_noise
+            keep = t < nd["alive_to"].iat[i]
+            t, noise = t[keep], noise[keep]
             s, e = by_node.get(i, (np.empty(0), np.empty(0)))
             j = np.searchsorted(s, t, side="right") - 1
             down = (j >= 0) & (t < e[np.maximum(j, 0)])
-            noise = g.random(len(t)) < c.audit_noise
             parts.append(pd.DataFrame({"node": i, "t": t, "available": ~down, "noise_fail": noise}))
         a = pd.concat(parts, ignore_index=True)
         a["epoch"] = np.floor(a["t"]).astype(int)

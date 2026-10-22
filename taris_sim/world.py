@@ -102,8 +102,9 @@ class World:
         """beta_0 подбирается так, чтобы средняя по сети частота страховых случаев равнялась mean_event_rate.
         Так оба режима мира (согласованный и несогласованный) имеют одинаковую общую частоту."""
         c, nd = self.cfg, self.nodes
-        expo = (nd["alive_to"] - nd["alive_from"]).clip(lower=0).to_numpy()
-        e0 = self.expected_own_counts()
+        # по базовой жизни: кризисы (пункт 3.9) не должны менять калибровку
+        expo = (nd["alive_to_base"] - nd["alive_from"]).clip(lower=0).to_numpy()
+        e0 = self.expected_own_counts(life_end="alive_to_base")
         self.beta0 = float(np.log(c.mean_event_rate * expo.sum() / e0.sum()))
         lam_avg = np.where(expo > 0, e0 * np.exp(self.beta0) / np.maximum(expo, 1e-9), np.nan)
         lam_avg = np.where(np.isnan(lam_avg), np.nanmean(lam_avg), lam_avg)
@@ -154,9 +155,13 @@ class World:
             ts = self._thin(g, lambda t: self.churn_rate(t - j0), start, H, lam_max, first_only=True)
             if len(ts):
                 leave[i] = ts[0]
-        nd["leave_t"] = leave
+        # Базовая жизнь — без кризисов. Все потоки узла генерируются на ней и потом обрезаются
+        # по итоговой жизни (alive_to), поэтому кризисы не меняют остальные события узла.
+        nd["leave_t_base"] = leave
         nd["alive_from"] = np.maximum(0.0, nd["join_t"])
-        nd["alive_to"] = np.minimum(H, nd["leave_t"])
+        nd["alive_to_base"] = np.minimum(H, nd["leave_t_base"])
+        nd["leave_t"] = nd["leave_t_base"]
+        nd["alive_to"] = nd["alive_to_base"]
 
     # ------------------------------------------------------------------ 3.4
     def sample_duration(self, g, node_idx: int, m: int) -> np.ndarray:
@@ -197,8 +202,9 @@ class World:
         c, nd = self.cfg, self.nodes
         rows = []
         # Собственные простои узлов
+        alive_to = nd["alive_to"].to_numpy()
         for i in range(len(nd)):
-            j0, a0, a1 = nd["join_t"].iat[i], nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            j0, a0, a1 = nd["join_t"].iat[i], nd["alive_from"].iat[i], nd["alive_to_base"].iat[i]
             if a1 <= a0:
                 continue
             grid = np.linspace(a0, a1, 200)
@@ -207,7 +213,8 @@ class World:
             ts = self._thin(g, lambda t: self.rate(np.full(len(t), i), t), a0, a1, lam_max)
             L = self.sample_duration(R.stream(c.seed, R.DURATION, i), i, len(ts))
             for t, l in zip(ts, L):
-                rows.append((i, t, t + l, "own", -1, False))
+                if t < alive_to[i]:
+                    rows.append((i, t, t + l, "own", -1, False))
         # Сырой поток собственных простоев (до слияния перекрытий) — для проверки частоты
         self.raw_own = pd.DataFrame([(r[0], r[1], r[2] - r[1]) for r in rows], columns=["node", "start", "dur"])
         self.raw_own_counts = self.raw_own["node"].value_counts().reindex(range(len(nd)), fill_value=0)
@@ -226,31 +233,16 @@ class World:
                     g = R.stream(c.seed, R.SHOCK, ti, int(cl))
                     m = g.poisson(rate * c.horizon_days)
                     for t in np.sort(g.uniform(0, c.horizon_days, m)):
-                        idx = np.asarray(idx)
-                        alive = idx[(nd["alive_from"].to_numpy()[idx] <= t) & (nd["alive_to"].to_numpy()[idx] > t)]
+                        tag = ti * 1000 + int(cl)
                         if c.world_mode == "matched":
-                            k = c.shock_shape
-                            th = c.shock_scale_hours[ti]
-                            d_h = c.franchise_d_hours
-                            L = th * ((d_h / th) ** k - np.log(g.random())) ** (1.0 / k) * HOUR
-                            destroyed = bool(g.random() < c.shock_total_share)
-                            if destroyed:
-                                L = max(L, 1.5 * c.T_rep)
-                            shock_rows.append((ctype, int(cl), t, t + L, destroyed, len(alive)))
-                            for i in alive:
-                                rows.append((int(i), t, t + L, "shock", ti * 1000 + int(cl), destroyed))
+                            L, destroyed = self.shock_draw(g, c.shock_scale_hours[ti], c.shock_total_share)
+                            hit = self.shock_rows(rows, idx, t, L, destroyed, "shock", tag)
+                            shock_rows.append((ctype, int(cl), t, t + L, destroyed, hit))
                         else:
                             Dl = c.storm_hours * HOUR
-                            shock_rows.append((ctype, int(cl), t, t + Dl, False, len(alive)))
                             gs = R.stream(c.seed, R.STORM, ti, int(cl), int(t * 1000))
-                            for i in alive:
-                                lam = float(self.rate([i], [t])[0]) * (c.storm_multiplier - 1.0)
-                                m_i = gs.poisson(lam * Dl)
-                                if m_i:
-                                    ts = np.sort(gs.uniform(t, t + Dl, m_i))
-                                    L = self.sample_duration(gs, int(i), m_i)
-                                    for tt, l in zip(ts, L):
-                                        rows.append((int(i), tt, tt + l, "storm", ti * 1000 + int(cl), False))
+                            hit = self.storm_rows(rows, gs, idx, t, Dl, c.storm_multiplier, "storm", tag)
+                            shock_rows.append((ctype, int(cl), t, t + Dl, False, hit))
         self.shocks = pd.DataFrame(shock_rows, columns=["ctype", "cluster", "start", "end", "destroyed", "n_nodes"])
 
         out = pd.DataFrame(rows, columns=["node", "start", "end", "kind", "cluster", "destroyed"])
@@ -260,6 +252,46 @@ class World:
         dur = out["end"] - out["start"]
         out["cls"] = np.where(out["destroyed"] | (dur > c.T_rep), "total", "partial")
         self.outages = out.reset_index(drop=True)
+
+    # ---- общий шок и буря: используются шоками кластеров (3.4) и кризисами (3.9)
+    def alive_at(self, idx, t, life_end: str = "alive_to") -> np.ndarray:
+        """Узлы из idx, живые в момент t."""
+        nd = self.nodes
+        idx = np.asarray(idx)
+        return idx[(nd["alive_from"].to_numpy()[idx] <= t) & (nd[life_end].to_numpy()[idx] > t)]
+
+    def shock_draw(self, g, scale_hours: float, total_share: float):
+        """Длительность общего шока (Вейбулл, длиннее франшизы) и признак полной гибели."""
+        c = self.cfg
+        k, th, d_h = c.shock_shape, scale_hours, c.franchise_d_hours
+        L = th * ((d_h / th) ** k - np.log(g.random())) ** (1.0 / k) * HOUR
+        destroyed = bool(g.random() < total_share)
+        if destroyed:
+            L = max(L, 1.5 * c.T_rep)
+        return L, destroyed
+
+    def shock_rows(self, rows, idx, t, L, destroyed, kind, tag) -> int:
+        """Все живые узлы кластера уходят в простой одной длительности; возвращает число затронутых узлов."""
+        alive = self.alive_at(idx, t)
+        for i in alive:
+            rows.append((int(i), t, t + L, kind, tag, destroyed))
+        return len(alive)
+
+    def storm_rows(self, rows, gs, idx, t, Dl, multiplier, kind, tag) -> int:
+        """Буря: интенсивность простоев узлов кластера умножается на multiplier на время Dl.
+        Случайные числа тянутся для всех узлов, живых по базовой жизни, а строки остаются только
+        у живых по итоговой: так кризисы не сдвигают поток бури у остальных узлов."""
+        alive = set(self.alive_at(idx, t).tolist())
+        for i in self.alive_at(idx, t, "alive_to_base"):
+            lam = float(self.rate([i], [t])[0]) * (multiplier - 1.0)
+            m_i = gs.poisson(lam * Dl)
+            if m_i:
+                ts = np.sort(gs.uniform(t, t + Dl, m_i))
+                L = self.sample_duration(gs, int(i), m_i)
+                if int(i) in alive:
+                    for tt, l in zip(ts, L):
+                        rows.append((int(i), tt, tt + l, kind, tag, False))
+        return len(alive)
 
     @staticmethod
     def _merge_overlaps(df: pd.DataFrame) -> pd.DataFrame:
@@ -285,20 +317,21 @@ class World:
         c, nd = self.cfg, self.nodes
         rows = []
         for i in range(len(nd)):
-            a0, a1 = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            a0, a1 = nd["alive_from"].iat[i], nd["alive_to_base"].iat[i]
             g = R.stream(c.seed, R.SILENT, i)
             lam = float(nd["lam_silent"].iat[i])
             for t in self._thin(g, lambda t: np.full(len(t), lam), a0, a1, lam):
-                rows.append((i, t))
+                if t < nd["alive_to"].iat[i]:
+                    rows.append((i, t))
         self.silent = pd.DataFrame(rows, columns=["node", "t"])
 
     # ------------------------------------------------------------- сервис
-    def expected_own_counts(self, step_days: float = 1.0) -> np.ndarray:
+    def expected_own_counts(self, step_days: float = 1.0, life_end: str = "alive_to") -> np.ndarray:
         """Ожидаемое число собственных простоев каждого узла: интеграл lambda_true по жизни узла."""
         nd = self.nodes
         exp_n = np.zeros(len(nd))
         for i in range(len(nd)):
-            a0, a1 = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+            a0, a1 = nd["alive_from"].iat[i], nd[life_end].iat[i]
             if a1 <= a0:
                 continue
             m = max(2, int(np.ceil((a1 - a0) / step_days)) + 1)
