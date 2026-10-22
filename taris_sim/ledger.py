@@ -49,6 +49,31 @@ class NetworkView:
     def holders(self, obj: int) -> set:
         return {self.L.f_node[f] for f in self.L.obj_frags[obj]}
 
+    # ---- реестр узлов и версии клиента (пункт 3.9): то, что узлы публикуют о себе
+    def registered(self) -> np.ndarray:
+        """Узлы, зарегистрированные к моменту t (отменённые регистрации сюда не попадают никогда)."""
+        return np.flatnonzero(self.L.registered_by(self.t))
+
+    def join_times(self) -> np.ndarray:
+        """Моменты регистрации узлов; у ещё не пришедших — inf (будущее политике не видно)."""
+        j = self.L.join
+        return np.where(j <= self.t, j, np.inf)
+
+    def releases(self) -> np.ndarray:
+        """Моменты выпуска версий клиента к моменту t; версия 0 — исходная (момент -inf)."""
+        cr = self.L.w.crisis
+        if cr is None:
+            return np.array([-np.inf])
+        return cr.release[cr.release <= self.t]
+
+    def node_versions(self) -> np.ndarray:
+        """Заявленная версия клиента каждого узла в момент t; -1 у ещё не зарегистрированных."""
+        L = self.L
+        reg = L.registered_by(self.t)
+        if L.w.crisis is None:
+            return np.where(reg, 0, -1)
+        return np.where(reg, L.w.crisis.version_at(self.t), -1)
+
 
 class Ledger:
     def __init__(self, world: World, chain: Chain, data: DataStream):
