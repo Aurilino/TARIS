@@ -89,7 +89,7 @@ class Crises:
         ep = dict(id=len(self.episodes), type=typ, ctype=ctype, cluster=cluster, key=key, tau=float(tau),
                   W=float(W), w0=float(tau - W if w0 is None else w0), predictable=bool(predictable),
                   false_alarm=bool(false_alarm), parent=parent, targets=np.asarray(targets, dtype=int),
-                  end=float(tau), n_hit=0, destroyed=False)
+                  end=float(tau), n_hit=0, destroyed=False, n_xi=0)
         self.episodes.append(ep)
         return ep
 
@@ -208,6 +208,7 @@ class Crises:
         u = lambda t: (t - w0) / max(tau - w0, 1e-12)
         targets = ep["targets"]
         xi = self.stream(PRE, *key, CH_XI).random(len(targets)) < s
+        ep["n_xi"] = int(xi.sum())
         nd = w.nodes
         for i in targets[xi]:
             lo = max(w0, self.a0[i])
@@ -328,7 +329,7 @@ class Crises:
     # ------------------------------------------------------------- таблицы истины
     def table(self) -> pd.DataFrame:
         cols = ["id", "type", "ctype", "cluster", "tau", "W", "w0", "predictable", "false_alarm",
-                "parent", "end", "n_targets", "n_hit", "destroyed"]
+                "parent", "end", "n_targets", "n_hit", "destroyed", "n_xi"]
         rows = [{**{k: e[k] for k in cols if k in e}, "n_targets": len(e["targets"])} for e in self.episodes]
         return pd.DataFrame(rows, columns=cols)
 
