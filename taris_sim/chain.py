@@ -15,7 +15,8 @@ from .config import Config, MINUTE
 from .world import World
 from . import rng as R
 
-SOURCE_PRIORITY = {"noise": 0, "micro": 1, "own": 2, "storm": 3, "shock": 4, "leave": 5}
+SOURCE_PRIORITY = {"noise": 0, "micro": 1, "own": 2, "pre_short": 3, "storm": 4, "shock": 5, "crisis": 6, "leave": 7}
+REAL_SOURCES = ["own", "pre_short", "shock", "storm", "crisis", "leave"]     # простои, а не шум и микропрерывания
 
 
 def merge_intervals(df: pd.DataFrame, extra_cols=("source",)) -> pd.DataFrame:
@@ -126,7 +127,7 @@ class Chain:
         d = c.d if d is None else d
         o = self.observed.copy()
         o["cls"] = np.select([o["dur"] <= d, o["dur"] <= c.T_rep], ["micro", "partial"], "total")
-        o["is_real"] = o["source"].isin(["own", "shock", "storm", "leave"])
+        o["is_real"] = o["source"].isin(REAL_SOURCES)
         return o
 
     # ------------------------------------------------------------ аудиты

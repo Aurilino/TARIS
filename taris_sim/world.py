@@ -12,6 +12,7 @@ from scipy import stats
 
 from .config import Config, HOUR, YEAR
 from . import rng as R
+from .crisis import Crises, OUTAGE_TAG
 
 CLUSTER_TYPES = ("dc", "provider", "region")
 
@@ -23,8 +24,13 @@ class World:
         self._build_nodes()
         self._build_lifetimes()
         self._calibrate()
+        self.crisis = None
+        if cfg.crises_enabled:
+            self._apply_crises()
         self._build_outages()
         self._build_silent_losses()
+        if self.crisis is not None:
+            self._finalize_crises()
 
     # ------------------------------------------------------------------ 3.1
     def _build_clusters(self):
@@ -124,7 +130,9 @@ class World:
         """lambda_true узла в момент t (событий в сутки), без бурь."""
         nd = self.nodes
         node_idx = np.asarray(node_idx)
-        age = np.asarray(t) - nd["join_t"].to_numpy()[node_idx]
+        # возраст — от исходной регистрации: отмена регистрации кризисом не должна менять потоки (3.9)
+        join = nd["join_t_base"] if "join_t_base" in nd else nd["join_t"]
+        age = np.asarray(t) - join.to_numpy()[node_idx]
         return (np.exp(self.beta0 + nd["lin_pred"].to_numpy()[node_idx])
                 * nd["theta"].to_numpy()[node_idx] * self.age_factor(age))
 
@@ -162,6 +170,47 @@ class World:
         nd["alive_to_base"] = np.minimum(H, nd["leave_t_base"])
         nd["leave_t"] = nd["leave_t_base"]
         nd["alive_to"] = nd["alive_to_base"]
+
+    # ------------------------------------------------------------------ 3.9
+    def _apply_crises(self):
+        """Кризисы строятся по базовой жизни; здесь из них получается итоговая жизнь узлов:
+        принудительный уход или гибель (износ, массовый уход) и отменённые регистрации."""
+        c, nd = self.cfg, self.nodes
+        self.crisis = Crises(self).build()
+        fr = self.crisis.frames()
+        nd["join_t_base"] = nd["join_t"]
+        nd["leave_reason"] = np.where(np.isfinite(nd["leave_t_base"]), "churn", "")
+        forced = fr["forced"].sort_values(["node", "t"], kind="mergesort").drop_duplicates("node")
+        idx = forced["node"].to_numpy()
+        earlier = forced["t"].to_numpy() < nd["leave_t_base"].to_numpy()[idx]
+        nd.loc[idx[earlier], "leave_t"] = forced["t"].to_numpy()[earlier]
+        nd.loc[idx[earlier], "leave_reason"] = forced["reason"].to_numpy()[earlier]
+        nd["alive_to"] = np.minimum(c.horizon_days, nd["leave_t"])
+        # отменённая регистрация: узел так и не пришёл в сеть
+        canc = fr["cancelled"]["node"].unique()
+        nd["cancelled"] = False
+        nd.loc[canc, "cancelled"] = True
+        nd.loc[canc, "join_t"] = np.inf
+        nd.loc[canc, "leave_t"] = np.inf
+        nd.loc[canc, "leave_reason"] = ""
+        nd.loc[canc, "alive_to"] = nd.loc[canc, "alive_from"]
+
+    def _finalize_crises(self):
+        """Таблицы истины кризисов (пункт 3.9), обрезанные по итоговой жизни узлов."""
+        nd, cr = self.nodes, self.crisis
+        fr = cr.frames()
+        alive_to = nd["alive_to"].to_numpy()
+        self.crises = cr.table()
+        pe = fr["pre_events"]
+        self.pre_events = pe[pe["start"].to_numpy() < alive_to[pe["node"].to_numpy()]].reset_index(drop=True)
+        pa = fr["pre_audit"]
+        pa = pa.assign(end=np.minimum(pa["end"].to_numpy(), alive_to[pa["node"].to_numpy()]))
+        self.pre_audit = pa[pa["end"] > pa["start"]].reset_index(drop=True)
+        self.forced = fr["forced"]
+        self.cancelled = fr["cancelled"]
+        self.versions = cr.versions
+        nu = cr.node_updates
+        self.node_updates = nu[nu["t"].to_numpy() < alive_to[nu["node"].to_numpy()]].reset_index(drop=True)
 
     # ------------------------------------------------------------------ 3.4
     def sample_duration(self, g, node_idx: int, m: int) -> np.ndarray:
@@ -245,6 +294,13 @@ class World:
                             shock_rows.append((ctype, int(cl), t, t + Dl, False, hit))
         self.shocks = pd.DataFrame(shock_rows, columns=["ctype", "cluster", "start", "end", "destroyed", "n_nodes"])
 
+        # Кризисы (пункт 3.9): простои от исходов и короткие простои-предвестники
+        if self.crisis is not None:
+            self.crisis.outage_rows(rows)
+            pe = self.crisis.frames()["pre_events"]
+            for r in pe[pe["channel"] == "short"].itertuples(index=False):
+                rows.append((int(r.node), r.start, r.end, "pre_short", OUTAGE_TAG + int(r.episode), False))
+
         out = pd.DataFrame(rows, columns=["node", "start", "end", "kind", "cluster", "destroyed"])
         out = self._merge_overlaps(out)
         alive_to = nd["alive_to"].to_numpy()[out["node"]]
@@ -323,6 +379,11 @@ class World:
             for t in self._thin(g, lambda t: np.full(len(t), lam), a0, a1, lam):
                 if t < nd["alive_to"].iat[i]:
                     rows.append((i, t))
+        # тихие потери-предвестники износа (пункт 3.9)
+        if self.crisis is not None:
+            for r in self.crisis.frames()["pre_silent"].itertuples(index=False):
+                if r.t < nd["alive_to"].iat[int(r.node)]:
+                    rows.append((int(r.node), r.t))
         self.silent = pd.DataFrame(rows, columns=["node", "t"])
 
     # ------------------------------------------------------------- сервис
