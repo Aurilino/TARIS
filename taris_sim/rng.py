@@ -6,7 +6,7 @@
 import numpy as np
 
 # Номера потоков мира
-NODES, OPERATORS, OUTAGE, DURATION, CHURN, SHOCK, SILENT, MICRO, STORM, PING, AUDIT, NOISE, DATA = range(1, 14)
+NODES, OPERATORS, OUTAGE, DURATION, CHURN, SHOCK, SILENT, MICRO, STORM, PING, AUDIT, NOISE, DATA, CRISIS = range(1, 15)
 
 
 def stream(seed: int, *labels: int) -> np.random.Generator:

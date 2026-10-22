@@ -117,8 +117,10 @@ class Config:
     cr_exodus_rho_join: float = 0.3        # регистрации падают до этой доли обычного уровня
     cr_exodus_multiplier: float = 30.0     # Gamma_churn
     cr_exodus_period_days: float = 30.0
-    # уязвимость ПО (узлы одной версии клиента); частота — на всю сеть
+    # уязвимость ПО (узлы одной версии клиента); частота — на всю сеть.
+    # Срабатывает через ~Exp(trigger_days) после выпуска версии и бьёт только по уже обновившимся.
     cr_software_rate: float = 1.0
+    cr_software_trigger_days: float = 3.0
     cr_software_pi: float = 0.5
     cr_software_q: float = 0.5
     cr_software_W_days: float = 5.0
