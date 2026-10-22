@@ -25,7 +25,9 @@ class Policy:
         return []
 
     def alarm(self, t: float, view) -> list[dict]:
-        """Тревоги о кризисах (пункт 3.9): словари с ключами cluster, type, prob, horizon."""
+        """Тревоги о кризисах (пункт 3.9): словари с ключами type (тип кризиса), ctype и cluster
+        (кластер-цель в тех же обозначениях, что world.crises: dc — номер, region — номер,
+        batch — «dc/класс», version — номер версии), prob (вероятность) и horizon (горизонт, сутки)."""
         return []
 
     def predict(self, t: float, view):

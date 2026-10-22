@@ -148,7 +148,7 @@ class Ledger:
         self.need_repair = set()
         self.owner_idx = {}
         self.mig_pending = {}                                    # объект -> номера фрагментов в переносе
-        self.log_loss, self.log_repair, self.log_disc, self.log_migr = [], [], [], []
+        self.log_loss, self.log_repair, self.log_disc, self.log_migr, self.log_alarm = [], [], [], [], []
         self.heap, self.seq = [], 0
 
     def _push(self, t, kind, payload):
@@ -310,6 +310,9 @@ class Ledger:
         for t in range(T):
             step = self.ch.step()
             view.t, view.seed = float(t), bytes.fromhex(step["seed"])
+            for a in policy.alarm(float(t), view):
+                self.log_alarm.append((float(t), a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
+                                       float(a.get("horizon", 1.0))))
             self._repair(float(t), policy.on_epoch(float(t), view))
             self._migrate(float(t), policy.migrate(float(t), view))
             for obj in self.data.new_objects(t):
@@ -337,6 +340,7 @@ class RunResult:
         self.repairs = pd.DataFrame(L.log_repair, columns=["obj", "t", "r", "traffic"])
         self.disclosures = pd.DataFrame(L.log_disc, columns=["obj", "owner", "t"])
         self.migrations = pd.DataFrame(L.log_migr, columns=["obj", "idx", "from", "to", "t", "traffic", "t_done", "ok"])
+        self.alarms = pd.DataFrame(L.log_alarm, columns=["t", "type", "ctype", "cluster", "prob", "horizon"])
         self.objects = L.data.objects.assign(n=L.obj_n, lost_t=L.obj_lost_t)
         self._L = L
 
@@ -366,6 +370,118 @@ class RunResult:
             "Переносов (удачных)": int(self.migrations["ok"].sum()),
             "Трафик переносов в год": float(self.migrations["traffic"].sum() / (T / 365)),
         }
+
+    # ------------------------------------------------- кризисы (пункт 3.9)
+    def alarm_episodes(self) -> pd.DataFrame:
+        """Подряд идущие тревоги по одному типу и кластеру объединяются в эпизод: следующая тревога
+        поднята до конца горизонта предыдущей. Эпизод верен, если кризис того же типа в том же
+        кластере начался в пределах [первая тревога, конец горизонта последней]."""
+        cols = ["type", "ctype", "cluster", "t0", "until", "n", "correct"]
+        al = self.alarms
+        if al.empty:
+            return pd.DataFrame(columns=cols)
+        al = al.assign(ckey=al["cluster"].astype(str)).sort_values("t", kind="mergesort")
+        eps = []
+        for (typ, ctype, ckey), g in al.groupby(["type", "ctype", "ckey"], sort=False):
+            cur = None
+            for r in g.itertuples(index=False):
+                if cur is not None and r.t <= cur["until"]:
+                    cur["until"] = max(cur["until"], r.t + r.horizon)
+                    cur["n"] += 1
+                else:
+                    cur = dict(type=typ, ctype=ctype, cluster=ckey, t0=r.t, until=r.t + r.horizon, n=1)
+                    eps.append(cur)
+        ae = pd.DataFrame(eps)
+        cr = self._L.w.crises
+        real = cr[~cr["false_alarm"]].assign(ckey=cr["cluster"].astype(str))
+        ae["correct"] = [bool(((real["type"] == e.type) & (real["ctype"] == e.ctype) & (real["ckey"] == e.cluster)
+                               & (real["tau"] >= e.t0) & (real["tau"] <= e.until)).any()) for e in ae.itertuples()]
+        return ae[cols]
+
+    def _in_cluster(self, nodes: np.ndarray, ctype: str, cluster: str, t: float) -> np.ndarray:
+        """Принадлежность узлов кластеру-цели (по истине, для учёта цены ложных тревог)."""
+        w = self._L.w
+        nd = w.nodes
+        if ctype == "dc":
+            return nd["dc"].to_numpy()[nodes] == int(cluster)
+        if ctype == "region":
+            return nd["region"].to_numpy()[nodes] == int(cluster)
+        if ctype == "batch":
+            dc, hw = cluster.split("/")
+            return (nd["dc"].to_numpy()[nodes] == int(dc)) & (nd["hw_true"].to_numpy()[nodes] == w.cfg.hw_classes.index(hw))
+        if ctype == "version":
+            return w.crisis.version_at(t)[nodes] == int(cluster)
+        return np.zeros(len(nodes), bool)
+
+    def crisis_report(self):
+        """Метрики упреждения и потери на кризисах (пункт 3.9): сводка и таблица по кризисам.
+        Учитываются кризисы, начавшиеся до конца прогона. Окна кризисов могут перекрываться —
+        тогда одна потеря входит в несколько кризисов; такие кризисы помечены overlap."""
+        L, c = self._L, self.cfg
+        if L.w.crisis is None:
+            return {}, pd.DataFrame()
+        run_end = float(len(self.daily))
+        cr = L.w.crises
+        real = cr[~cr["false_alarm"] & (cr["tau"] < run_end)].copy()
+        real["win_end"] = real["end"] + c.T_rep
+        size = self.objects["size"].to_numpy()
+        lost_t = self.objects["lost_t"].to_numpy()
+        alive = self.daily["objects_alive"].to_numpy()
+        mean_size = float(size.mean())
+        # потеря относится к кризису, если объект потерян в окне кризиса и в момент tau
+        # хотя бы один его фрагмент лежал на узле кластера-цели
+        fr = self.fragments
+        f_end = np.minimum(fr["t_to"].to_numpy(), fr["t_dead"].to_numpy())
+        f_node, f_obj, f_from = fr["node"].to_numpy(), fr["obj"].to_numpy(), fr["t_from"].to_numpy()
+        targets = {e["id"]: e["targets"] for e in L.w.crisis.episodes}
+        lost = []
+        for r in real.itertuples():
+            on = np.isin(f_node, targets[r.id]) & (f_from <= r.tau) & (f_end > r.tau)
+            exposed = np.unique(f_obj[on])
+            hit = exposed[(lost_t[exposed] >= r.tau) & (lost_t[exposed] <= r.win_end)]
+            lost.append(size[hit].sum())
+        real["lost"] = lost
+        real["stored"] = [alive[min(int(r.tau), len(alive) - 1)] * mean_size for r in real.itertuples()]
+        real["loss_share"] = real["lost"] / real["stored"].clip(lower=1e-12)
+        # перекрытие: другой кризис с пересекающимся окном и общими узлами-целями
+        s, e, ids = real["tau"].to_numpy(), real["win_end"].to_numpy(), real["id"].to_numpy()
+        real["overlap"] = [bool(any(j != i and s[j] < e[i] and e[j] > s[i]
+                                    and np.intersect1d(targets[ids[i]], targets[ids[j]]).size
+                                    for j in range(len(real)))) for i in range(len(real))]
+        # упреждение: эпизод тревоги по тому же типу и кластеру, начатый до tau и покрывающий tau
+        ae = self.alarm_episodes()
+        lead = []
+        for r in real.itertuples():
+            m = ae[(ae["type"] == r.type) & (ae["ctype"] == r.ctype) & (ae["cluster"] == str(r.cluster))
+                   & (ae["t0"] < r.tau) & (ae["until"] >= r.tau)]
+            lead.append((r.tau - m["t0"].min()) * 24.0 if len(m) else 0.0)
+        real["lead_h"] = lead
+        pred, sudd = real[real["predictable"]], real[~real["predictable"]]
+        det = pred[pred["lead_h"] > 0]
+        tp, fp = int(ae["correct"].sum()), int((~ae["correct"]).sum())
+        # цена ложных тревог: трафик переносов из кластера ложной тревоги во время её действия
+        mg, fa_traffic = self.migrations, 0.0
+        for a in ae[~ae["correct"]].itertuples():
+            m = mg[(mg["t"] >= a.t0) & (mg["t"] <= a.until)]
+            if len(m):
+                inside = self._in_cluster(m["from"].to_numpy().astype(int), a.ctype, a.cluster, a.t0)
+                fa_traffic += float(m["traffic"].to_numpy()[inside].sum())
+        summary = {
+            "Кризисов (до конца прогона)": len(real),
+            "Предсказуемых": len(pred),
+            "Замечено заранее": len(det),
+            "Полнота тревог": len(det) / len(pred) if len(pred) else np.nan,
+            "Эпизодов тревог": len(ae),
+            "Точность тревог": tp / (tp + fp) if tp + fp else np.nan,
+            "Упреждение, ч (среднее по замеченным)": float(det["lead_h"].mean()) if len(det) else np.nan,
+            "Потери на предсказуемом кризисе, доля": float(pred["loss_share"].mean()) if len(pred) else np.nan,
+            "Потери на внезапном кризисе, доля": float(sudd["loss_share"].mean()) if len(sudd) else np.nan,
+            "Кризисов с перекрытием окон": int(real["overlap"].sum()),
+            "Трафик переносов по ложным тревогам": fa_traffic,
+        }
+        cols = ["id", "type", "ctype", "cluster", "tau", "end", "predictable", "n_hit", "destroyed",
+                "lost", "stored", "loss_share", "lead_h", "overlap"]
+        return summary, real[cols].reset_index(drop=True)
 
     def unavailability(self, n_objects: int | None = None) -> pd.DataFrame:
         """Доля времени, когда объект нельзя прочитать (доступно меньше k фрагментов), для выборки объектов."""
