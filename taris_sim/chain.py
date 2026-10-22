@@ -15,7 +15,7 @@ from .config import Config, MINUTE
 from .world import World
 from . import rng as R
 
-SOURCE_PRIORITY = {"noise": 0, "micro": 1, "own": 2, "pre_short": 3, "storm": 4, "shock": 5, "crisis": 6, "leave": 7}
+SOURCE_PRIORITY = {"noise": 0, "micro": 1, "pre_micro": 2, "own": 3, "pre_short": 4, "storm": 5, "shock": 6, "crisis": 7, "leave": 8}
 REAL_SOURCES = ["own", "pre_short", "shock", "storm", "crisis", "leave"]     # простои, а не шум и микропрерывания
 
 
@@ -81,7 +81,13 @@ class Chain:
         nd = w.nodes
         lv = nd[np.isfinite(nd["leave_t"])]
         leave = pd.DataFrame({"node": lv.index, "start": lv["leave_t"].to_numpy(), "end": float(c.horizon_days), "source": "leave"})
-        return pd.concat([real, micro, leave], ignore_index=True)
+        parts = [real, micro, leave]
+        if w.crisis is not None:
+            # микропрерывания-предвестники кризисов (пункт 3.9): сеть видит их как обычные микропрерывания
+            pm = w.pre_events[w.pre_events["channel"] == "micro"]
+            parts.append(pd.DataFrame({"node": pm["node"].to_numpy(), "start": pm["start"].to_numpy(),
+                                       "end": pm["end"].to_numpy(), "source": "pre_micro"}))
+        return pd.concat(parts, ignore_index=True)
 
     # ------------------------------------------------------------ пинги
     def _observe(self) -> pd.DataFrame:
@@ -156,7 +162,33 @@ class Chain:
         a = pd.concat(parts, ignore_index=True)
         a["epoch"] = np.floor(a["t"]).astype(int)
         a["passed_avail"] = a["available"] & ~a["noise_fail"]     # итог без учёта целостности фрагмента
+        if self.world.crisis is not None:
+            a["pre_fail"] = self._pre_audit_fails(a)
+            a["passed_avail"] &= ~a["pre_fail"]
         return a
+
+    def _pre_audit_fails(self, a: pd.DataFrame) -> np.ndarray:
+        """Предвестник износа (пункт 3.9): в окне вероятность ложного провала аудита растёт до
+        p_noise * (1 + (rho - 1) * g(u)). Шумовой провал уже разыгран, поэтому здесь добавка
+        p_noise * (rho - 1) * g(u) / (1 - p_noise) — среди аудитов без шумового провала."""
+        c, w = self.cfg, self.world
+        pre = np.zeros(len(a), bool)
+        win = w.pre_audit
+        if win.empty:
+            return pre
+        node = a["node"].to_numpy()
+        t = a["t"].to_numpy()
+        noise = a["noise_fail"].to_numpy()
+        for i, g in win.groupby("node"):
+            rows = np.flatnonzero(node == i)
+            r = R.stream(c.seed, R.CRISIS, 20, int(i)).random(len(rows))   # одно число на каждый аудит узла
+            extra = np.zeros(len(rows))
+            for wr in g.itertuples(index=False):
+                inside = (t[rows] >= wr.start) & (t[rows] < wr.end)
+                u = (t[rows][inside] - wr.w0) / max(wr.tau - wr.w0, 1e-12)
+                extra[inside] += c.audit_noise * (wr.rho - 1.0) * w.crisis.g_shape(u)
+            pre[rows] = ~noise[rows] & (r < extra / (1.0 - c.audit_noise))
+        return pre
 
     # ------------------------------------------------- пошаговый интерфейс
     def reset(self):

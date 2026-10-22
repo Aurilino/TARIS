@@ -79,8 +79,9 @@ class Ledger:
                 self.true_down_at[i, a:b + 1] = True
         self.alive_to = nd["alive_to"].to_numpy()
         self.size = data.objects["size"].to_numpy()
-        # время обнаружения тихой потери: первый аудит после события при доступном узле без шума
-        a = chain.audits[chain.audits["available"] & ~chain.audits["noise_fail"]]
+        # время обнаружения тихой потери: первый аудит после события при доступном узле без провала
+        # (шум аудитора или предвестник износа, пункт 3.9)
+        a = chain.audits[chain.audits["passed_avail"]]
         self.audit_ok = {i: g["t"].to_numpy() for i, g in a.groupby("node")}
 
     # ------------------------------------------------------------ сервис
