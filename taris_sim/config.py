@@ -75,6 +75,64 @@ class Config:
     storm_multiplier: float = 40.0         # «буря» (несогласованный мир)
     storm_hours: float = 12.0
 
+    # --- 3.9. Кризисы и предвестники
+    # Для каждого типа: rate — частота nu_e (в год на кластер), pi — доля предсказуемых,
+    # q — ложных тревог на один предсказуемый кризис, W_days — средняя длина окна предвестника,
+    # s — доля узлов кластера-цели с предвестником, rho — рост интенсивности канала к моменту кризиса.
+    crises_enabled: bool = False
+    pre_gamma: float = 2.0                 # форма роста g(u) = u^gamma (согласованный мир)
+    pre_k_W: float = 4.0                   # форма гамма-распределения длины окна (согласованный мир)
+    pre_u0: float = 0.5                    # ступенька g(u) = 1[u >= u0] (несогласованный мир)
+    pre_sigma_W: float = 1.0               # сигма логнормальной длины окна (несогласованный мир)
+    mism_s_factor: float = 0.5             # несогласованный мир: s_e меньше...
+    mism_q_factor: float = 2.0             # ...а ложных тревог больше
+    # буря в дата-центре: исход — шок дата-центра (согласованный мир) или буря (несогласованный)
+    cr_storm_rate: float = 0.5
+    cr_storm_pi: float = 0.7
+    cr_storm_q: float = 0.5
+    cr_storm_W_days: float = 3.0
+    cr_storm_s: float = 0.6
+    cr_storm_rho: float = 5.0
+    # каскад: вторичная буря в других дата-центрах того же провайдера
+    cr_cascade_p: float = 0.3
+    cr_cascade_delay_hours: float = 6.0
+    cr_cascade_s: float = 0.6
+    cr_cascade_rho: float = 5.0
+    # износ партии дисков (класс оборудования × дата-центр)
+    cr_wear_rate: float = 0.1
+    cr_wear_pi: float = 0.9
+    cr_wear_q: float = 0.5
+    cr_wear_W_days: float = 30.0
+    cr_wear_s: float = 0.8
+    cr_wear_rho: float = 10.0
+    cr_wear_p_death: float = 0.3           # вероятность гибели узла партии за период
+    cr_wear_period_days: float = 30.0
+    # массовый уход из региона
+    cr_exodus_rate: float = 0.2
+    cr_exodus_pi: float = 0.8
+    cr_exodus_q: float = 0.5
+    cr_exodus_W_days: float = 21.0
+    cr_exodus_s: float = 0.5
+    cr_exodus_rho: float = 5.0
+    cr_exodus_rho_join: float = 0.3        # регистрации падают до этой доли обычного уровня
+    cr_exodus_multiplier: float = 30.0     # Gamma_churn
+    cr_exodus_period_days: float = 30.0
+    # уязвимость ПО (узлы одной версии клиента); частота — на всю сеть
+    cr_software_rate: float = 1.0
+    cr_software_pi: float = 0.5
+    cr_software_q: float = 0.5
+    cr_software_W_days: float = 5.0
+    cr_software_s: float = 0.8             # среди обновившихся узлов
+    cr_software_rho: float = 5.0
+    cr_software_L_mean_hours: float = 12.0
+    cr_software_total_share: float = 0.05
+    sw_release_every_days: float = 60.0    # новые версии клиента
+    sw_update_delay_days: float = 10.0     # средняя задержка обновления узла
+    # пожар в дата-центре: внезапная полная гибель
+    cr_fire_rate: float = 0.05
+    # атака Сибиллы — вместе с модулем adversary
+    cr_sybil_enabled: bool = False
+
     # --- 3.2. Данные и кодирование
     blocks_per_epoch: int = 20
     block_growth_per_year: float = 0.0     # рост потока блоков
@@ -113,10 +171,13 @@ class Config:
 
 
 def scenario(name: str, **overrides) -> Config:
-    """Готовые сценарии. S1, S3–S5 добавляются вместе с модулями validate и adversary."""
+    """Готовые сценарии. S1, S3–S5 и S7 добавляются вместе с модулями validate и adversary."""
     base = {
         "S0": dict(shocks_enabled=False),
         "S2": dict(shocks_enabled=True),
+        # S2, где шоки дата-центров заменены библиотекой кризисов (пункт 3.9)
+        "S6": dict(shocks_enabled=True, crises_enabled=True,
+                   shock_rate_per_year=(0.0,) + Config.shock_rate_per_year[1:]),
     }
     if name not in base:
         raise ValueError(f"Сценарий {name} ещё не реализован")
