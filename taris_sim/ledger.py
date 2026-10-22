@@ -49,6 +49,18 @@ class NetworkView:
     def holders(self, obj: int) -> set:
         return {self.L.f_node[f] for f in self.L.obj_frags[obj]}
 
+    def placement(self, obj: int) -> dict:
+        """Номер фрагмента -> узел по карте размещения (фрагменты, не признанные утраченными)."""
+        return {self.L.f_idx[f]: self.L.f_node[f] for f in self.L.obj_frags[obj]}
+
+    def on_node(self, node: int) -> list:
+        """Фрагменты на узле по карте размещения: (объект, номер фрагмента)."""
+        return [(self.L.f_obj[f], self.L.f_idx[f]) for f in self.L.node_frags[node]]
+
+    def migrating(self, obj: int) -> set:
+        """Номера фрагментов объекта, перенос которых ещё идёт."""
+        return set(self.L.mig_pending.get(obj, ()))
+
     # ---- реестр узлов и версии клиента (пункт 3.9): то, что узлы публикуют о себе
     def registered(self) -> np.ndarray:
         """Узлы, зарегистрированные к моменту t (отменённые регистрации сюда не попадают никогда)."""
@@ -135,7 +147,8 @@ class Ledger:
         self.pending = [set() for _ in range(n_obj)]
         self.need_repair = set()
         self.owner_idx = {}
-        self.log_loss, self.log_repair, self.log_disc = [], [], []
+        self.mig_pending = {}                                    # объект -> номера фрагментов в переносе
+        self.log_loss, self.log_repair, self.log_disc, self.log_migr = [], [], [], []
         self.heap, self.seq = [], 0
 
     def _push(self, t, kind, payload):
@@ -225,6 +238,8 @@ class Ledger:
                         self.missing[obj].discard(i)
                 if not (self.missing[obj] - self.pending[obj]):
                     self.need_repair.discard(obj)
+            elif kind == "migrate_done":
+                self._migrate_done(t, *p)
 
     def _repair(self, t, reqs):
         c = self.cfg
@@ -242,6 +257,46 @@ class Ledger:
             self.pending[obj].update(idx)
             self._push(t + c.repair_hours * HOUR, "repair_done", (obj, idx, nodes))
 
+    def _migrate(self, t, reqs):
+        """Перенос фрагмента заранее (пункт 3.9): чтение одного фрагмента с доступного узла-источника,
+        запись на получателя через repair_hours, затем старая копия удаляется. Трафик — size / k.
+        Перенос не удаётся (трафик всё равно потрачен), если к моменту завершения исходный фрагмент
+        уничтожен или признан утраченным, объект потерян или получатель ушёл или заполнен."""
+        e = min(int(t), self.T - 1)
+        for obj, idx, to in reqs:
+            obj, idx, to = int(obj), int(idx), int(to)
+            if self.obj_lost_t[obj] != np.inf or idx in self.mig_pending.get(obj, ()):
+                continue
+            src = [f for f in self.obj_frags[obj] if self.f_idx[f] == idx]
+            if not src:
+                continue
+            f = src[0]
+            node = self.f_node[f]
+            holders = {self.f_node[g] for g in self.obj_frags[obj]}
+            if (not self.f_exist[f] or self.true_down_at[node, e] or to in holders
+                    or not self.registered_by(t)[to] or self.alive_to[to] <= t or self.used[to] >= self.capacity[to]):
+                continue
+            traffic = self.size[obj] / self.cfg.k
+            self.mig_pending.setdefault(obj, set()).add(idx)
+            self.log_migr.append([obj, idx, node, to, t, traffic, np.nan, False])
+            self._push(t + self.cfg.repair_hours * HOUR, "migrate_done", (f, to, len(self.log_migr) - 1))
+
+    def _migrate_done(self, t, f, to, rec):
+        obj, idx = self.f_obj[f], self.f_idx[f]
+        self.mig_pending[obj].discard(idx)
+        self.log_migr[rec][6] = t
+        if (not self.f_exist[f] or self.f_to[f] != np.inf or self.obj_lost_t[obj] != np.inf
+                or self.alive_to[to] <= t or self.used[to] >= self.capacity[to]
+                or any(self.f_node[g] == to for g in self.obj_frags[obj])):
+            return
+        # новая копия появляется раньше, чем удаляется старая: число существующих фрагментов не проседает
+        self._add_fragment(obj, idx, to, t)
+        node = self.f_node[f]
+        self.f_exist[f] = False; self.f_dead[f] = t; self.obj_exist[obj] -= 1
+        self.f_to[f] = t; self.f_end[f] = "перенос"
+        self.node_frags[node].discard(f); self.obj_frags[obj].discard(f); self.used[node] -= 1
+        self.log_migr[rec][7] = True
+
     # ------------------------------------------------------------ прогон
     def run(self, policy, epochs: int | None = None, progress: bool = False):
         self._reset_state()
@@ -256,6 +311,7 @@ class Ledger:
             step = self.ch.step()
             view.t, view.seed = float(t), bytes.fromhex(step["seed"])
             self._repair(float(t), policy.on_epoch(float(t), view))
+            self._migrate(float(t), policy.migrate(float(t), view))
             for obj in self.data.new_objects(t):
                 nodes = policy.place(int(obj), float(t), view)
                 self.obj_n[obj] = len(nodes)
@@ -280,6 +336,7 @@ class RunResult:
         self.losses = pd.DataFrame(L.log_loss, columns=["obj", "t"])
         self.repairs = pd.DataFrame(L.log_repair, columns=["obj", "t", "r", "traffic"])
         self.disclosures = pd.DataFrame(L.log_disc, columns=["obj", "owner", "t"])
+        self.migrations = pd.DataFrame(L.log_migr, columns=["obj", "idx", "from", "to", "t", "traffic", "t_done", "ok"])
         self.objects = L.data.objects.assign(n=L.obj_n, lost_t=L.obj_lost_t)
         self._L = L
 
@@ -306,6 +363,8 @@ class RunResult:
             "Трафик восстановления в год": float(self.repairs["traffic"].sum() / (T / 365)),
             "Операций восстановления": len(self.repairs),
             "Раскрытий": len(self.disclosures),
+            "Переносов (удачных)": int(self.migrations["ok"].sum()),
+            "Трафик переносов в год": float(self.migrations["traffic"].sum() / (T / 365)),
         }
 
     def unavailability(self, n_objects: int | None = None) -> pd.DataFrame:

@@ -20,6 +20,14 @@ class Policy:
         """Решения о восстановлении: (объект, номера фрагментов, узлы-получатели)."""
         return []
 
+    def migrate(self, t: float, view) -> list[tuple[int, int, int]]:
+        """Переносы заранее (пункт 3.9): (объект, номер фрагмента, узел-получатель)."""
+        return []
+
+    def alarm(self, t: float, view) -> list[dict]:
+        """Тревоги о кризисах (пункт 3.9): словари с ключами cluster, type, prob, horizon."""
+        return []
+
     def predict(self, t: float, view):
         return None
 
