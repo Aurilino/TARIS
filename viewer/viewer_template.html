@@ -96,6 +96,20 @@ select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel
 .empty{color:var(--muted); font-size:13px}
 .card dl{display:grid; grid-template-columns:auto 1fr; gap:3px 12px; margin:0; font-size:13px}
 .card dt{color:var(--muted)} .card dd{margin:0; min-width:0; overflow-wrap:anywhere}
+.card canvas{display:block; width:100%; height:26px; margin-top:8px}
+.card .bar-rep{height:6px; border-radius:3px; background:var(--line); margin-top:4px; overflow:hidden}
+.card .bar-rep span{display:block; height:100%; background:var(--cluster)}
+.feed{display:flex; flex-direction:column; min-height:0}
+.filters{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px}
+.filters button{font-size:12px; border:1.5px solid var(--line); background:transparent; border-radius:999px; padding:1px 10px; cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--panel)}
+.filters button[hidden]{display:none}
+#feed{list-style:none; margin:0; padding:0; font-size:13px; max-height:320px; overflow:auto}
+#feed li{display:flex; gap:8px; align-items:baseline; padding:4px 2px; border-top:1px solid var(--line); cursor:pointer}
+#feed li:first-child{border-top:none}
+#feed li:hover{background:color-mix(in srgb, var(--accent) 8%, transparent)}
+#feed li.future{opacity:.45}
+#feed .when{flex:0 0 auto; font-family:var(--font-mono); font-size:12px; color:var(--muted); min-width:58px}
 .truthonly{display:none}
 body.truth .truthonly{display:inline}
 .note{font-size:12px; color:var(--muted); margin:8px 0 0}
@@ -148,8 +162,13 @@ body.truth .truthonly{display:inline}
       <ul id="now"><li class="empty">—</li></ul>
     </div>
     <div class="panel card">
-      <h2>Узел</h2>
-      <div id="card"><p class="empty">Нажмите на узел на карте.</p></div>
+      <h2 id="card-title">Карточка</h2>
+      <div id="card"><p class="empty">Нажмите на узел или дата-центр на карте.</p></div>
+    </div>
+    <div class="panel feed">
+      <h2>Лента событий</h2>
+      <div class="filters" id="filters" role="group" aria-label="Какие события показывать"></div>
+      <ol id="feed"></ol>
     </div>
   </aside>
 </main>
@@ -159,6 +178,9 @@ body.truth .truthonly{display:inline}
 <script>
 "use strict";
 const MIN = 1440;                                   // минут в сутках: время в журнале — целые минуты
+const TYPE_RU = {storm: "буря", cascade: "каскад", wear: "износ партии", exodus: "массовый уход", software: "сбой ПО", fire: "пожар"};
+const HW_RU = {consumer_hdd: "бытовой HDD", enterprise_hdd: "серверный HDD", ssd: "SSD"};
+const hw = name => HW_RU[name] || name;
 const $ = id => document.getElementById(id);
 const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const fmt = (x, d = 0) => x == null ? "—" : Number(x).toLocaleString("ru-RU", {maximumFractionDigits: d, minimumFractionDigits: d});
@@ -210,9 +232,30 @@ function prepare(log) {
   rows(log.truth.crisis_targets).forEach(r => { if (!targets.has(r.crisis)) targets.set(r.crisis, []); targets.get(r.crisis).push(r.node); });
   const lam = log.truth.nodes.lam_year.slice().filter(x => x != null).sort((a, b) => a - b);
   const q1 = lam[Math.floor(lam.length / 3)], q2 = lam[Math.floor(2 * lam.length / 3)];
-  return {H, N, agg, netOut, trOut, pre, micro, mean, crises, targets, q1, q2,
-          episodes: rows(log.policy.alarm_episodes), losses: rows(log.outcomes.losses), d: log.dict};
+  const S0 = {H, N, agg, netOut, trOut, pre, micro, mean, crises, targets, q1, q2,
+              episodes: rows(log.policy.alarm_episodes), losses: rows(log.outcomes.losses), d: log.dict};
+  S0.events = buildEvents(log, S0);
+  return S0;
 }
+// лента: события сети (тревоги, потери, долгие простои, версии) и истины (кризисы, предвестники, шоки)
+const CATS = {alarm: "тревоги", loss: "потери", outage: "долгие простои", version: "версии ПО",
+              crisis: "кризисы", pre: "предвестники", shock: "шоки"};
+const TRUTH_CATS = new Set(["crisis", "pre", "shock"]);
+function buildEvents(log, s) {
+  const ev = [], d = log.dict;
+  s.episodes.forEach(a => ev.push({m: a.t0, cat: "alarm", text: `тревога: ${TYPE_RU[d.crisis_type[a.type]]}, ${where(a.ctype, a.cluster, d)}`}));
+  s.losses.forEach(l => ev.push({m: l.t, cat: "loss", text: `потерян объект № ${l.obj}`}));
+  rows(log.net.outages).forEach(o => { if (o.cls === 2) ev.push({m: o.start, cat: "outage", node: o.node, text: `узел № ${o.node} не отвечает больше суток`}); });
+  rows(log.net.versions).forEach(v => { if (v.t >= 0) ev.push({m: v.t, cat: "version", text: `выпущена версия клиента ${v.version}`}); });
+  s.crises.forEach(c => {
+    const what = `${TYPE_RU[d.crisis_type[c.type]]}, ${where(c.ctype, c.cluster, d)}`;
+    if (!c.false_alarm) ev.push({m: c.tau, cat: "crisis", text: `кризис: ${what}${c.predictable ? "" : " (внезапный)"}`});
+    if (c.predictable || c.false_alarm) ev.push({m: Math.max(0, c.w0), cat: "pre", text: `${c.false_alarm ? "ложный предвестник" : "предвестник"}: ${what}`});
+  });
+  rows(log.truth.shocks).forEach(sh => ev.push({m: sh.start, cat: "shock", text: `шок: ${where(sh.ctype, sh.cluster, d)}${sh.destroyed ? ", данные уничтожены" : ""}`}));
+  return ev.sort((a, b) => a.m - b.m);
+}
+const feedOn = new Set(Object.keys(CATS).filter(k => k !== "outage"));   // долгих простоев много — по умолчанию скрыты
 function findAt(list, m) {                            // интервал, идущий в момент m (интервалы узла не пересекаются)
   let lo = 0, hi = list.length - 1, k = -1;
   while (lo <= hi) { const mid = (lo + hi) >> 1; if (list[mid].start <= m) { k = mid; lo = mid + 1; } else hi = mid - 1; }
@@ -255,7 +298,12 @@ function buildMap() {
   cy = cytoscape({container: $("cy"), elements: els, layout: {name: "preset"}, style: cyStyle(),
                   minZoom: 0.15, maxZoom: 3, wheelSensitivity: 0.25, boxSelectionEnabled: false, autoungrabify: true});
   cy.fit(undefined, 24);
-  cy.on("tap", "node[kind = 'node']", e => { selected = e.target.data("node"); render(); });
+  cy.on("tap", "node", e => {
+    const k = e.target.data("kind"), id = e.target.id();
+    if (k === "node") selected = {k, i: e.target.data("node")};
+    else if (k === "dc" || k === "region") selected = {k, i: Number(id.slice(1))};
+    render();
+  });
   cy.on("tap", e => { if (e.target === cy) { selected = null; render(); } });
 }
 function cyStyle() {
@@ -289,6 +337,7 @@ function cyStyle() {
     {selector: "node.gone", style: {"opacity": 0.3, "border-color": tok("--down")}},
     {selector: "node.pre-on", style: {"border-color": tok("--precursor"), "border-width": 3.2}},
     {selector: "node.sel", style: {"overlay-color": tok("--accent"), "overlay-opacity": 0.25, "overlay-padding": 5}},
+    {selector: "node[kind = 'dc'].sel, node[kind = 'region'].sel", style: {"overlay-opacity": 0.1, "overlay-padding": 3}},
   ];
 }
 
@@ -321,9 +370,10 @@ function render() {
   cy.batch(() => {
     cy.nodes("[kind = 'node']").forEach(el => {
       const i = el.data("node");
-      el.classes(nodeClass(i, m, day) + (i === selected ? " sel" : ""));
+      el.classes(nodeClass(i, m, day) + (selected && selected.k === "node" && selected.i === i ? " sel" : ""));
     });
     cy.nodes("[kind = 'dc'], [kind = 'region']").classes("");
+    if (selected && selected.k !== "node") cy.$id((selected.k === "dc" ? "d" : "r") + selected.i).addClass("sel");
     const mark = (ctype, cluster, cls) => {
       if (ctype === "dc") cy.$id("d" + cluster).addClass(cls);
       if (ctype === "region") cy.$id("r" + cluster).addClass(cls);
@@ -336,7 +386,7 @@ function render() {
   $("slider").value = t;
   const y = Math.floor(t / 365) + 1, dd = Math.floor(t % 365) + 1;
   $("clock").innerHTML = "сутки <b>" + fmt(Math.floor(t)) + "</b> из " + fmt(S.H) + " · год " + y + ", день " + dd;
-  renderTiles(day); renderNow(m); renderCard(m, day); drawStrip();
+  renderTiles(day); renderNow(m); renderCard(m, day); renderFeed(m); drawStrip();
 }
 function renderTiles(day) {
   const d = L.daily, k = Math.min(day, d.epoch.length - 1);
@@ -347,12 +397,11 @@ function renderTiles(day) {
   ];
   $("tiles").innerHTML = tiles.map(([kk, v, bad]) => `<div class="tile${bad ? " bad" : ""}"><div class="v">${v}</div><div class="k">${kk}</div></div>`).join("");
 }
-const TYPE_RU = {storm: "буря", cascade: "каскад", wear: "износ партии", exodus: "массовый уход", software: "сбой ПО", fire: "пожар"};
-function where(ctype, cluster) {
-  const c = S.d.ctype[ctype];
+function where(ctype, cluster, d = S.d) {
+  const c = d.ctype[ctype];
   if (c === "dc") return "ДЦ " + (Number(cluster) + 1);
   if (c === "region") return "регион " + (Number(cluster) + 1);
-  if (c === "batch") { const [dc, hw] = String(cluster).split("/"); return "партия " + hw + " в ДЦ " + (Number(dc) + 1); }
+  if (c === "batch") { const [dc, hwn] = String(cluster).split("/"); return "партия «" + hw(hwn) + "» в ДЦ " + (Number(dc) + 1); }
   if (c === "version") return "версия " + cluster;
   return String(cluster);
 }
@@ -367,22 +416,96 @@ function renderNow(m) {
   if (recent) items.push(`<li><span class="chip loss">потери</span><span>за неделю потеряно объектов: ${fmt(recent)}</span></li>`);
   $("now").innerHTML = items.length ? items.slice(0, 12).join("") : `<li class="empty">${truth ? "Кризисов и предвестников сейчас нет." : "Тревог и потерь сейчас нет."}</li>`;
 }
+const LEAVE_RU = {churn: "обычный уход", exodus: "массовый уход", wear_death: "гибель диска (износ)", pre_churn: "ранний уход перед кризисом"};
 function renderCard(m, day) {
-  if (selected == null) { $("card").innerHTML = `<p class="empty">Нажмите на узел на карте.</p>`; return; }
-  const i = selected, n = L.nodes, tn = L.truth.nodes;
+  if (selected == null) {
+    $("card-title").textContent = "Карточка";
+    $("card").innerHTML = `<p class="empty">Нажмите на узел или дата-центр на карте.</p>`; return;
+  }
+  if (selected.k === "node") return nodeCard(selected.i, m, day);
+  return clusterCard(selected.k, selected.i, m, day);
+}
+function nodeCard(i, m, day) {
+  const n = L.nodes, tn = L.truth.nodes;
   const o = findAt(S.netOut[i], m);
   const age = n.join[i] == null ? null : (m - n.join[i]) / MIN;
-  let html = `<dl><dt>Узел</dt><dd>№ ${i}</dd><dt>Где</dt><dd>регион ${n.region[i] + 1}, ДЦ ${n.dc[i] + 1}, провайдер ${n.provider[i] + 1}</dd>`
-    + `<dt>Класс (заявлен)</dt><dd>${L.dict.hw[n.hw_claimed[i]]}</dd>`
+  $("card-title").textContent = "Узел № " + i;
+  let html = `<dl><dt>Где</dt><dd>регион ${n.region[i] + 1}, ДЦ ${n.dc[i] + 1}, провайдер ${n.provider[i] + 1}</dd>`
+    + `<dt>Класс (заявлен)</dt><dd>${hw(L.dict.hw[n.hw_claimed[i]])}</dd>`
     + `<dt>В сети</dt><dd>${age == null ? "регистрация отменена" : age < 0 ? "ещё не пришёл" : fmt(age) + " сут"}</dd>`
-    + `<dt>Сейчас</dt><dd>${o ? "простой " + fmt((m - o.start) / 60, 1) + " ч" : "доступен"}</dd>`
+    + `<dt>Сейчас</dt><dd>${o ? "не отвечает " + fmt((m - o.start) / 60, 1) + " ч" : "доступен"}</dd>`
     + `<dt>Короткие события</dt><dd>×${fmt(signal(i, day), 1)} к обычному (3 сут)</dd>`;
   if (truth) {
-    html += `<dt>Владелец</dt><dd>оператор ${tn.owner[i]}</dd><dt>Класс (истина)</dt><dd>${L.dict.hw[tn.hw_true[i]]}</dd>`
+    html += `<dt>Владелец</dt><dd>оператор ${tn.owner[i]}</dd><dt>Класс (истина)</dt><dd>${hw(L.dict.hw[tn.hw_true[i]])}</dd>`
       + `<dt>Простоев в год</dt><dd>${fmt(tn.lam_year[i], 1)}</dd><dt>Полная гибель</dt><dd>${fmt(100 * tn.phi[i], 1)}% простоев</dd>`
-      + `<dt>Уход</dt><dd>${tn.leave[i] >= 0 ? "сутки " + fmt(tn.leave[i] / MIN) + " (" + (L.dict.leave_reason[tn.leave_reason[i]] || "—") + ")" : "нет"}</dd>`;
+      + `<dt>Уход</dt><dd>${tn.leave[i] >= 0 ? "сутки " + fmt(tn.leave[i] / MIN) + ", " + (LEAVE_RU[L.dict.leave_reason[tn.leave_reason[i]]] || "—") : "нет"}</dd>`;
   }
-  $("card").innerHTML = html + "</dl>";
+  html += "</dl>";
+  if (o) {                                           // прогресс до порога переразмещения T_rep = 24 ч
+    const p = Math.min(1, (m - o.start) / MIN);
+    html += `<p class="note">До признания фрагментов утраченными: ${fmt(24 * p, 1)} ч из 24</p><div class="bar-rep"><span style="width:${100 * p}%"></span></div>`;
+  }
+  html += `<canvas id="mini" aria-label="Простои узла за весь прогон"></canvas><p class="note">Простои за прогон${truth ? " (красные — от кризисов)" : ""}; чёрная черта — сейчас.</p>`;
+  $("card").innerHTML = html;
+  const cv = $("mini"), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const X = mm => mm / MIN / S.H * w;
+  g.fillStyle = tok("--line"); g.fillRect(0, h / 2, w, 1);
+  (truth ? S.trOut[i] : S.netOut[i]).forEach(r => {
+    const kind = truth ? S.d.outage_kind[r.kind] : "own";
+    g.fillStyle = kind === "own" || kind === "pre_short" ? tok("--down") : tok("--cluster");
+    g.fillRect(X(r.start), 4, Math.max(1.5, X(r.end < 0 ? S.H * MIN : r.end) - X(r.start)), h - 8);
+  });
+  g.fillStyle = tok("--ink"); g.fillRect(X(m) - 1, 0, 2, h);
+}
+function clusterCard(k, c, m, day) {
+  const n = L.nodes, members = n.id.filter(i => (k === "dc" ? n.dc[i] : n.region[i]) === c);
+  const here = members.filter(i => n.join[i] != null && n.join[i] <= m);
+  const down = here.filter(i => findAt(S.netOut[i], m)), present = here.filter(i => !findAt(S.netOut[i], m));
+  const sig = present.length ? present.reduce((a, i) => a + signal(i, day), 0) / present.length : 1;
+  $("card-title").textContent = k === "dc" ? `ДЦ ${c + 1} · провайдер ${L.world.dcs.provider[c] + 1}` : `Регион ${c + 1}`;
+  const ctype = S.d.ctype.indexOf(k);
+  const mine = x => x.ctype === ctype && String(x.cluster) === String(c);
+  let html = `<dl><dt>Узлов отвечает</dt><dd>${fmt(present.length)}</dd><dt>Не отвечает</dt><dd>${fmt(down.length)}</dd>`
+    + `<dt>Короткие события</dt><dd>×${fmt(sig, 1)} к обычному (в среднем по узлам)</dd>`
+    + `<dt>Тревог по кластеру</dt><dd>${fmt(S.episodes.filter(a => mine(a) && a.t0 <= m).length)} до сих пор</dd></dl>`;
+  if (truth) {
+    const past = S.crises.filter(x => mine(x) && !x.false_alarm && x.tau <= m);
+    const next = S.crises.filter(x => mine(x) && !x.false_alarm && x.tau > m).slice(0, 1)[0];
+    html += `<p class="note">Кризисов здесь до сих пор: ${past.length}${past.length ? " — " + past.slice(-4).map(x => TYPE_RU[S.d.crisis_type[x.type]] + " (сутки " + fmt(x.tau / MIN) + ")").join(", ") : ""}.`
+      + (next ? ` Следующий: ${TYPE_RU[S.d.crisis_type[next.type]]}, сутки ${fmt(next.tau / MIN)}${next.predictable ? ", с предвестником" : ", внезапный"}.` : "") + `</p>`;
+  }
+  $("card").innerHTML = html;
+}
+
+// ------------------------------------------------------------------ лента событий
+function renderFilters() {
+  $("filters").innerHTML = Object.entries(CATS).map(([k, v]) =>
+    `<button data-cat="${k}" aria-pressed="${feedOn.has(k)}"${TRUTH_CATS.has(k) && !truth ? " hidden" : ""}>${v}</button>`).join("");
+  $("filters").querySelectorAll("button").forEach(b => b.onclick = () => {
+    const k = b.dataset.cat; feedOn.has(k) ? feedOn.delete(k) : feedOn.add(k); renderFilters(); render();
+  });
+}
+let feedKey = "";
+function renderFeed(m) {
+  // последние 60 суток до текущего момента, новые сверху; будущее не показываем
+  const from = m - 60 * MIN, list = [];
+  for (let k = S.events.length - 1; k >= 0 && list.length < 80; k--) {
+    const e = S.events[k];
+    if (e.m > m) continue;
+    if (e.m < from) break;
+    if (!feedOn.has(e.cat) || (TRUTH_CATS.has(e.cat) && !truth)) continue;
+    list.push(e);
+  }
+  const key = list.length + ":" + (list[0] ? list[0].m : 0) + ":" + truth + ":" + [...feedOn].join();
+  if (key === feedKey) return;
+  feedKey = key;
+  const chip = {alarm: "alarm", loss: "loss", crisis: "crisis", pre: "pre", shock: "crisis", outage: "fa", version: "fa"};
+  $("feed").innerHTML = list.length ? list.map(e => `<li data-m="${e.m}"><span class="when">сут. ${fmt(Math.floor(e.m / MIN))}</span>`
+    + `<span class="chip ${chip[e.cat]}">${CATS[e.cat]}</span><span>${e.text}</span></li>`).join("")
+    : `<li class="empty" style="cursor:default">За последние 60 суток событий нет.</li>`;
+  $("feed").querySelectorAll("li[data-m]").forEach(li => li.onclick = () => { t = Number(li.dataset.m) / MIN + 1e-4; render(); });
 }
 
 // ------------------------------------------------------------------ шкала прогона
@@ -422,7 +545,7 @@ function stripLegend() {
 
 // ------------------------------------------------------------------ управление
 function setView(v) {
-  truth = v; document.body.classList.toggle("truth", v);
+  truth = v; document.body.classList.toggle("truth", v); feedKey = ""; renderFilters();
   $("v-net").setAttribute("aria-pressed", String(!v)); $("v-truth").setAttribute("aria-pressed", String(v));
   stripLegend(); render();
 }
