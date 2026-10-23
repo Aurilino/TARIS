@@ -23,8 +23,23 @@
 | `scripts/plot_world.py` | — | Графики A–D |
 | `scripts/plot_chain.py` | — | Графики E (как сеть видит простой) и F (зачем нужна франшиза) |
 | `scripts/plot_ledger.py` | — | Графики G (резерв информации объекта) и H (потери и затраты границ сравнения) |
+| `taris_sim/export.py` | 3.8 | Журнал прогона для просмотрщика по схеме `taris-log/1` (`docs/42_log_schema.md`) |
+| `scripts/export_run.py` | 3.8 | Прогон политики и журнал основного (около 200 узлов) или полного мира |
+| `scripts/check_export.py` | 3.8 | Проверки журнала: схема, сверка с прогоном, «взгляд сети» без полей истины, воспроизводимость |
+| `viewer/viewer_template.html`, `scripts/build_viewer.py` | 3.8 | Просмотрщик прогона: карта сети, проигрывание, «сеть / истина», карточки, лента событий, резерв объекта |
 
-Дальше: `export` и `viewer` (3.8), `adversary` (3.5), `validate` (3.7).
+Дальше: граф связей в просмотрщике, сценарии и вмешательства, `adversary` (3.5), `validate` (3.7).
+
+## Просмотрщик
+
+```powershell
+python scripts\export_run.py runs main                     # журнал основного мира (оракул кризисов, около 5 минут)
+python scripts\check_export.py                              # проверки журнала
+python scripts\build_viewer.py runs\main_crisis_oracle13_matched.taris.json.gz
+start viewer\build\taris_viewer.html                        # страница со встроенным журналом; «Открыть журнал» — любой другой
+```
+
+Страница грузит Cytoscape.js и шрифты из интернета; журнал распаковывается в браузере. `viewer\build\taris_viewer_artifact.html` — та же страница для публикации.
 
 ## Запуск (Windows 11, PowerShell)
 
