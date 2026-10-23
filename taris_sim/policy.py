@@ -97,18 +97,23 @@ class OraclePolicy(UniformPolicy):
     def _choose_spread(self, rng, cand, m, held=()):
         """Выбор с разнесением. Если при лимите r на регион и провайдера не набрать m узлов
         (например, кластер-цель кризиса исключён), лимит ослабляется на 1, 2, ... — лучше
-        лишний фрагмент в регионе, чем недоразмещённый объект. Лимиты на дата-центр и на владельца
-        не ослабляются (общий владелец — это риск раскрытия)."""
+        лишний фрагмент в регионе, чем недоразмещённый объект. Если не помогло и полное ослабление,
+        в крайнем случае разрешается 2, 3, ... фрагмента в одном дата-центре. Лимит на владельца
+        не ослабляется (общий владелец — это риск раскрытия)."""
         r0 = min(self.n - self.k, self.k - 1)
         for relax in range(self.n + 1):
             out = self._choose_spread_r(rng, cand, m, held, r0 + relax, r0)
             if out:
                 return out
+        for dc_cap in range(2, self.n + 1):
+            out = self._choose_spread_r(rng, cand, m, held, r0 + self.n, r0, dc_cap)
+            if out:
+                return out
         return []
 
-    def _choose_spread_r(self, rng, cand, m, held, r, r_own):
+    def _choose_spread_r(self, rng, cand, m, held, r, r_own, dc_cap=1):
         held = np.fromiter(held, int) if len(held) else np.empty(0, int)
-        used_dc = np.zeros(self.n_dc, bool); used_dc[self.dc[held]] = True
+        cd = np.bincount(self.dc[held], minlength=self.n_dc)
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
         cr = np.bincount(self.reg[held], minlength=self.n_reg)
         co = {}
@@ -118,7 +123,7 @@ class OraclePolicy(UniformPolicy):
         w = self.w[cand].astype(float)
         out = []
         for _ in range(m):
-            ok = (~used_dc[self.dc[cand]]) & (cp[self.prov[cand]] < r) & (cr[self.reg[cand]] < r)
+            ok = (cd[self.dc[cand]] < dc_cap) & (cp[self.prov[cand]] < r) & (cr[self.reg[cand]] < r)
             if co:
                 ok &= np.array([co.get(o, 0) < r_own for o in self.own[cand]]) if len(co) else ok
             ww = w * ok
@@ -128,7 +133,7 @@ class OraclePolicy(UniformPolicy):
             j = int(np.searchsorted(np.cumsum(ww), rng.random() * tot, side="right"))
             j = min(j, len(cand) - 1)
             c = int(cand[j]); out.append(c)
-            used_dc[self.dc[c]] = True; cp[self.prov[c]] += 1; cr[self.reg[c]] += 1
+            cd[self.dc[c]] += 1; cp[self.prov[c]] += 1; cr[self.reg[c]] += 1
             co[self.own[c]] = co.get(self.own[c], 0) + 1
             w[j] = 0.0
         return out

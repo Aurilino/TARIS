@@ -454,7 +454,7 @@ class RunResult:
         lost = []
         for r in real.itertuples():
             on = np.isin(f_node, targets[r.id]) & (f_from <= r.tau) & (f_end > r.tau)
-            exposed = np.unique(f_obj[on])
+            exposed = np.unique(f_obj[on]).astype(int)
             hit = exposed[(lost_t[exposed] >= r.tau) & (lost_t[exposed] <= r.win_end)]
             lost.append(size[hit].sum())
         real["lost"] = lost
