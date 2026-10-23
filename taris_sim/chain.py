@@ -156,8 +156,11 @@ class Chain:
             keep = t < nd["alive_to"].iat[i]
             t, noise = t[keep], noise[keep]
             s, e = by_node.get(i, (np.empty(0), np.empty(0)))
-            j = np.searchsorted(s, t, side="right") - 1
-            down = (j >= 0) & (t < e[np.maximum(j, 0)])
+            if len(s):
+                j = np.searchsorted(s, t, side="right") - 1
+                down = (j >= 0) & (t < e[np.maximum(j, 0)])
+            else:                                                  # у узла не было ни одного простоя
+                down = np.zeros(len(t), bool)
             parts.append(pd.DataFrame({"node": i, "t": t, "available": ~down, "noise_fail": noise}))
         a = pd.concat(parts, ignore_index=True)
         a["epoch"] = np.floor(a["t"]).astype(int)

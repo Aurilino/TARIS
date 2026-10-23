@@ -8,6 +8,7 @@
 4. Воспроизводимость.
 По нескольким зёрнам (кризисов в одном мире мало):
 5. Параметры эпизодов: длина окна, доля узлов с предвестником, каскады, задержка сбоя ПО.
+6. Сила предвестника по каналам: число событий против ожидаемого по формулам 3.9, провалы аудитов.
 
     python scripts/check_crisis.py [число зёрен, по умолчанию 10]
 """
@@ -18,6 +19,7 @@ import pandas as pd
 from scipy import stats
 from taris_sim.config import scenario, YEAR, HOUR
 from taris_sim.world import World
+from taris_sim.chain import Chain
 from taris_sim.crisis import type_params
 
 PRE_TYPES = ("storm", "wear", "exodus", "software")       # типы с окном предвестника, длина которого разыгрывается
@@ -159,6 +161,51 @@ def episode_params(ws: list) -> pd.DataFrame:
     return verdict(df)
 
 
+def precursor_strength(ws: list, chains: list) -> pd.DataFrame:
+    """Д2. Сила предвестника по каналам: число предвестниковых событий (по истине, до обрезки по итоговой
+    жизни) против ожидаемого по формулам 3.9 — суммарно по эпизодам и зёрнам."""
+    obs, exp, var = {}, {}, {}
+    for w in ws:
+        cr = w.crisis
+        fr = cr.frames()
+        ep_type = {e["id"]: e["type"] for e in cr.episodes}
+        ep_tau = {e["id"]: e["tau"] for e in cr.episodes}
+        cnt = []
+        pe = fr["pre_events"]
+        cnt += [(ep_type[e], ch) for e, ch in zip(pe["episode"], pe["channel"])]
+        cnt += [(ep_type[e], "silent") for e in fr["pre_silent"]["episode"]]
+        fo = fr["forced"]
+        cnt += [(ep_type[e], "churn") for e in fo.loc[fo["reason"] == "pre_churn", "episode"]]
+        ca = fr["cancelled"]
+        cnt += [(ep_type[e], "join") for e, j in zip(ca["episode"], ca["join_t"]) if j < ep_tau[e]]
+        for key in cnt:
+            obs[key] = obs.get(key, 0) + 1
+        for e in cr.episodes:
+            if e["predictable"] or e["false_alarm"]:
+                for ch, (m, v) in cr.expected_precursor(e).items():
+                    exp[(e["type"], ch)] = exp.get((e["type"], ch), 0.0) + m
+                    var[(e["type"], ch)] = var.get((e["type"], ch), 0.0) + v
+    rows = [(f"Предвестник: {typ}, {ch}", obs.get((typ, ch), 0), exp[(typ, ch)],
+             (obs.get((typ, ch), 0) - exp[(typ, ch)]) / np.sqrt(max(var[(typ, ch)], 1e-12)))
+            for typ, ch in sorted(exp)]
+    # провалы аудитов в окнах износа: доп. провал среди аудитов без шумового провала
+    o, m, v = 0, 0.0, 0.0
+    for w, ch in zip(ws, chains):
+        a = ch.audits
+        c = w.cfg
+        node, t = a["node"].to_numpy(), a["t"].to_numpy()
+        extra = np.zeros(len(a))
+        for wr in w.pre_audit.itertuples(index=False):
+            sel = (node == wr.node) & (t >= wr.start) & (t < wr.end)
+            extra[sel] += c.audit_noise * (wr.rho - 1.0) * w.crisis.g_shape((t[sel] - wr.w0) / max(wr.tau - wr.w0, 1e-12))
+        q = np.minimum(extra / (1.0 - c.audit_noise), 1.0)[~a["noise_fail"].to_numpy()]
+        o += int(a["pre_fail"].sum()); m += q.sum(); v += (q * (1 - q)).sum()
+    rows.append(("Предвестник: wear, провалы аудитов", o, m, (o - m) / np.sqrt(max(v, 1e-12))))
+    df = pd.DataFrame(rows, columns=["Проверка", "Наблюдается", "Ожидается", "z"])
+    df["Итог"] = np.where(df["z"].abs() < 3, "OK", "ПРОВЕРИТЬ")
+    return df
+
+
 if __name__ == "__main__":
     n_seeds = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     for mode in ("matched", "mismatched"):
@@ -175,3 +222,6 @@ if __name__ == "__main__":
         ws = [World(scenario("S6", world_mode=mode, seed=s)) for s in range(1, n_seeds + 1)]
         print(f"\n=== Параметры эпизодов, {mode}, зёрен {n_seeds}")
         print(episode_params(ws).round(4).to_string(index=False))
+        chains = [Chain(w) for w in ws]
+        print(f"\n=== Сила предвестника по каналам, {mode}, зёрен {n_seeds}")
+        print(precursor_strength(ws, chains).round(2).to_string(index=False))

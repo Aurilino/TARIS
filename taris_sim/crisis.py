@@ -211,10 +211,7 @@ class Crises:
         ep["n_xi"] = int(xi.sum())
         nd = w.nodes
         for i in targets[xi]:
-            lo = max(w0, self.a0[i])
-            if typ == "software":
-                lo = max(lo, self.upd[i, ep["cluster"]])         # предвестник — только у обновившихся
-            hi = min(tau, self.a1[i])
+            lo, hi = self.precursor_span(ep, i)
             if hi <= lo:
                 continue
             for ch in CHANNELS[typ]:
@@ -256,6 +253,56 @@ class Crises:
                 j = self.join[i]
                 if max(w0, 0.0) <= j < tau and ri < (1.0 - p["rho_join"]) * float(self.g_shape(u(j))):
                     self.cancel_rows.append((int(i), float(j), ep["id"]))
+
+    def precursor_span(self, ep, i):
+        """Часть окна предвестника, когда узел i жив (по базовой жизни); у сбоя ПО — после обновления узла."""
+        lo = max(ep["w0"], self.a0[i])
+        if ep["type"] == "software":
+            lo = max(lo, self.upd[i, ep["cluster"]])         # предвестник — только у обновившихся
+        return lo, min(ep["tau"], self.a1[i])
+
+    def precursor_nodes(self, ep) -> np.ndarray:
+        """Узлы кластера-цели с меткой предвестника xi = 1 (тот же поток, что при построении)."""
+        s = type_params(self.cfg, ep["type"])["s"]
+        xi = self.stream(PRE, *ep["key"], CH_XI).random(len(ep["targets"])) < s
+        return ep["targets"][xi]
+
+    def expected_precursor(self, ep, n_grid: int = 400) -> dict:
+        """Ожидаемое число предвестниковых событий эпизода по каналам и его дисперсия (для проверок, шаг Д):
+        интеграл lambda^X * (rho - 1) * g(u) по окну у помеченных узлов. Для ухода (первое событие)
+        и отменённых регистраций — сумма вероятностей, дисперсия — сумма p * (1 - p)."""
+        c, w, nd = self.cfg, self.w, self.w.nodes
+        p = type_params(c, ep["type"])
+        rho, w0, tau = p.get("rho", 1.0), ep["w0"], ep["tau"]
+        u = lambda t: (t - w0) / max(tau - w0, 1e-12)
+        out = {}
+
+        def add(ch, mean, var):
+            m0, v0 = out.get(ch, (0.0, 0.0))
+            out[ch] = (m0 + mean, v0 + var)
+
+        for i in self.precursor_nodes(ep):
+            lo, hi = self.precursor_span(ep, i)
+            if hi <= lo:
+                continue
+            t = np.linspace(lo, hi, n_grid)
+            g = self.g_shape(u(t)) * (rho - 1.0)
+            for ch in CHANNELS[ep["type"]]:
+                if ch == "micro":
+                    m = float(nd["lam_micro"].iat[i]) * np.trapezoid(g, t); add(ch, m, m)
+                elif ch == "short":
+                    m = np.trapezoid(w.rate(np.full(n_grid, i), t) * g, t); add(ch, m, m)
+                elif ch == "silent":
+                    m = float(nd["lam_silent"].iat[i]) * np.trapezoid(g, t); add(ch, m, m)
+                elif ch == "churn":
+                    q = 1.0 - np.exp(-np.trapezoid(w.churn_rate(t - self.join[i]) * g, t)); add(ch, q, q * (1 - q))
+        if "join" in CHANNELS[ep["type"]]:
+            region = w.nodes.index[w.nodes["region"] == ep["cluster"]].to_numpy()
+            j = self.join[region]
+            j = j[(j >= max(w0, 0.0)) & (j < tau)]
+            q = (1.0 - p["rho_join"]) * self.g_shape(u(j))
+            add("join", float(q.sum()), float((q * (1 - q)).sum()))
+        return out
 
     def _short_durations(self, g, i, m):
         """Короткие простои предвестника: длиннее франшизы d, короче порога T_rep."""
