@@ -1,0 +1,467 @@
+<title>Просмотрщик TARIS</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Один экран: сверху управление временем, под ним шкала прогона; слева карта сети регион → дата-центр → узлы,
+   справа метрики, текущие события и карточка узла. Палитра и шрифт — как у демонстрации среды (env_demo). */
+:root{
+  --paper:#F5F7F6; --panel:#FFFFFF; --ink:#1C2430; --muted:#5F6B78; --line:#D5DBE0;
+  --cluster:#D2332F; --cluster-soft:rgba(210,51,47,.07);
+  --region:#5F6B78; --region-soft:rgba(95,107,120,.05);
+  --risk-low:#BFE3D6; --risk-mid:#F1E2A8; --risk-high:#F3B49C;
+  --calm:#DCE4EA; --signal:#F2C25A; --signal-hot:#E8873A;
+  --down:#8A96A3; --accent:#2C5FA8; --alarm:#2C5FA8; --precursor:#D9961A; --loss:#8E1B1B;
+  --font-body:"Golos Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14181D; --panel:#1B2027; --ink:#E5E9ED; --muted:#9AA6B2; --line:#2D353F;
+    --cluster:#FF6A5E; --cluster-soft:rgba(255,106,94,.08);
+    --region:#9AA6B2; --region-soft:rgba(154,166,178,.05);
+    --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
+    --calm:#36414D; --signal:#B98A2C; --signal-hot:#D46E2A;
+    --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --panel:#1B2027; --ink:#E5E9ED; --muted:#9AA6B2; --line:#2D353F;
+  --cluster:#FF6A5E; --cluster-soft:rgba(255,106,94,.08);
+  --region:#9AA6B2; --region-soft:rgba(154,166,178,.05);
+  --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
+  --calm:#36414D; --signal:#B98A2C; --signal-hot:#D46E2A;
+  --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A;
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:14px; line-height:1.45;
+  font-variant-numeric:tabular-nums; display:flex; flex-direction:column}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--panel)}
+button,select,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--panel); border-bottom:1px solid var(--line);
+  padding-block:10px 8px}
+.head{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 16px}
+.head h1{font-size:18px; font-weight:600; margin:0; letter-spacing:-.01em}
+.run{color:var(--muted); font-size:13px; min-width:0}
+.run b{color:var(--ink); font-weight:500}
+.controls{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:8px}
+.btn{border:1.5px solid var(--ink); background:transparent; border-radius:999px; padding:4px 14px; cursor:pointer}
+.btn.primary{background:var(--ink); color:var(--panel); min-width:86px}
+.btn:disabled{opacity:.4; cursor:default}
+select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel); padding:4px 8px}
+.clock{font-family:var(--font-mono); font-size:13px; min-width:190px}
+.clock b{font-weight:500}
+.view{display:inline-flex; border:1.5px solid var(--ink); border-radius:999px; overflow:hidden}
+.view button{border:0; background:transparent; padding:4px 12px; cursor:pointer}
+.view button[aria-pressed="true"]{background:var(--ink); color:var(--panel)}
+.file{margin-left:auto}
+.file input{position:absolute; width:1px; height:1px; opacity:0}
+.file label{border:1.5px solid var(--line); border-radius:999px; padding:4px 12px; cursor:pointer; display:inline-block}
+.file input:focus-visible + label{outline:2px solid var(--accent); outline-offset:2px}
+
+.timeline{margin-top:8px; position:relative}
+.timeline input[type=range]{width:100%; margin:0; accent-color:var(--ink); display:block}
+.timeline canvas{display:block; width:100%; height:34px; cursor:pointer}
+.tl-legend{display:flex; flex-wrap:wrap; gap:2px 14px; font-size:12px; color:var(--muted); margin-top:2px}
+.tl-legend i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px}
+
+.layout{flex:1; display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:14px; padding-block:12px; min-height:0}
+@media (max-width:900px){ .layout{grid-template-columns:minmax(0,1fr)} }
+.mapbox{position:relative; min-height:420px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+#cy{position:absolute; inset:0 0 46px 0}
+.maplegend{position:absolute; left:10px; bottom:8px; right:10px; display:flex; flex-wrap:wrap; gap:2px 14px; font-size:12px;
+  color:var(--muted); pointer-events:none}
+.sw{display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:-1px; border:1.5px solid var(--ink)}
+.side{display:flex; flex-direction:column; gap:12px; min-width:0}
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; min-width:0}
+.panel h2{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 8px; font-weight:500}
+.tiles{display:grid; grid-template-columns:1fr 1fr; gap:8px 12px}
+.tile .v{font-size:20px; font-weight:600; line-height:1.15}
+.tile .k{font-size:12px; color:var(--muted)}
+.tile.bad .v{color:var(--loss)}
+.now ul{list-style:none; margin:0; padding:0; font-size:13px; display:flex; flex-direction:column; gap:6px}
+.now li{display:flex; gap:8px; align-items:baseline}
+.chip{flex:0 0 auto; font-size:11px; border-radius:999px; padding:0 8px; border:1.5px solid currentColor; white-space:nowrap}
+.chip.crisis{color:var(--cluster)} .chip.pre{color:var(--precursor)} .chip.alarm{color:var(--alarm)} .chip.loss{color:var(--loss)}
+.chip.fa{color:var(--muted)}
+.empty{color:var(--muted); font-size:13px}
+.card dl{display:grid; grid-template-columns:auto 1fr; gap:3px 12px; margin:0; font-size:13px}
+.card dt{color:var(--muted)} .card dd{margin:0; min-width:0; overflow-wrap:anywhere}
+.truthonly{display:none}
+body.truth .truthonly{display:inline}
+.note{font-size:12px; color:var(--muted); margin:8px 0 0}
+
+.loading{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px;
+  color:var(--muted); background:var(--panel)}
+.loading strong{display:block; color:var(--ink); font-size:16px; margin-bottom:6px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+
+<header class="bar wrap">
+  <div class="head">
+    <h1>Просмотрщик TARIS</h1>
+    <span class="run" id="run">журнал не загружен</span>
+  </div>
+  <div class="controls">
+    <button class="btn primary" id="play" disabled>Пуск</button>
+    <select id="speed" aria-label="Скорость времени">
+      <option value="1">1 сутки в секунду</option>
+      <option value="7" selected>1 неделя в секунду</option>
+      <option value="30">1 месяц в секунду</option>
+    </select>
+    <span class="clock" id="clock">сутки —</span>
+    <span class="view" role="group" aria-label="Что показывать">
+      <button id="v-net" aria-pressed="true">Взгляд сети</button>
+      <button id="v-truth" aria-pressed="false">Истина</button>
+    </span>
+    <span class="file"><input type="file" id="file" accept=".gz,.json"><label for="file">Открыть журнал</label></span>
+  </div>
+  <div class="timeline">
+    <canvas id="strip" aria-label="Шкала прогона: кризисы, тревоги и потери"></canvas>
+    <input type="range" id="slider" min="0" max="1095" step="0.25" value="0" aria-label="Время, сутки" disabled>
+    <div class="tl-legend" id="tl-legend"></div>
+  </div>
+</header>
+
+<main class="layout wrap">
+  <section class="mapbox" aria-label="Карта сети">
+    <div id="cy"></div>
+    <div class="maplegend" id="maplegend"></div>
+    <div class="loading" id="loading"><div><strong>Загружаю журнал прогона…</strong>Если ничего не происходит, откройте файл <code>.taris.json.gz</code> кнопкой «Открыть журнал».</div></div>
+  </section>
+  <aside class="side">
+    <div class="panel">
+      <h2>Сейчас в сети</h2>
+      <div class="tiles" id="tiles"></div>
+    </div>
+    <div class="panel now">
+      <h2>Что происходит</h2>
+      <ul id="now"><li class="empty">—</li></ul>
+    </div>
+    <div class="panel card">
+      <h2>Узел</h2>
+      <div id="card"><p class="empty">Нажмите на узел на карте.</p></div>
+    </div>
+  </aside>
+</main>
+
+<script id="log-data" type="application/octet-stream">__LOG_B64__</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script>
+"use strict";
+const MIN = 1440;                                   // минут в сутках: время в журнале — целые минуты
+const $ = id => document.getElementById(id);
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (x, d = 0) => x == null ? "—" : Number(x).toLocaleString("ru-RU", {maximumFractionDigits: d, minimumFractionDigits: d});
+
+let L = null, S = null, cy = null;                  // журнал, подготовленные данные, карта
+let t = 0, playing = false, lastFrame = 0, truth = false, selected = null;
+
+// ------------------------------------------------------------------ загрузка журнала
+async function gunzipJSON(stream) {
+  const text = await new Response(stream.pipeThrough(new DecompressionStream("gzip"))).text();
+  return JSON.parse(text);
+}
+async function loadEmbedded() {
+  const b64 = $("log-data").textContent.trim();
+  if (!b64 || b64.startsWith("__")) return null;
+  const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  return gunzipJSON(new Blob([bin]).stream());
+}
+$("file").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  showLoading("Читаю " + f.name + "…");
+  try {
+    const log = f.name.endsWith(".gz") ? await gunzipJSON(f.stream()) : JSON.parse(await f.text());
+    start(log);
+  } catch (err) {
+    showLoading("Не удалось прочитать файл: " + err.message + ". Нужен журнал прогона .taris.json.gz из scripts/export_run.py.");
+  }
+});
+function showLoading(msg) { const el = $("loading"); el.hidden = false; el.firstElementChild.innerHTML = "<strong>" + msg + "</strong>"; }
+
+// ------------------------------------------------------------------ подготовка данных
+function rows(tab) {                                  // столбцы -> массив строк
+  const keys = Object.keys(tab || {}); if (!keys.length) return [];
+  return tab[keys[0]].map((_, i) => Object.fromEntries(keys.map(k => [k, tab[k][i]])));
+}
+function prepare(log) {
+  const H = log.meta.horizon_days, N = log.nodes.id.length, agg = log.meta.agg_days;
+  const per = () => Array.from({length: N}, () => []);
+  const netOut = per(), trOut = per(), pre = per();
+  rows(log.net.outages).forEach(r => netOut[r.node].push(r));
+  rows(log.truth.outages).forEach(r => trOut[r.node].push(r));
+  rows(log.truth.precursors).forEach(r => pre[r.node].push(r));
+  netOut.forEach(a => a.sort((x, y) => x.start - y.start));
+  trOut.forEach(a => a.sort((x, y) => x.start - y.start));
+  // частота коротких наблюдаемых событий узла: средняя за жизнь — фон для «всплеска»
+  const micro = log.net.micro, mean = micro.counts.map(c => c.length ? c.reduce((a, b) => a + b, 0) / c.length : 0);
+  const crises = rows(log.truth.crises), targets = new Map();
+  rows(log.truth.crisis_targets).forEach(r => { if (!targets.has(r.crisis)) targets.set(r.crisis, []); targets.get(r.crisis).push(r.node); });
+  const lam = log.truth.nodes.lam_year.slice().filter(x => x != null).sort((a, b) => a - b);
+  const q1 = lam[Math.floor(lam.length / 3)], q2 = lam[Math.floor(2 * lam.length / 3)];
+  return {H, N, agg, netOut, trOut, pre, micro, mean, crises, targets, q1, q2,
+          episodes: rows(log.policy.alarm_episodes), losses: rows(log.outcomes.losses), d: log.dict};
+}
+function findAt(list, m) {                            // интервал, идущий в момент m (интервалы узла не пересекаются)
+  let lo = 0, hi = list.length - 1, k = -1;
+  while (lo <= hi) { const mid = (lo + hi) >> 1; if (list[mid].start <= m) { k = mid; lo = mid + 1; } else hi = mid - 1; }
+  return k >= 0 && m < (list[k].end < 0 ? Infinity : list[k].end) ? list[k] : null;
+}
+function signal(i, day) {                             // во сколько раз чаще обычного сеть видела короткие события за 3 суток
+  const c = S.micro.counts[i], b0 = S.micro.bin0[i];
+  if (!c.length || !S.mean[i]) return 1;
+  const b = Math.floor(day / S.agg) - b0, w = Math.max(1, Math.round(3 / S.agg));
+  let s = 0, n = 0;
+  for (let k = Math.max(0, b - w + 1); k <= b && k < c.length; k++) { s += c[k]; n++; }
+  return n ? (s / n) / S.mean[i] : 1;
+}
+
+// ------------------------------------------------------------------ карта
+function buildMap() {
+  const els = [], n = L.nodes, dcs = L.world.dcs;
+  const byDc = new Map();
+  n.id.forEach(i => { const d = n.dc[i]; if (!byDc.has(d)) byDc.set(d, []); byDc.get(d).push(i); });
+  const regions = L.world.regions.id;
+  const STEP = 24, COLS = 5, PER_ROW = 3;             // регионы — по три в ряд, внутри региона дата-центры в две колонки
+  let x0 = 0, y0 = 0, rowH = 0;
+  regions.forEach((r, ri) => {
+    if (ri > 0 && ri % PER_ROW === 0) { x0 = 0; y0 += rowH + 90; rowH = 0; }
+    els.push({data: {id: "r" + r, label: "Регион " + (r + 1), kind: "region"}});
+    const myDc = dcs.id.filter(d => dcs.region[d] === r);
+    const colY = [y0, y0], colW = COLS * STEP + 40;
+    myDc.forEach(d => {
+      const ids = byDc.get(d) || [];
+      els.push({data: {id: "d" + d, parent: "r" + r, label: "ДЦ " + (d + 1) + " · провайдер " + (dcs.provider[d] + 1), kind: "dc"}});
+      const c = colY[0] <= colY[1] ? 0 : 1;
+      ids.forEach((i, k) => els.push({data: {id: "n" + i, parent: "d" + d, node: i, kind: "node"},
+        position: {x: x0 + c * colW + (k % COLS) * STEP, y: colY[c] + Math.floor(k / COLS) * STEP}}));
+      if (!ids.length) els.push({data: {id: "e" + d, parent: "d" + d, kind: "spacer"}, position: {x: x0 + c * colW, y: colY[c]}});
+      colY[c] += Math.max(1, Math.ceil(ids.length / COLS)) * STEP + 64;
+    });
+    rowH = Math.max(rowH, Math.max(colY[0], colY[1]) - y0);
+    x0 += 2 * colW + 70;
+  });
+  cy = cytoscape({container: $("cy"), elements: els, layout: {name: "preset"}, style: cyStyle(),
+                  minZoom: 0.15, maxZoom: 3, wheelSensitivity: 0.25, boxSelectionEnabled: false, autoungrabify: true});
+  cy.fit(undefined, 24);
+  cy.on("tap", "node[kind = 'node']", e => { selected = e.target.data("node"); render(); });
+  cy.on("tap", e => { if (e.target === cy) { selected = null; render(); } });
+}
+function cyStyle() {
+  return [
+    // Cytoscape не понимает rgba(), поэтому прозрачность заливки — отдельным свойством
+    {selector: "node[kind = 'region']", style: {"background-color": tok("--region"), "background-opacity": 0.05, "border-color": tok("--region"),
+      "border-width": 1.2, "border-style": "dashed", "shape": "round-rectangle", "label": "data(label)", "text-valign": "top",
+      "text-halign": "center", "font-size": 15, "font-weight": 600, "color": tok("--muted"), "padding": 18,
+      "font-family": "Golos Text, Segoe UI, sans-serif", "text-margin-y": -4}},
+    {selector: "node[kind = 'dc']", style: {"background-color": tok("--cluster"), "background-opacity": 0.06, "border-color": tok("--cluster"),
+      "border-width": 1.6, "shape": "round-rectangle", "label": "data(label)", "text-valign": "top", "text-halign": "center",
+      "font-size": 11, "color": tok("--cluster"), "padding": 10, "font-family": "Golos Text, Segoe UI, sans-serif", "text-margin-y": -3}},
+    {selector: "node[kind = 'dc'].crisis", style: {"border-width": 3.5, "background-opacity": 0.16}},
+    {selector: "node[kind = 'dc'].pre", style: {"border-color": tok("--precursor"), "border-style": "dashed", "border-width": 3}},
+    {selector: "node[kind = 'dc'].alarm", style: {"border-color": tok("--alarm"), "border-width": 3.5}},
+    {selector: "node[kind = 'region'].crisis", style: {"border-color": tok("--cluster"), "border-width": 3, "border-style": "solid"}},
+    {selector: "node[kind = 'region'].alarm", style: {"border-color": tok("--alarm"), "border-width": 3, "border-style": "solid"}},
+    {selector: "node[kind = 'spacer']", style: {"width": 1, "height": 1, "opacity": 0}},
+    {selector: "node[kind = 'node']", style: {"width": 15, "height": 15, "background-color": tok("--calm"), "border-color": tok("--ink"),
+      "border-width": 1.6}},
+    {selector: "node.hidden", style: {"display": "none"}},
+    {selector: "node.s-mid", style: {"background-color": tok("--signal")}},
+    {selector: "node.s-hot", style: {"background-color": tok("--signal-hot")}},
+    {selector: "node.r-low", style: {"background-color": tok("--risk-low")}},
+    {selector: "node.r-mid", style: {"background-color": tok("--risk-mid")}},
+    {selector: "node.r-high", style: {"background-color": tok("--risk-high")}},
+    {selector: "node.down", style: {"background-opacity": 0, "border-style": "dashed", "border-color": tok("--down")}},
+    {selector: "node.down-long", style: {"background-color": tok("--down"), "background-opacity": 0.45, "border-color": tok("--down")}},
+    {selector: "node.cr-down", style: {"border-color": tok("--cluster"), "border-style": "dashed", "border-width": 2.2, "background-opacity": 0}},
+    {selector: "node.dead", style: {"background-color": tok("--loss"), "background-opacity": 1, "border-color": tok("--loss")}},
+    {selector: "node.gone", style: {"opacity": 0.3, "border-color": tok("--down")}},
+    {selector: "node.pre-on", style: {"border-color": tok("--precursor"), "border-width": 3.2}},
+    {selector: "node.sel", style: {"overlay-color": tok("--accent"), "overlay-opacity": 0.25, "overlay-padding": 5}},
+  ];
+}
+
+// ------------------------------------------------------------------ состояние в момент t
+function nodeClass(i, m, day) {
+  const n = L.nodes;
+  if (truth) {
+    const tn = L.truth.nodes;
+    if (tn.cancelled[i] || n.join[i] == null || n.join[i] > m) return "hidden";
+    if (tn.leave[i] >= 0 && tn.leave[i] <= m) return "gone";
+    const o = findAt(S.trOut[i], m);
+    let c = tn.lam_year[i] <= S.q1 ? "r-low" : tn.lam_year[i] <= S.q2 ? "r-mid" : "r-high";
+    if (o) c = o.destroyed ? "dead" : (S.d.outage_kind[o.kind] === "own" || S.d.outage_kind[o.kind] === "pre_short") ? "down" : "cr-down";
+    if (S.pre[i].some(p => p.start <= m && m < p.end)) c += " pre-on";
+    return c;
+  }
+  if (n.join[i] == null || n.join[i] > m) return "hidden";
+  const o = findAt(S.netOut[i], m);
+  if (o) return m - o.start > MIN ? "down-long" : "down";
+  const s = signal(i, day);
+  return s >= 2 ? "s-hot" : s >= 1.4 ? "s-mid" : "";
+}
+function activeCrises(m) { return S.crises.filter(c => !c.false_alarm && c.tau <= m && m < c.end); }
+function activePre(m) { return S.crises.filter(c => (c.predictable || c.false_alarm) && c.w0 <= m && m < c.tau); }
+function activeAlarms(m) { return S.episodes.filter(a => a.t0 <= m && m < a.until); }
+
+function render() {
+  if (!L) return;
+  const m = Math.round(t * MIN), day = Math.min(S.H - 1, Math.floor(t));
+  cy.batch(() => {
+    cy.nodes("[kind = 'node']").forEach(el => {
+      const i = el.data("node");
+      el.classes(nodeClass(i, m, day) + (i === selected ? " sel" : ""));
+    });
+    cy.nodes("[kind = 'dc'], [kind = 'region']").classes("");
+    const mark = (ctype, cluster, cls) => {
+      if (ctype === "dc") cy.$id("d" + cluster).addClass(cls);
+      if (ctype === "region") cy.$id("r" + cluster).addClass(cls);
+    };
+    if (truth) {
+      activePre(m).forEach(c => mark(S.d.ctype[c.ctype], c.cluster, "pre"));
+      activeCrises(m).forEach(c => mark(S.d.ctype[c.ctype], c.cluster, "crisis"));
+    } else activeAlarms(m).forEach(a => mark(S.d.ctype[a.ctype], a.cluster, "alarm"));
+  });
+  $("slider").value = t;
+  const y = Math.floor(t / 365) + 1, dd = Math.floor(t % 365) + 1;
+  $("clock").innerHTML = "сутки <b>" + fmt(Math.floor(t)) + "</b> из " + fmt(S.H) + " · год " + y + ", день " + dd;
+  renderTiles(day); renderNow(m); renderCard(m, day); drawStrip();
+}
+function renderTiles(day) {
+  const d = L.daily, k = Math.min(day, d.epoch.length - 1);
+  const tiles = [
+    ["Объектов хранится", fmt(d.objects_alive[k])], ["Фрагментов", fmt(d.fragments[k])],
+    ["Потеряно объектов", fmt(d.lost_cum[k]), d.lost_cum[k] > 0], ["Тревог действует", fmt(d.alarms_active[k])],
+    ["Восстановлений за сутки", fmt(d.repairs[k])], ["Переносов за сутки", fmt(d.migrations[k])],
+  ];
+  $("tiles").innerHTML = tiles.map(([kk, v, bad]) => `<div class="tile${bad ? " bad" : ""}"><div class="v">${v}</div><div class="k">${kk}</div></div>`).join("");
+}
+const TYPE_RU = {storm: "буря", cascade: "каскад", wear: "износ партии", exodus: "массовый уход", software: "сбой ПО", fire: "пожар"};
+function where(ctype, cluster) {
+  const c = S.d.ctype[ctype];
+  if (c === "dc") return "ДЦ " + (Number(cluster) + 1);
+  if (c === "region") return "регион " + (Number(cluster) + 1);
+  if (c === "batch") { const [dc, hw] = String(cluster).split("/"); return "партия " + hw + " в ДЦ " + (Number(dc) + 1); }
+  if (c === "version") return "версия " + cluster;
+  return String(cluster);
+}
+function renderNow(m) {
+  const items = [];
+  activeAlarms(m).forEach(a => items.push(`<li><span class="chip alarm">тревога</span><span>${TYPE_RU[S.d.crisis_type[a.type]]}: ${where(a.ctype, a.cluster)}, до суток ${fmt(Math.floor(a.until / MIN))}</span></li>`));
+  if (truth) {
+    activePre(m).forEach(c => items.push(`<li><span class="chip ${c.false_alarm ? "fa" : "pre"}">${c.false_alarm ? "ложный предвестник" : "предвестник"}</span><span>${TYPE_RU[S.d.crisis_type[c.type]]}: ${where(c.ctype, c.cluster)}${c.false_alarm ? "" : ", кризис через " + fmt((c.tau - m) / MIN, 1) + " сут"}</span></li>`));
+    activeCrises(m).forEach(c => items.push(`<li><span class="chip crisis">кризис</span><span>${TYPE_RU[S.d.crisis_type[c.type]]}: ${where(c.ctype, c.cluster)}${c.predictable ? "" : " (внезапный)"}</span></li>`));
+  }
+  const recent = S.losses.filter(l => l.t <= m && l.t > m - 7 * MIN).length;
+  if (recent) items.push(`<li><span class="chip loss">потери</span><span>за неделю потеряно объектов: ${fmt(recent)}</span></li>`);
+  $("now").innerHTML = items.length ? items.slice(0, 12).join("") : `<li class="empty">${truth ? "Кризисов и предвестников сейчас нет." : "Тревог и потерь сейчас нет."}</li>`;
+}
+function renderCard(m, day) {
+  if (selected == null) { $("card").innerHTML = `<p class="empty">Нажмите на узел на карте.</p>`; return; }
+  const i = selected, n = L.nodes, tn = L.truth.nodes;
+  const o = findAt(S.netOut[i], m);
+  const age = n.join[i] == null ? null : (m - n.join[i]) / MIN;
+  let html = `<dl><dt>Узел</dt><dd>№ ${i}</dd><dt>Где</dt><dd>регион ${n.region[i] + 1}, ДЦ ${n.dc[i] + 1}, провайдер ${n.provider[i] + 1}</dd>`
+    + `<dt>Класс (заявлен)</dt><dd>${L.dict.hw[n.hw_claimed[i]]}</dd>`
+    + `<dt>В сети</dt><dd>${age == null ? "регистрация отменена" : age < 0 ? "ещё не пришёл" : fmt(age) + " сут"}</dd>`
+    + `<dt>Сейчас</dt><dd>${o ? "простой " + fmt((m - o.start) / 60, 1) + " ч" : "доступен"}</dd>`
+    + `<dt>Короткие события</dt><dd>×${fmt(signal(i, day), 1)} к обычному (3 сут)</dd>`;
+  if (truth) {
+    html += `<dt>Владелец</dt><dd>оператор ${tn.owner[i]}</dd><dt>Класс (истина)</dt><dd>${L.dict.hw[tn.hw_true[i]]}</dd>`
+      + `<dt>Простоев в год</dt><dd>${fmt(tn.lam_year[i], 1)}</dd><dt>Полная гибель</dt><dd>${fmt(100 * tn.phi[i], 1)}% простоев</dd>`
+      + `<dt>Уход</dt><dd>${tn.leave[i] >= 0 ? "сутки " + fmt(tn.leave[i] / MIN) + " (" + (L.dict.leave_reason[tn.leave_reason[i]] || "—") + ")" : "нет"}</dd>`;
+  }
+  $("card").innerHTML = html + "</dl>";
+}
+
+// ------------------------------------------------------------------ шкала прогона
+function drawStrip() {
+  const cv = $("strip"), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  const X = mm => (mm / MIN) / S.H * w;
+  g.fillStyle = tok("--line"); g.fillRect(0, h - 1, w, 1);
+  // ряд 1: тревоги политики (взгляд сети) — полосы
+  g.fillStyle = tok("--alarm"); g.globalAlpha = 0.7;
+  S.episodes.forEach(a => g.fillRect(X(a.t0), 2, Math.max(2, X(a.until) - X(a.t0)), 8));
+  g.globalAlpha = 1;
+  // ряд 2: кризисы (только истина) — засечки: сплошные предсказуемые, бледные внезапные, контур — ложные тревоги
+  if (truth) S.crises.forEach(c => {
+    const x = X(c.tau);
+    if (c.false_alarm) { g.strokeStyle = tok("--muted"); g.strokeRect(x - 1.5, 13, 3, 9); }
+    else { g.fillStyle = tok("--cluster"); g.globalAlpha = c.predictable ? 1 : 0.4; g.fillRect(x - 1, 13, 2.5, 9); g.globalAlpha = 1; }
+  });
+  // ряд 3: потери объектов
+  g.fillStyle = tok("--loss");
+  S.losses.forEach(l => g.fillRect(X(l.t) - 0.5, 25, 1.5, 7));
+  g.fillStyle = tok("--ink"); g.fillRect(X(t * MIN) - 1, 0, 2, h);
+}
+function stripLegend() {
+  $("tl-legend").innerHTML = `<span><i style="background:var(--alarm)"></i>тревоги политики</span>`
+    + `<span class="truthonly"><i style="background:var(--cluster)"></i>кризисы (бледные — внезапные, контур — ложные тревоги)</span>`
+    + `<span><i style="background:var(--loss)"></i>потери объектов</span>`;
+  $("maplegend").innerHTML = truth
+    ? `<span><span class="sw" style="background:var(--risk-low)"></span>риск ниже</span><span><span class="sw" style="background:var(--risk-mid)"></span>средний</span>`
+      + `<span><span class="sw" style="background:var(--risk-high)"></span>выше</span><span><span class="sw" style="border-color:var(--precursor);border-width:3px"></span>предвестник</span>`
+      + `<span><span class="sw" style="background:transparent;border-style:dashed;border-color:var(--cluster)"></span>простой от кризиса</span><span><span class="sw" style="background:var(--loss);border-color:var(--loss)"></span>данные уничтожены</span>`
+    : `<span><span class="sw" style="background:var(--calm)"></span>обычно</span><span><span class="sw" style="background:var(--signal)"></span>чаще обычного ×1,4</span>`
+      + `<span><span class="sw" style="background:var(--signal-hot)"></span>×2 и больше</span><span><span class="sw" style="background:transparent;border-style:dashed;border-color:var(--down)"></span>не отвечает</span>`
+      + `<span><span class="sw" style="background:var(--down);opacity:.6;border-color:var(--down)"></span>не отвечает больше суток</span>`;
+}
+
+// ------------------------------------------------------------------ управление
+function setView(v) {
+  truth = v; document.body.classList.toggle("truth", v);
+  $("v-net").setAttribute("aria-pressed", String(!v)); $("v-truth").setAttribute("aria-pressed", String(v));
+  stripLegend(); render();
+}
+$("v-net").onclick = () => setView(false);
+$("v-truth").onclick = () => setView(true);
+$("play").onclick = () => { playing = !playing; $("play").textContent = playing ? "Пауза" : "Пуск"; lastFrame = performance.now(); if (playing) requestAnimationFrame(tick); };
+$("slider").oninput = e => { t = Number(e.target.value); render(); };
+$("strip").addEventListener("click", e => { const r = e.target.getBoundingClientRect(); t = (e.clientX - r.left) / r.width * S.H; render(); });
+function tick(now) {
+  if (!playing) return;
+  const dt = (now - lastFrame) / 1000; lastFrame = now;
+  t = Math.min(S.H, t + dt * Number($("speed").value));
+  if (t >= S.H) { playing = false; $("play").textContent = "Пуск"; }
+  render();
+  if (playing) requestAnimationFrame(tick);
+}
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+const restyle = () => { if (cy) { cy.style(cyStyle()); drawStrip(); } };
+mq.addEventListener("change", restyle);
+new MutationObserver(restyle).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+let fitTimer = 0;
+window.addEventListener("resize", () => {
+  if (!L) return;
+  drawStrip();
+  clearTimeout(fitTimer);
+  fitTimer = setTimeout(() => { cy.resize(); cy.fit(undefined, 24); }, 150);
+});
+
+function start(log) {
+  if (log.schema !== "taris-log/1") { showLoading("Это не журнал TARIS (ожидается схема taris-log/1)."); return; }
+  L = log; S = prepare(log);
+  const me = log.meta, pol = me.policy, mode = me.world_mode === "matched" ? "согласованный мир" : "несогласованный мир";
+  $("run").innerHTML = `<b>${me.scenario || "сценарий"}</b> · ${mode} · ${pol} · узлов за горизонт ${fmt(S.N)} · зерно ${me.seed}`;
+  $("slider").max = S.H; $("slider").disabled = false; $("play").disabled = false;
+  if (cy) cy.destroy();
+  buildMap();
+  $("loading").hidden = true;
+  t = Math.min(S.H, 200); setView(truth);
+}
+loadEmbedded().then(log => { if (log) start(log); else showLoading("Журнал не встроен в страницу. Откройте файл .taris.json.gz кнопкой «Открыть журнал»."); })
+  .catch(err => showLoading("Не удалось распаковать встроенный журнал: " + err.message));
+</script>

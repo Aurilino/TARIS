@@ -6,3 +6,5 @@ runs/
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache/
+# собранные страницы просмотрщика со встроенными журналами (scripts/build_viewer.py)
+viewer/build/
