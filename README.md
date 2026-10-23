@@ -56,6 +56,7 @@ python scripts\check_crisis.py 10      # проверки кризисов в с
 foreach ($p in "uniform15","uniform13","oracle13") { python scripts\run_baselines.py runs $p }   # 1–3 минуты каждая
 foreach ($p in "oracle13","crisis_oracle13") { python scripts\run_baselines.py runs $p S6 matched }   # S6: 5 и около 16 минут
 python scripts\plot_ledger.py runs figures   # графики G–H
+python scripts\plot_crisis.py figures        # график I: профиль предвестника глазами сети (около 5 минут)
 ```
 
 ## Устройство
