@@ -199,14 +199,16 @@ class Chain:
         self.seed_t = hashlib.sha256(f"genesis:{self.cfg.seed}".encode()).digest()
 
     def step(self) -> dict:
-        """Одна эпоха: общая случайность и наблюдения, ставшие известными к её концу."""
+        """Одна эпоха: общая случайность и наблюдения, ставшие известными к её концу.
+        Только «взгляд сети» (пункт 3.9, проверка Д3): ни источника простоя, ни признаков шума и
+        предвестника, а у ещё идущих простоев — ни конца, ни длительности (это было бы будущее)."""
         t = self.t
         self.seed_t = hashlib.sha256(self.seed_t + t.to_bytes(4, "big")).digest()
         o = self.observed
-        started = o[(o["start"] >= t) & (o["start"] < t + 1)]
-        ended = o[(o["end"] >= t) & (o["end"] < t + 1)]
-        ongoing = o[(o["start"] < t + 1) & (o["end"] >= t + 1)]
-        aud = self.audits[self.audits["epoch"] == t]
+        started = o.loc[(o["start"] >= t) & (o["start"] < t + 1), ["node", "start"]]
+        ended = o.loc[(o["end"] >= t) & (o["end"] < t + 1), ["node", "start", "end", "dur"]]
+        ongoing = o.loc[(o["start"] < t + 1) & (o["end"] >= t + 1), ["node", "start"]]
+        aud = self.audits.loc[self.audits["epoch"] == t, ["node", "t", "epoch", "passed_avail"]]
         self.t += 1
         return {"epoch": t, "seed": self.seed_t.hex(),
                 "outages_started": started, "outages_ended": ended, "outages_ongoing": ongoing,

@@ -9,6 +9,11 @@
 По нескольким зёрнам (кризисов в одном мире мало):
 5. Параметры эпизодов: длина окна, доля узлов с предвестником, каскады, задержка сбоя ПО.
 6. Сила предвестника по каналам: число событий против ожидаемого по формулам 3.9, провалы аудитов.
+7. Отсутствие утечки истины: нет избытка наблюдаемых событий перед внезапными кризисами и вне окон
+   предвестника, ложные тревоги по наблюдениям неотличимы от настоящих окон, в журнале цепочки нет полей истины.
+8. Исходы кризисов: гибель партии при износе, волна ухода и подавление регистраций, пожар, сбой ПО, бури и шоки.
+9. Сигнал глазами сети: во сколько раз наблюдаемая частота событий у узлов-целей перед кризисом выше фона —
+   для предсказуемых кризисов, ложных тревог и внезапных кризисов (есть ли агенту что ловить).
 
     python scripts/check_crisis.py [число зёрен, по умолчанию 10]
 """
@@ -206,6 +211,278 @@ def precursor_strength(ws: list, chains: list) -> pd.DataFrame:
     return df
 
 
+# ------------------------------------------------------------ Д3. отсутствие утечки истины
+SUDDEN_W = {"storm": "storm", "wear": "wear", "exodus": "exodus", "software": "software", "fire": "storm"}
+
+
+def excluded(w) -> dict:
+    """По узлам: окна предвестника (у помеченных узлов) и периоды кризисов у узлов-целей —
+    всё, что не является «фоном». Возвращает узел -> (начала, концы) объединённых интервалов."""
+    cr, T = w.crisis, w.cfg.T_rep
+    ex = {}
+    for e in cr.episodes:
+        if e["predictable"] or e["false_alarm"]:
+            for i in cr.precursor_nodes(e):
+                lo, hi = cr.precursor_span(e, i)
+                if hi > lo:
+                    ex.setdefault(int(i), []).append((lo, hi))
+        if not e["false_alarm"]:
+            for i in e["targets"]:
+                ex.setdefault(int(i), []).append((e["tau"], e["end"] + T))
+    out = {}
+    for i, iv in ex.items():
+        iv.sort()
+        s, e = [iv[0][0]], [iv[0][1]]
+        for a, b in iv[1:]:
+            if a <= e[-1]:
+                e[-1] = max(e[-1], b)
+            else:
+                s.append(a); e.append(b)
+        out[i] = (np.array(s), np.array(e))
+    return out
+
+
+def clip(times, a, b, ex):
+    """Экспозиция и число событий в [a, b) за вычетом исключённых интервалов ex = (начала, концы)."""
+    if b <= a:
+        return 0.0, 0
+    n = int(np.searchsorted(times, b) - np.searchsorted(times, a))
+    x = b - a
+    s, e = ex
+    for lo, hi in zip(np.maximum(s, a), np.minimum(e, b)):
+        if hi > lo:
+            x -= hi - lo
+            n -= int(np.searchsorted(times, hi) - np.searchsorted(times, lo))
+    return x, n
+
+
+def observed_events(w, ch) -> dict:
+    """События, которые видит сеть: короткие наблюдаемые простои (не длиннее T_rep, включая шум)
+    и проваленные аудиты — моменты по узлам."""
+    o = ch.observed
+    o = o[o["dur"] <= w.cfg.T_rep]
+    a = ch.audits[~ch.audits["passed_avail"]]
+    return {"short": {i: np.sort(g["start"].to_numpy()) for i, g in o.groupby("node")},
+            "audit": {i: np.sort(g["t"].to_numpy()) for i, g in a.groupby("node")}}
+
+
+def background(w, ev, ex) -> dict:
+    """Фоновая частота событий каждого узла: вне окон предвестника и периодов кризисов, по итоговой жизни."""
+    nd = w.nodes
+    r = {}
+    for kind, by in ev.items():
+        rate = np.zeros(len(nd))
+        for i in range(len(nd)):
+            x, n = clip(by.get(i, np.empty(0)), nd["alive_from"].iat[i], nd["alive_to"].iat[i], ex.get(i, (np.empty(0), np.empty(0))))
+            rate[i] = n / x if x > 0 else 0.0
+        r[kind] = rate
+    return r
+
+
+def window_excess(w, ev, ex, r0, e, kind, a, b, exclude_window=True):
+    """Наблюдаемое и ожидаемое по фону число событий у узлов-целей эпизода в окне [a, b)."""
+    nd = w.nodes
+    O, E = 0, 0.0
+    empty = (np.empty(0), np.empty(0))
+    for i in e["targets"]:
+        lo, hi = max(a, nd["alive_from"].iat[i]), min(b, nd["alive_to"].iat[i])
+        x, n = clip(ev[kind].get(i, np.empty(0)), lo, hi, ex.get(int(i), empty) if exclude_window else empty)
+        O += n; E += x * r0[kind][i]
+    return O, E
+
+
+def leakage(ws, chains, controls) -> pd.DataFrame:
+    rows = []
+    sud = {}
+    fa_real = {}
+    for w, ch in zip(ws, chains):
+        ev, ex = observed_events(w, ch), excluded(w)
+        r0 = background(w, ev, ex)
+        for e in w.crisis.episodes:
+            typ = e["type"]
+            kind = "audit" if typ == "wear" else "short"
+            if not e["predictable"] and not e["false_alarm"] and typ in SUDDEN_W:
+                # перед внезапным кризисом: последние W̄ суток у узлов-целей (за вычетом чужих окон)
+                Wm = type_params(w.cfg, SUDDEN_W[typ])["W_days"]
+                O, E = window_excess(w, ev, ex, r0, e, kind, e["tau"] - Wm, e["tau"])
+                o, m = sud.get((typ, kind), (0, 0.0))
+                sud[(typ, kind)] = (o + O, m + E)
+            if (e["predictable"] or e["false_alarm"]) and typ in ("storm", "wear", "software"):
+                O, E = window_excess(w, ev, ex, r0, e, kind, e["w0"], e["tau"], exclude_window=False)
+                if E > 0:
+                    fa_real.setdefault((typ, e["false_alarm"]), []).append(O / E)
+    for (typ, kind), (O, E) in sorted(sud.items()):
+        rows.append((f"Перед внезапным кризисом: {typ}, {kind}", O, E, (O - E) / np.sqrt(max(E, 1e-12)), np.nan))
+    # вне окон: те же события в мире S6 и в том же мире без кризисов (общие случайные числа)
+    for kind in ("short", "audit"):
+        o6, oc = 0, 0
+        for (w, ch), (wc, chc) in zip(zip(ws, chains), controls):
+            ev6, evc, ex = observed_events(w, ch), observed_events(wc, chc), excluded(w)
+            nd = w.nodes
+            for i in range(len(nd)):
+                a, b = nd["alive_from"].iat[i], nd["alive_to"].iat[i]
+                exi = ex.get(i, (np.empty(0), np.empty(0)))
+                o6 += clip(ev6[kind].get(i, np.empty(0)), a, b, exi)[1]
+                oc += clip(evc[kind].get(i, np.empty(0)), a, b, exi)[1]
+        rows.append((f"Вне окон: S6 против мира без кризисов, {kind}", o6, oc, (o6 - oc) / np.sqrt(max(o6 + oc, 1)), np.nan))
+    # ложные тревоги по наблюдениям неотличимы от окон настоящих кризисов (Манн–Уитни)
+    for typ in ("storm", "wear", "software"):
+        real, fa = fa_real.get((typ, False), []), fa_real.get((typ, True), [])
+        if len(real) > 2 and len(fa) > 2:
+            p = stats.mannwhitneyu(real, fa).pvalue
+            rows.append((f"Избыток в окне: {typ}, настоящие (n={len(real)}) / ложные (n={len(fa)})",
+                         float(np.mean(real)), float(np.mean(fa)), 0.0, p))
+    df = pd.DataFrame(rows, columns=["Проверка", "Наблюдается", "Ожидается", "z", "p (МУ)"])
+    df["Итог"] = np.where((df["z"].abs() < 3) & (df["p (МУ)"].fillna(1.0) > 0.001), "OK", "ПРОВЕРИТЬ")
+    return df
+
+
+# ------------------------------------------------------------ Д4. исходы кризисов
+def outcomes(ws) -> pd.DataFrame:
+    c = ws[0].cfg
+    rows = []
+    # износ: каждый живой узел партии гибнет с вероятностью p_death в равномерный момент периода
+    p = type_params(c, "wear")
+    n_alive, n_dead, u = 0, 0, []
+    for w in ws:
+        cr = w.crisis
+        fo = cr.frames()["forced"]
+        for e in cr.episodes:
+            if e["type"] != "wear" or e["false_alarm"]:
+                continue
+            n_alive += len(cr.alive_base(e["targets"], e["tau"]))
+            d = fo[(fo["reason"] == "wear_death") & (fo["episode"] == e["id"])]
+            n_dead += len(d)
+            u += list((d["t"].to_numpy() - e["tau"]) / p["period_days"])
+    q = p["p_death"]
+    rows.append(("Износ: доля погибших узлов партии", n_dead / max(n_alive, 1), q,
+                 (n_dead - q * n_alive) / np.sqrt(n_alive * q * (1 - q)), np.nan))
+    rows.append((f"Износ: момент гибели / период (n={len(u)})", float(np.mean(u)), 0.5,
+                 (np.mean(u) - 0.5) / np.sqrt(1 / 12 / len(u)), stats.kstest(u, "uniform").pvalue))
+    # массовый уход: первое событие потока (Gamma - 1) * lambda_churn на периоде; регистрации подавлены
+    p = type_params(c, "exodus")
+    o_l, m_l, v_l, o_j, n_j = 0, 0.0, 0.0, 0, 0
+    for w in ws:
+        cr = w.crisis
+        fr = cr.frames()
+        for e in cr.episodes:
+            if e["type"] != "exodus" or e["false_alarm"]:
+                continue
+            tau, T = e["tau"], p["period_days"]
+            for i in e["targets"]:
+                lo, hi = max(tau, cr.a0[i]), min(tau + T, cr.a1[i])
+                if hi > lo:
+                    t = np.linspace(lo, hi, 200)
+                    q = 1 - np.exp(-np.trapezoid(w.churn_rate(t - cr.join[i]) * (p["multiplier"] - 1), t))
+                    m_l += q; v_l += q * (1 - q)
+            fo = fr["forced"]
+            o_l += int(((fo["reason"] == "exodus") & (fo["episode"] == e["id"])).sum())
+            j = cr.join[e["targets"]]
+            n_j += int(((j >= tau) & (j < tau + T)).sum())
+            ca = fr["cancelled"]
+            o_j += int(((ca["episode"] == e["id"]) & (ca["join_t"] >= tau)).sum())
+    rows.append(("Массовый уход: уходы за период", o_l, m_l, (o_l - m_l) / np.sqrt(max(v_l, 1e-12)), np.nan))
+    q = 1 - p["rho_join"]
+    rows.append(("Массовый уход: доля отменённых регистраций", o_j / max(n_j, 1), q,
+                 (o_j - q * n_j) / np.sqrt(max(n_j * q * (1 - q), 1e-12)), np.nan))
+    # пожар: гибнут все живые узлы дата-центра; уязвимость ПО: затронуты ровно живые узлы версии
+    fire_ok, sw_ok, sw_n, sw_d = True, True, 0, 0
+    for w in ws:
+        for e in w.crisis.episodes:
+            if e["false_alarm"]:
+                continue
+            alive = len(w.alive_at(e["targets"], e["tau"]))
+            if e["type"] == "fire":
+                fire_ok &= e["destroyed"] and e["n_hit"] == alive
+            if e["type"] == "software":
+                ver = w.crisis.version_at(e["tau"])[e["targets"]]
+                sw_ok &= bool((ver == e["cluster"]).all()) and e["n_hit"] == alive
+                sw_n += 1; sw_d += int(e["destroyed"])
+    rows.append(("Пожар: погибли все живые узлы дата-центра", float(fire_ok), 1.0, 0.0 if fire_ok else 99.0, np.nan))
+    rows.append(("Сбой ПО: затронуты ровно живые узлы версии", float(sw_ok), 1.0, 0.0 if sw_ok else 99.0, np.nan))
+    q = type_params(c, "software")["total_share"]
+    rows.append((f"Сбой ПО: доля с гибелью данных (n={sw_n})", sw_d / max(sw_n, 1), q,
+                 (sw_d - q * sw_n) / np.sqrt(max(sw_n * q * (1 - q), 1e-12)), np.nan))
+    # буря и каскад: в согласованном мире — общий шок (Вейбулл длиннее франшизы, доля полной гибели),
+    # в несогласованном — буря фиксированной длительности
+    st = pd.concat([w.crises for w in ws], ignore_index=True)
+    st = st[st["type"].isin(["storm", "cascade"]) & ~st["false_alarm"]]
+    if c.world_mode == "matched":
+        q = c.shock_total_share
+        n, d = len(st), int(st["destroyed"].sum())
+        rows.append(("Буря и каскад: доля полной гибели", d / n, q, (d - q * n) / np.sqrt(n * q * (1 - q)), np.nan))
+        L = ((st["end"] - st["tau"]) / HOUR)[~st["destroyed"]].to_numpy()
+        k, th, dh = c.shock_shape, c.shock_scale_hours[0], c.franchise_d_hours
+        cdf = lambda l: 1 - np.exp(-(np.maximum(l, dh) / th) ** k + (dh / th) ** k)
+        mean = stats.weibull_min(k, scale=th).expect(lambda l: l, lb=dh, conditional=True)
+        rows.append((f"Буря и каскад: длительность шока, ч (n={len(L)})", L.mean(), mean,
+                     0.0, stats.kstest(L, cdf).pvalue))
+    else:
+        L = ((st["end"] - st["tau"]) / HOUR).to_numpy()
+        ok = np.allclose(L, c.storm_hours)
+        rows.append(("Буря и каскад: длительность бури, ч", L.mean(), c.storm_hours, 0.0 if ok else 99.0, np.nan))
+    df = pd.DataFrame(rows, columns=["Проверка", "Наблюдается", "Ожидается", "z", "p (КС)"])
+    return verdict(df)
+
+
+# ------------------------------------------------------------ Д5. сигнал глазами сети
+SIGNAL_KIND = {"storm": "short", "cascade": "short", "software": "short", "fire": "short", "wear": "audit"}
+
+
+def signal(ws, chains) -> pd.DataFrame:
+    """Во сколько раз частота наблюдаемых событий у узлов-целей перед кризисом выше их фона:
+    за последние сутки (у каскада — за всё окно от первичного кризиса). У массового ухода —
+    уходы узлов региона за последние 7 суток против ожидаемых по обычной интенсивности ухода.
+    Предсказуемые кризисы и ложные тревоги должны давать отношение > 1, внезапные — около 1."""
+    agg = {}
+    for w, ch in zip(ws, chains):
+        ev, ex = observed_events(w, ch), excluded(w)
+        r0 = background(w, ev, ex)
+        cr = w.crisis
+        leave = w.nodes["leave_t"].to_numpy()
+        for e in cr.episodes:
+            typ = e["type"]
+            grp = "ложные" if e["false_alarm"] else ("предсказуемые" if e["predictable"] else "внезапные")
+            if typ == "exodus":
+                a, b = e["tau"] - 7.0, e["tau"]
+                O = int(((leave[e["targets"]] >= a) & (leave[e["targets"]] < b)).sum())
+                E = 0.0
+                for i in e["targets"]:
+                    lo, hi = max(a, cr.a0[i]), min(b, cr.a1[i])
+                    if hi > lo:
+                        t = np.linspace(lo, hi, 50)
+                        E += 1 - np.exp(-np.trapezoid(w.churn_rate(t - cr.join[i]), t))
+                kind = "уходы"
+            else:
+                kind = SIGNAL_KIND[typ]
+                a = e["w0"] if typ == "cascade" else e["tau"] - 1.0
+                O, E = window_excess(w, ev, ex, r0, e, kind, a, e["tau"], exclude_window=False)
+            o, m, n = agg.get((typ, grp, kind), (0, 0.0, 0))
+            agg[(typ, grp, kind)] = (o + O, m + E, n + 1)
+    rows = []
+    for (typ, grp, kind), (O, E, n) in sorted(agg.items()):
+        z = (O - E) / np.sqrt(max(E, 1e-12))
+        if grp == "внезапные":
+            res = "OK" if abs(z) < 3 else "ПРОВЕРИТЬ"
+        else:
+            res = "сигнал есть" if z >= 3 else "сигнал слабый"
+        rows.append((f"{typ}, {grp} (n={n}), {kind}", O, E, O / max(E, 1e-12), z, res))
+    return pd.DataFrame(rows, columns=["Эпизоды", "Наблюдается", "Фон", "Отношение", "z", "Итог"])
+
+
+def view_has_no_truth(w, ch) -> list:
+    """В «взгляде сети» (журнал цепочки по эпохам) нет полей истины."""
+    allowed = {"outages_started": {"node", "start"}, "outages_ongoing": {"node", "start"},
+               "outages_ended": {"node", "start", "end", "dur"}, "audits": {"node", "t", "epoch", "passed_avail"}}
+    ch.reset()
+    ok = True
+    for _ in range(60):
+        st = ch.step()
+        ok &= all(set(st[k].columns) <= cols for k, cols in allowed.items())
+    ch.reset()
+    return [("Журнал цепочки без полей истины (источник, шум, предвестник, будущий конец простоя)", ok)]
+
+
 if __name__ == "__main__":
     n_seeds = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     for mode in ("matched", "mismatched"):
@@ -222,6 +499,19 @@ if __name__ == "__main__":
         ws = [World(scenario("S6", world_mode=mode, seed=s)) for s in range(1, n_seeds + 1)]
         print(f"\n=== Параметры эпизодов, {mode}, зёрен {n_seeds}")
         print(episode_params(ws).round(4).to_string(index=False))
+        print(f"\n=== Исходы кризисов, {mode}, зёрен {n_seeds}")
+        print(outcomes(ws).round(4).to_string(index=False))
         chains = [Chain(w) for w in ws]
         print(f"\n=== Сила предвестника по каналам, {mode}, зёрен {n_seeds}")
         print(precursor_strength(ws, chains).round(2).to_string(index=False))
+        n_ctrl = min(3, n_seeds)
+        controls = []
+        for w in ws[:n_ctrl]:
+            wc = World(scenario("S6", world_mode=mode, seed=w.cfg.seed, crises_enabled=False))
+            controls.append((wc, Chain(wc)))
+        print(f"\n=== Отсутствие утечки истины, {mode}, зёрен {n_seeds} (мир без кризисов — {n_ctrl})")
+        print(leakage(ws, chains, controls).round(3).to_string(index=False))
+        for name, ok in view_has_no_truth(ws[0], chains[0]):
+            print(f"{name}: {'OK' if ok else 'ОШИБКА'}")
+        print(f"\n=== Сигнал глазами сети перед кризисом, {mode}, зёрен {n_seeds}")
+        print(signal(ws, chains).round(2).to_string(index=False))
