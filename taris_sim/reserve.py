@@ -341,3 +341,61 @@ def choose(table, eps: float, by: str = "cost"):
         return r.to_dict() | {"feasible": True}
     r = table.sort_values(["P_loss", by], kind="mergesort").iloc[0]
     return r.to_dict() | {"feasible": False}
+
+
+# ------------------------------------------------------------------ IBNR и RBNS
+def duration_sf(world, nodes, x_hours) -> np.ndarray:
+    """P(L > x | L > d) для собственного простоя узлов nodes (пункт 3.4: Вейбулл в согласованном мире,
+    логнормальное в несогласованном, множитель длительности устройства из пункта 3.10); x в часах, x >= d."""
+    from scipy import stats
+    c, nd = world.cfg, world.nodes
+    nodes = np.asarray(nodes, int)
+    hw = nd["hw_true"].to_numpy()[nodes].astype(int)
+    u = nd["sev_u"].to_numpy()[nodes]
+    m_d = nd["m_dur"].to_numpy()[nodes]
+    a = np.asarray(c.alpha_hw)[hw]
+    x = np.maximum(np.asarray(x_hours, float), c.franchise_d_hours)
+    d = c.franchise_d_hours
+    if c.world_mode == "matched":
+        k = c.weibull_shape
+        th = c.weibull_scale_hours * np.exp(a + u) * m_d
+        return np.exp(-(x / th) ** k + (d / th) ** k)
+    mu = np.log(c.lognorm_median_hours) + a + u + np.log(m_d)
+    s = c.lognorm_sigma
+    return stats.norm.sf((np.log(x) - mu) / s) / stats.norm.sf((np.log(d) - mu) / s)
+
+
+def ibnr(rates, nodes, t: float, last_ok) -> np.ndarray:
+    """Ожидаемое число тихо утраченных, но ещё не обнаруженных фрагментов на каждом узле из nodes (пункт 3.11):
+    1 - exp(-lambda_sil_i * Delta_aud_i), Delta_aud_i — время с последнего успешного аудита (last_ok — массив по
+    всем узлам из view.last_audit_ok(); до первого аудита отсчёт от регистрации)."""
+    nodes = np.asarray(nodes, int)
+    lo = np.asarray(last_ok, float)[nodes]
+    lo = np.where(np.isfinite(lo), lo, rates.join[nodes])
+    return 1.0 - np.exp(-rates.lam_sil[nodes] * np.maximum(t - lo, 0.0))
+
+
+def rbns(rates, nodes, t: float, down_since) -> np.ndarray:
+    """Ожидаемое число фрагментов на узлах в текущем простое, которые окажутся утраченными (пункт 3.11):
+    P(L > T_rep | L > a) по распределению собственного простоя узла, a — сколько простой уже длится.
+    Учитываются простои не короче франшизы d (короче — шум пингов и микропрерывания); простой дольше T_rep
+    сеть уже признала, он в запас не входит."""
+    c = rates.w.cfg
+    nodes = np.asarray(nodes, int)
+    ds = np.asarray(down_since, float)[nodes]
+    a_h = (t - ds) * 24.0
+    on = np.isfinite(ds) & (a_h >= c.franchise_d_hours) & (a_h < c.T_rep_hours)
+    out = np.zeros(len(nodes))
+    if on.any():
+        out[on] = duration_sf(rates.w, nodes[on], c.T_rep_hours) / duration_sf(rates.w, nodes[on], a_h[on])
+    return out
+
+
+def effective_reserve(rates, view, obj: int, t: float, k: int, last_ok=None, down=None) -> tuple[float, dict]:
+    """Фактический запас объекта R_eff = s - k - D_IBNR - D_RBNS по карте размещения и «взгляду сети»."""
+    nodes = np.array(sorted(view.holders(obj)), int)
+    last_ok = view.last_audit_ok() if last_ok is None else last_ok
+    down = view.down_since() if down is None else down
+    ib = float(ibnr(rates, nodes, t, last_ok).sum()) if len(nodes) else 0.0
+    rb = float(rbns(rates, nodes, t, down).sum()) if len(nodes) else 0.0
+    return len(nodes) - k - ib - rb, {"s": len(nodes), "ibnr": ib, "rbns": rb}

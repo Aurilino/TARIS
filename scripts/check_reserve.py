@@ -7,6 +7,8 @@
 3. Уравнение Тиле: совпадение с уравнением Колмогорова, меняющиеся интенсивности, Монте-Карло той же цепи.
 4. Модель объекта против Монте-Карло по фрагментам с настоящими задержками учёта и разнородными узлами:
    допуск приближения — модель не оптимистична, завышает вероятность потери не больше чем на 25%, трафик — до 10%.
+5. IBNR и RBNS против истины мира (S0 в обоих режимах; S2 — справочно): ожидаемое число необнаруженных тихих
+   потерь и простоев, которые превысят T_rep, против фактического.
 
     python scripts/check_reserve.py
 """
@@ -339,10 +341,58 @@ class ScaledRates:
         return [(a, b, eta * self.s, m) for a, b, eta, m in self.b.shock_clusters(nodes, t)]
 
 
+def ibnr_rbns_checks(scn, mode, strict=True):
+    """Прогноз IBNR и RBNS против истины мира в начале каждой эпохи (сутки 30..H)."""
+    from taris_sim.chain import Chain
+    from taris_sim.data import DataStream
+    from taris_sim.ledger import Ledger, NetworkView
+    print(f"\n5. IBNR и RBNS против истины мира: {scn}, {mode}")
+    w = World(scenario(scn, world_mode=mode, **MAIN))
+    c = w.cfg
+    R = RS.TrueRates(w)
+    ch = Chain(w)
+    L = Ledger(w, ch, DataStream(c, len(w.nodes)))
+    view = NetworkView(L)
+    sil = {i: np.sort(g["t"].to_numpy()) for i, g in w.silent.groupby("node")}
+    pred_i = act_i = 0.0
+    rb_p, rb_a, rb_age = [], [], []
+    for t in range(30, c.horizon_days):
+        view.t = float(t)
+        alive = w.alive_at(np.arange(len(w.nodes)), t)
+        lo = view.last_audit_ok()
+        pred_i += RS.ibnr(R, alive, t, lo).sum()
+        for i in alive:
+            st = sil.get(i)
+            if st is not None:
+                a0 = lo[i] if np.isfinite(lo[i]) else R.join[i]
+                act_i += np.count_nonzero((st > a0) & (st <= t))
+        ds = view.down_since()
+        p = RS.rbns(R, alive, t, ds)
+        on = p > 0
+        for i, pi in zip(alive[on], p[on]):
+            s_, e_ = L.obs_iv[i]
+            j = np.searchsorted(s_, t, side="right") - 1
+            rb_p.append(pi); rb_a.append(float(e_[j] - s_[j] > c.T_rep)); rb_age.append((t - s_[j]) * 24)
+    ztest("IBNR: необнаруженные тихие потери (сумма по узлам и эпохам)", act_i, pred_i)
+    rb_p, rb_a, rb_age = map(np.array, (rb_p, rb_a, rb_age))
+    if strict:
+        ztest("RBNS: простои, превысившие T_rep (сумма по узлам в простое)", rb_a.sum(), rb_p.sum(), (rb_p * (1 - rb_p)).sum())
+    rows = []
+    for a0, a1 in ((0.25, 1), (1, 4), (4, 12), (12, 24)):
+        m = (rb_age >= a0) & (rb_age < a1)
+        rows.append({"длится, ч": f"{a0:g}–{a1:g}", "случаев": int(m.sum()), "прогноз": round(rb_p[m].sum(), 1),
+                     "превысили T_rep": int(rb_a[m].sum())})
+    print("  RBNS по возрасту простоя" + ("" if strict else " (справочно: в простоях есть шоки, у них своя длительность)") + ":")
+    print(pd.DataFrame(rows).to_string(index=False))
+
+
 w, R = rates_vs_world("S2", "matched")
 window_checks(w, R)
 thiele_checks(w, R)
 delay_checks(w, R)
+ibnr_rbns_checks("S0", "matched")
+ibnr_rbns_checks("S0", "mismatched")
+ibnr_rbns_checks("S2", "matched", strict=False)
 rates_vs_world("S2", "mismatched")
 rates_vs_world("S8", "matched")
 

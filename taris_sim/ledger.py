@@ -78,6 +78,28 @@ class NetworkView:
             return np.array([-np.inf])
         return cr.release[cr.release <= self.t]
 
+    # ---- для резерва информации (пункт 3.11): то, что сеть видит по аудитам и пингам
+    def last_audit_ok(self) -> np.ndarray:
+        """Момент последнего успешного аудита каждого узла к моменту t; -inf, если успешных аудитов ещё не было."""
+        L, t = self.L, self.t
+        out = np.full(L.N, -np.inf)
+        for i, at in L.audit_ok.items():
+            j = np.searchsorted(at, t, side="right")
+            if j:
+                out[i] = at[j - 1]
+        return out
+
+    def down_since(self) -> np.ndarray:
+        """Начало текущего наблюдаемого простоя каждого узла (по пингам); nan, если узел сейчас доступен.
+        Конец простоя политике не виден: известно только, что в момент t он ещё идёт."""
+        L, t = self.L, self.t
+        out = np.full(L.N, np.nan)
+        for i, (s, e) in L.obs_iv.items():
+            j = np.searchsorted(s, t, side="right") - 1
+            if j >= 0 and t < e[j]:
+                out[i] = s[j]
+        return out
+
     def node_versions(self) -> np.ndarray:
         """Заявленная версия клиента каждого узла в момент t; -1 у ещё не зарегистрированных."""
         L = self.L
@@ -107,6 +129,7 @@ class Ledger:
         for i, a, b in zip(o["node"].to_numpy(), e0, np.minimum(e1, self.T - 1)):
             if b >= a:
                 self.obs_down[i, a:b + 1] = True
+        self.obs_iv = {i: (g["start"].to_numpy(), g["end"].to_numpy()) for i, g in o.sort_values(["node", "start"]).groupby("node")}
         # истинные интервалы недоступности (для чтения при восстановлении и учёта доступности)
         td = merge_intervals(chain.true_down.drop(columns="source").assign(source="own")).drop(columns="source")
         self.down = {i: (g["start"].to_numpy(), g["end"].to_numpy()) for i, g in td.groupby("node")}
