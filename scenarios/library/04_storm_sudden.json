@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Та же буря без предвестника",
+  "description": "Та же буря в ДЦ 12 на сутках 400, но внезапная: сравните с предыдущим сценарием.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "storm", "cluster": 11, "t": 400, "predictable": false}]
+}

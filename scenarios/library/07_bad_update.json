@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Неудачное обновление ПО",
+  "description": "Сбой последней версии клиента на сутках 600 без предвестника: одновременно падают все обновившиеся узлы.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "software", "cluster": null, "t": 600, "predictable": false}]
+}

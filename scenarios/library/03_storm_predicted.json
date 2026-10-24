@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Буря с предвестником",
+  "description": "Буря в ДЦ 12 на сутках 400 с окном предвестника 5 суток: оракул кризисов успевает увести данные заранее.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "storm", "cluster": 11, "t": 400, "predictable": true, "W_days": 5}]
+}

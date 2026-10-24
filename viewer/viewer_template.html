@@ -69,6 +69,9 @@ select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel
 .file label{border:1.5px solid var(--line); border-radius:999px; padding:4px 12px; cursor:pointer; display:inline-block}
 .file input:focus-visible + label{outline:2px solid var(--accent); outline-offset:2px}
 
+.libbar{display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; margin-top:8px; font-size:13px}
+.libbar select{font-weight:500; max-width:100%}
+.libdesc{color:var(--muted); min-width:0; flex:1 1 280px}
 .timeline{margin-top:8px; position:relative}
 .timeline input[type=range]{width:100%; margin:0; accent-color:var(--ink); display:block}
 .timeline canvas{display:block; width:100%; height:34px; cursor:pointer}
@@ -170,6 +173,10 @@ body.truth .truthonly{display:inline}
     </span>
     <span class="file"><input type="file" id="file" accept=".gz,.json"><label for="file">Открыть журнал</label></span>
   </div>
+  <div class="libbar" id="libbar" hidden>
+    <label>Сценарий из библиотеки <select id="lib"></select></label>
+    <span class="libdesc" id="libdesc"></span>
+  </div>
   <div class="timeline">
     <canvas id="strip" aria-label="Шкала прогона: кризисы, тревоги и потери"></canvas>
     <input type="range" id="slider" min="0" max="1095" step="0.25" value="0" aria-label="Время, сутки" disabled>
@@ -256,6 +263,7 @@ body.truth .truthonly{display:inline}
   </aside>
 </main>
 
+<script id="log-lib" type="application/json">[]</script>
 <script id="log-data" type="application/octet-stream">__LOG_B64__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
 <script>
@@ -1013,6 +1021,24 @@ function start(log) {
   $("loading").hidden = true;
   t = Math.min(S.H, 200); setView(truth);
 }
-loadEmbedded().then(log => { if (log) start(log); else showLoading("Журнал не встроен в страницу. Откройте файл .taris.json.gz кнопкой «Открыть журнал»."); })
-  .catch(err => showLoading("Не удалось распаковать встроенный журнал: " + err.message));
+// библиотека готовых сценариев (этап 6.4): несколько журналов в одной странице, переключение без перезагрузки
+const LIB = (() => { try { return JSON.parse($("log-lib").textContent); } catch (e) { return []; } })();
+async function loadLib(k) {
+  const it = LIB[k];
+  $("libdesc").textContent = it.description;
+  showLoading("Загружаю сценарий «" + it.name + "»…");
+  const bin = Uint8Array.from(atob(it.b64), c => c.charCodeAt(0));
+  const keepT = L ? t : null, keepTruth = truth;
+  start(await gunzipJSON(new Blob([bin]).stream()));
+  if (keepT != null) { t = keepT; setView(keepTruth); }      // при переключении время и взгляд сохраняются — удобно сравнивать
+}
+if (LIB.length) {
+  $("libbar").hidden = false;
+  $("lib").innerHTML = LIB.map((it, k) => `<option value="${k}">${it.name}</option>`).join("");
+  $("lib").onchange = e => loadLib(Number(e.target.value)).catch(err => showLoading("Не удалось открыть сценарий: " + err.message));
+  loadLib(0).catch(err => showLoading("Не удалось открыть сценарий: " + err.message));
+} else {
+  loadEmbedded().then(log => { if (log) start(log); else showLoading("Журнал не встроен в страницу. Откройте файл .taris.json.gz кнопкой «Открыть журнал»."); })
+    .catch(err => showLoading("Не удалось распаковать встроенный журнал: " + err.message));
+}
 </script>

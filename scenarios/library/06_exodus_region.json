@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Массовый уход из региона",
+  "description": "Массовый уход из региона 2 (85 узлов) на сутках 500 с предвестником: сначала уходят отдельные узлы и падают регистрации.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "exodus", "cluster": 1, "t": 500, "predictable": true}]
+}

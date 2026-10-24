@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Шок крупного провайдера",
+  "description": "Провайдер 4 (пять дата-центров) недоступен 36 часов на сутках 450; данные целы.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "shock", "ctype": "provider", "cluster": 3, "t": 450, "hours": 36, "destroyed": false}]
+}

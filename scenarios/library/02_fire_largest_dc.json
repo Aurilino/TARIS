@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Пожар в крупнейшем ДЦ",
+  "description": "Внезапный пожар в ДЦ 12 (33 узла) на сутках 400: все данные дата-центра уничтожены, предвестника нет.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "fire", "cluster": 11, "t": 400}]
+}

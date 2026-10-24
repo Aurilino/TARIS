@@ -100,23 +100,24 @@ class OraclePolicy(UniformPolicy):
         self.n_dc, self.n_prov, self.n_reg = int(self.dc.max()) + 1, int(self.prov.max()) + 1, world.cfg.n_regions
 
     def _choose_spread(self, rng, cand, m, held=()):
-        """Выбор с разнесением. Если при лимите r на регион и провайдера не набрать m узлов
-        (например, кластер-цель кризиса исключён), лимит ослабляется на 1, 2, ... — лучше
-        лишний фрагмент в регионе, чем недоразмещённый объект. Если не помогло и полное ослабление,
-        в крайнем случае разрешается 2, 3, ... фрагмента в одном дата-центре. Лимит на владельца
-        не ослабляется (общий владелец — это риск раскрытия)."""
-        r0 = min(self.n - self.k, self.k - 1)
-        for relax in range(self.n + 1):
-            out = self._choose_spread_r(rng, cand, m, held, r0 + relax, r0)
-            if out:
-                return out
-        for dc_cap in range(2, self.n + 1):
-            out = self._choose_spread_r(rng, cand, m, held, r0 + self.n, r0, dc_cap)
+        """Выбор с разнесением: в дата-центре — один фрагмент объекта, у провайдера, в регионе и у владельца —
+        не больше r = min(n - k, k - 1). Если узлов не набрать (например, кластер-цель кризиса исключён),
+        лимиты ослабляются по одному, начиная с самого безобидного: сначала регион (+1, +2, ...), потом
+        дата-центр (2, 3, ... фрагмента), в крайнем случае — провайдер. Дата-центр — меньший домен отказа, чем
+        провайдер: при немногих живых провайдерах лишний фрагмент лучше положить вторым в дата-центр, чем
+        четвёртым к провайдеру, — простой провайдера дольше T_rep иначе губит объекты разом.
+        Лимит на владельца не ослабляется (общий владелец — это риск раскрытия)."""
+        r0, n = min(self.n - self.k, self.k - 1), self.n
+        steps = ([(r0, r0 + rr, 1) for rr in range(n + 1)]                 # регион
+                 + [(r0, r0 + n, dc) for dc in range(2, n + 1)]            # дата-центр
+                 + [(r0 + rp, r0 + n, n) for rp in range(1, n + 1)])       # провайдер
+        for r_prov, r_reg, dc_cap in steps:
+            out = self._choose_spread_r(rng, cand, m, held, r_prov, r_reg, r0, dc_cap)
             if out:
                 return out
         return []
 
-    def _choose_spread_r(self, rng, cand, m, held, r, r_own, dc_cap=1):
+    def _choose_spread_r(self, rng, cand, m, held, r_prov, r_reg, r_own, dc_cap=1):
         held = np.fromiter(held, int) if len(held) else np.empty(0, int)
         cd = np.bincount(self.dc[held], minlength=self.n_dc)
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
@@ -128,7 +129,7 @@ class OraclePolicy(UniformPolicy):
         w = self.w[cand].astype(float)
         out = []
         for _ in range(m):
-            ok = (cd[self.dc[cand]] < dc_cap) & (cp[self.prov[cand]] < r) & (cr[self.reg[cand]] < r)
+            ok = (cd[self.dc[cand]] < dc_cap) & (cp[self.prov[cand]] < r_prov) & (cr[self.reg[cand]] < r_reg)
             if co:
                 ok &= np.array([co.get(o, 0) < r_own for o in self.own[cand]]) if len(co) else ok
             ww = w * ok
