@@ -1,0 +1,15 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Пример: все виды вмешательств",
+  "description": "Основной мир S6 и по одному вмешательству каждого вида: пожар, буря с предвестником, износ партии, массовый уход, сбой ПО, шок провайдера и выключение узла.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [
+    {"kind": "crisis", "type": "fire", "cluster": 3, "t": 400},
+    {"kind": "crisis", "type": "storm", "cluster": 5, "t": 250, "predictable": true, "W_days": 4},
+    {"kind": "crisis", "type": "wear", "cluster": "2/consumer_hdd", "t": 600, "predictable": true},
+    {"kind": "crisis", "type": "exodus", "cluster": 1, "t": 800, "predictable": true},
+    {"kind": "crisis", "type": "software", "cluster": null, "t": 900, "predictable": false},
+    {"kind": "shock", "ctype": "provider", "cluster": 2, "t": 300, "hours": 30, "destroyed": false},
+    {"kind": "node_down", "node": 12, "t": 500, "hours": 48}
+  ]
+}

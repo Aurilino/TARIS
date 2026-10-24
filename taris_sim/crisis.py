@@ -22,7 +22,9 @@ from . import rng as R
 
 TYPES = ("storm", "cascade", "wear", "exodus", "software", "fire")
 T_ID = {t: k + 1 for k, t in enumerate(TYPES)}
-SCHED, FALSE, PRE, OUT, VER, CASC = range(1, 7)          # подпотоки rng.CRISIS
+SCHED, FALSE, PRE, OUT, VER, CASC, MANUAL = range(1, 8)  # подпотоки rng.CRISIS
+MANUAL_KEY = 900                                         # метка кластера в ключе ручных кризисов (вмешательства)
+MANUAL_TYPES = ("storm", "fire", "wear", "exodus", "software")
 CH_XI, CH_MICRO, CH_SHORT, CH_SILENT, CH_CHURN, CH_JOIN = range(1, 7)
 
 # каналы предвестника по типам кризиса
@@ -89,27 +91,31 @@ class Crises:
         ep = dict(id=len(self.episodes), type=typ, ctype=ctype, cluster=cluster, key=key, tau=float(tau),
                   W=float(W), w0=float(tau - W if w0 is None else w0), predictable=bool(predictable),
                   false_alarm=bool(false_alarm), parent=parent, targets=np.asarray(targets, dtype=int),
-                  end=float(tau), n_hit=0, destroyed=False, n_xi=0)
+                  end=float(tau), n_hit=0, destroyed=False, n_xi=0, manual=False)
         self.episodes.append(ep)
         return ep
 
     # ------------------------------------------------------------- построение
-    def build(self):
+    def build(self, library: bool = True, manual=()):
+        """library — случайная шкала кризисов по параметрам (сценарий S6); manual — кризисы-вмешательства
+        из файла сценария (словари с ключами type, cluster, t, predictable, W_days)."""
         c, nd = self.cfg, self.w.nodes
         self._versions()
         by_dc = {k: np.asarray(v) for k, v in nd.groupby("dc").groups.items()}
         by_region = {k: np.asarray(v) for k, v in nd.groupby("region").groups.items()}
         by_batch = {k: np.asarray(v) for k, v in nd.groupby(["dc", "hw_true"]).groups.items()}
 
-        for dc in range(c.n_dc):
-            self._schedule("storm", "dc", dc, dc, by_dc.get(dc, []))
-        for (dc, hw), idx in sorted(by_batch.items()):
-            self._schedule("wear", "batch", f"{dc}/{c.hw_classes[hw]}", dc * 10 + int(hw), idx)
-        for r in range(c.n_regions):
-            self._schedule("exodus", "region", r, r, by_region.get(r, []))
-        self._schedule_software()
-        for dc in range(c.n_dc):
-            self._schedule("fire", "dc", dc, dc, by_dc.get(dc, []))
+        if library:
+            for dc in range(c.n_dc):
+                self._schedule("storm", "dc", dc, dc, by_dc.get(dc, []))
+            for (dc, hw), idx in sorted(by_batch.items()):
+                self._schedule("wear", "batch", f"{dc}/{c.hw_classes[hw]}", dc * 10 + int(hw), idx)
+            for r in range(c.n_regions):
+                self._schedule("exodus", "region", r, r, by_region.get(r, []))
+            self._schedule_software()
+            for dc in range(c.n_dc):
+                self._schedule("fire", "dc", dc, dc, by_dc.get(dc, []))
+        self._manual(manual, by_dc, by_region, by_batch)
         self._cascades(by_dc)
 
         for ep in self.episodes:
@@ -156,6 +162,37 @@ class Crises:
                     tg = self.alive_base(np.flatnonzero(self.version_at(tau) == v), tau)
                     self._add("software", "version", v, (T_ID["software"], v, 0, int(is_fa)), tau, Wx, Px, is_fa, tg,
                               w0=max(tau - Wx, self.release[v]))
+
+    def _manual(self, items, by_dc, by_region, by_batch):
+        """Кризисы-вмешательства: тот же механизм предвестника, исхода и каскадов, что у случайных кризисов,
+        но момент и кластер заданы. Случайные числа — из отдельного подпотока по номеру вмешательства."""
+        c = self.cfg
+        for k, it in enumerate(items):
+            typ, tau = it["type"], float(it["t"])
+            p = type_params(c, typ)
+            g = self.stream(MANUAL, k)
+            pred = bool(it.get("predictable", True)) and typ != "fire"
+            if not pred:
+                W = 0.0
+            elif it.get("W_days") is not None:
+                W = float(it["W_days"])
+            else:
+                W = self.draw_W(g, p["W_days"])
+            cl, w0 = it.get("cluster"), None
+            if typ in ("storm", "fire"):
+                ctype, cluster, tg = "dc", int(cl), by_dc.get(int(cl), np.empty(0, int))
+            elif typ == "wear":
+                dc, hw = str(cl).split("/")
+                ctype, cluster, tg = "batch", f"{int(dc)}/{hw}", by_batch.get((int(dc), c.hw_classes.index(hw)), np.empty(0, int))
+            elif typ == "exodus":
+                ctype, cluster, tg = "region", int(cl), by_region.get(int(cl), np.empty(0, int))
+            else:                                                    # software: версия, по умолчанию последняя к моменту
+                v = int(cl) if cl is not None else int(np.searchsorted(self.release, tau, side="right") - 1)
+                ctype, cluster = "version", v
+                tg = self.alive_base(np.flatnonzero(self.version_at(tau) == v), tau)
+                w0 = max(tau - W, self.release[v])
+            ep = self._add(typ, ctype, cluster, (T_ID[typ], MANUAL_KEY, k, 0), tau, W, pred, False, tg, w0=w0)
+            ep["manual"] = True
 
     def _cascades(self, by_dc):
         """Каскад: после бури или пожара в дата-центре — вторичная буря в других дата-центрах провайдера."""
@@ -376,7 +413,7 @@ class Crises:
     # ------------------------------------------------------------- таблицы истины
     def table(self) -> pd.DataFrame:
         cols = ["id", "type", "ctype", "cluster", "tau", "W", "w0", "predictable", "false_alarm",
-                "parent", "end", "n_targets", "n_hit", "destroyed", "n_xi"]
+                "parent", "end", "n_targets", "n_hit", "destroyed", "n_xi", "manual"]
         rows = [{**{k: e[k] for k in cols if k in e}, "n_targets": len(e["targets"])} for e in self.episodes]
         return pd.DataFrame(rows, columns=cols)
 

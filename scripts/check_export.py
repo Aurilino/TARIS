@@ -36,7 +36,7 @@ TABLES = {
               "outages": ["node", "start", "end", "kind", "destroyed"], "micro": ["node", "bin0", "counts"],
               "pre_micro": ["node", "bin0", "counts"], "shocks": ["ctype", "cluster", "start", "end", "destroyed", "n_nodes"],
               "crises": ["id", "type", "ctype", "cluster", "tau", "W", "w0", "end", "predictable", "false_alarm", "parent",
-                         "n_targets", "n_hit", "destroyed"],
+                         "n_targets", "n_hit", "destroyed", "manual"],
               "crisis_targets": ["crisis", "node"], "precursors": ["crisis", "node", "start", "end"],
               "audit_windows": ["node", "start", "end", "w0", "tau", "rho", "crisis"], "silent": ["node", "t"],
               "disclosures": ["obj", "owner", "t"],

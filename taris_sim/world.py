@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -14,19 +15,25 @@ from .config import Config, HOUR, YEAR
 from . import rng as R
 from .crisis import Crises, OUTAGE_TAG
 
+MANUAL_TAG = 200000            # метка cluster у простоев от вмешательств: MANUAL_TAG + номер вмешательства
+
 CLUSTER_TYPES = ("dc", "provider", "region")
 
 
 class World:
-    def __init__(self, cfg: Config):
+    def __init__(self, cfg: Config, interventions=()):
+        """interventions — вмешательства из файла сценария (taris_sim/scenario.py): кризисы из библиотеки,
+        шоки кластеров, выключения узлов. Без вмешательств мир тот же, что раньше (общие случайные числа)."""
         self.cfg = cfg
+        self.interventions = [dict(x) for x in interventions]
         self._build_clusters()
         self._build_nodes()
         self._build_lifetimes()
         self._calibrate()
         self.crisis = None
-        if cfg.crises_enabled:
-            self._apply_crises()
+        manual_crises = [x for x in self.interventions if x["kind"] == "crisis"]
+        if cfg.crises_enabled or manual_crises:
+            self._apply_crises(library=cfg.crises_enabled, manual=manual_crises)
         self._build_outages()
         self._build_silent_losses()
         if self.crisis is not None:
@@ -172,11 +179,11 @@ class World:
         nd["alive_to"] = nd["alive_to_base"]
 
     # ------------------------------------------------------------------ 3.9
-    def _apply_crises(self):
+    def _apply_crises(self, library: bool = True, manual=()):
         """Кризисы строятся по базовой жизни; здесь из них получается итоговая жизнь узлов:
         принудительный уход или гибель (износ, массовый уход) и отменённые регистрации."""
         c, nd = self.cfg, self.nodes
-        self.crisis = Crises(self).build()
+        self.crisis = Crises(self).build(library=library, manual=manual)
         fr = self.crisis.frames()
         nd["join_t_base"] = nd["join_t"]
         nd["leave_reason"] = np.where(np.isfinite(nd["leave_t_base"]), "churn", "")
@@ -301,6 +308,22 @@ class World:
             for r in pe[pe["channel"] == "short"].itertuples(index=False):
                 rows.append((int(r.node), r.start, r.end, "pre_short", OUTAGE_TAG + int(r.episode), False))
 
+        # Вмешательства-шоки и выключения узлов (файл сценария): заданы полностью, случайности нет
+        for k, it in enumerate(self.interventions):
+            if it["kind"] not in ("shock", "node_down"):
+                continue
+            tag, t = MANUAL_TAG + k, float(it["t"])
+            L, destroyed = float(it["hours"]) * HOUR, bool(it.get("destroyed", False))
+            if it["kind"] == "shock":
+                idx = np.flatnonzero(nd[it["ctype"]].to_numpy() == int(it["cluster"]))
+                it["n_hit"] = self.shock_rows(rows, idx, t, L, destroyed, "shock", tag)
+            elif it["kind"] == "node_down":
+                i = int(it["node"])
+                alive = len(self.alive_at([i], t)) == 1
+                if alive:
+                    rows.append((i, t, t + L, "shock", tag, destroyed))
+                it["n_hit"] = int(alive)
+
         out = pd.DataFrame(rows, columns=["node", "start", "end", "kind", "cluster", "destroyed"])
         out = self._merge_overlaps(out)
         alive_to = nd["alive_to"].to_numpy()[out["node"]]
@@ -404,6 +427,8 @@ class World:
         """Хэш мира: два построения с одним зерном обязаны совпасть."""
         h = hashlib.sha256()
         h.update(self.cfg.to_json().encode())
+        if self.interventions:
+            h.update(json.dumps(self.interventions, sort_keys=True, ensure_ascii=False, default=str).encode())
         h.update(pd.util.hash_pandas_object(self.outages, index=False).values.tobytes())
         h.update(pd.util.hash_pandas_object(self.nodes[["owner", "join_t", "leave_t", "dc", "theta"]], index=False).values.tobytes())
         return h.hexdigest()[:16]

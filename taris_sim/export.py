@@ -225,7 +225,8 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
                            "cluster": [str(x) for x in cr["cluster"]], "tau": minutes(cr["tau"]), "W": rounded(cr["W"]),
                            "w0": minutes(cr["w0"]), "end": minutes(cr["end"]), "predictable": ints(cr["predictable"]),
                            "false_alarm": ints(cr["false_alarm"]), "parent": ints(cr["parent"]),
-                           "n_targets": ints(cr["n_targets"]), "n_hit": ints(cr["n_hit"]), "destroyed": ints(cr["destroyed"])}
+                           "n_targets": ints(cr["n_targets"]), "n_hit": ints(cr["n_hit"]), "destroyed": ints(cr["destroyed"]),
+                           "manual": ints(cr["manual"])}
         alive_to = nd["alive_to"].to_numpy()
         for e in k.episodes:
             truth["crisis_targets"]["crisis"] += [e["id"]] * len(e["targets"])
@@ -255,7 +256,8 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
         "meta": {"scenario": scenario, "world_mode": c.world_mode, "seed": c.seed,
                  "config": json.loads(c.to_json()), "config_hash": c.hash(), "code_commit": git_commit(root),
                  "policy": res.policy_name, "horizon_days": c.horizon_days, "agg_days": agg_days,
-                 "n_sample": len(sample), "metrics": metrics},
+                 "n_sample": len(sample), "metrics": metrics,
+                 "interventions": [{k_: plain(v) for k_, v in it.items()} for it in w.interventions]},
         "dict": {"outage_kind": OUTAGE_KIND, "outage_cls": OUTAGE_CLS, "frag_end": FRAG_END, "leave_reason": LEAVE_REASON,
                  "crisis_type": CRISIS_TYPES, "ctype": CTYPES, "hw": list(c.hw_classes), "subnet": [str(s) for s in subnets]},
         "world": {"regions": {"id": list(range(c.n_regions))}, "providers": {"id": list(range(c.n_providers))},
