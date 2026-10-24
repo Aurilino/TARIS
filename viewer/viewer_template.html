@@ -13,7 +13,7 @@
   --risk-low:#BFE3D6; --risk-mid:#F1E2A8; --risk-high:#F3B49C;
   --calm:#DCE4EA; --signal:#F2C25A; --signal-hot:#E8873A;
   --down:#8A96A3; --accent:#2C5FA8; --alarm:#2C5FA8; --precursor:#D9961A; --loss:#8E1B1B;
-  --link-infra:#2a78d6; --link-own:#c2457a;
+  --link-infra:#2a78d6; --link-own:#c2457a; --device:#2F7F7A;
   --font-body:"Golos Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
   color-scheme: light;
@@ -25,7 +25,7 @@
     --region:#9AA6B2; --region-soft:rgba(154,166,178,.05);
     --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
     --calm:#36414D; --signal:#B98A2C; --signal-hot:#D46E2A;
-    --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A; --link-infra:#5598e7; --link-own:#e07aa5;
+    --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A; --link-infra:#5598e7; --link-own:#e07aa5; --device:#5FB8B1;
     color-scheme: dark;
   }
 }
@@ -35,7 +35,7 @@
   --region:#9AA6B2; --region-soft:rgba(154,166,178,.05);
   --risk-low:#2E5E52; --risk-mid:#6B5C27; --risk-high:#7A3D2C;
   --calm:#36414D; --signal:#B98A2C; --signal-hot:#D46E2A;
-  --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A; --link-infra:#5598e7; --link-own:#e07aa5;
+  --down:#6E7A87; --accent:#7EA8E6; --alarm:#7EA8E6; --precursor:#E3A93A; --loss:#E06A6A; --link-infra:#5598e7; --link-own:#e07aa5; --device:#5FB8B1;
   color-scheme: dark;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -308,6 +308,10 @@ function prepare(log) {
   rows(log.truth.outages).forEach(r => trOut[r.node].push(r));
   rows(log.truth.precursors).forEach(r => pre[r.node].push(r));
   netOut.forEach(a => a.sort((x, y) => x.start - y.start));
+  // узел, молчащий 30 суток подряд, сеть считает ушедшим и убирает с карты (это видно и без истины);
+  // так на месте ушедших устройств пользователей могут появляться новые
+  const GONE = 30 * MIN;
+  const visEnd = netOut.map(a => { const o = a.find(r => (r.end < 0 ? H * MIN : r.end) - r.start >= GONE); return o ? o.start + GONE : Infinity; });
   trOut.forEach(a => a.sort((x, y) => x.start - y.start));
   // частота коротких наблюдаемых событий узла: средняя за жизнь — фон для «всплеска»
   const micro = log.net.micro, mean = micro.counts.map(c => c.length ? c.reduce((a, b) => a + b, 0) / c.length : 0);
@@ -315,7 +319,8 @@ function prepare(log) {
   rows(log.truth.crisis_targets).forEach(r => { if (!targets.has(r.crisis)) targets.set(r.crisis, []); targets.get(r.crisis).push(r.node); });
   const lam = log.truth.nodes.lam_year.slice().filter(x => x != null).sort((a, b) => a - b);
   const q1 = lam[Math.floor(lam.length / 3)], q2 = lam[Math.floor(2 * lam.length / 3)];
-  const S0 = {H, N, agg, netOut, trOut, pre, micro, mean, crises, targets, q1, q2,
+  const S0 = {H, N, agg, netOut, trOut, pre, micro, mean, crises, targets, q1, q2, visEnd, GONE,
+              device: log.nodes.device || new Array(N).fill(0),
               episodes: rows(log.policy.alarm_episodes), losses: rows(log.outcomes.losses), d: log.dict};
   S0.events = buildEvents(log, S0);
   // выборка объектов: фрагменты (где и когда лежал каждый), восстановления и переносы
@@ -403,6 +408,25 @@ function buildMap() {
       if (!ids.length) els.push({data: {id: "e" + d, parent: "d" + d, kind: "spacer"}, position: {x: x0 + c * colW, y: colY[c]}});
       colY[c] += Math.max(1, Math.ceil(ids.length / COLS)) * STEP + 64;
     });
+    // устройства пользователей региона (пункт 3.10): места переиспользуются — новое устройство занимает место
+    // того, которое сеть уже убрала с карты (30 суток молчания); так группа не растёт со всеми 3 годами регистраций
+    const devs = (byDc.get(-1) || []).filter(i => n.region[i] === r && n.join[i] != null).sort((a, b) => n.join[a] - n.join[b]);
+    let devH = 0;
+    if (devs.length) {
+      const free = [], slot = new Map();
+      devs.forEach(i => {
+        let s = free.findIndex(f => f <= n.join[i]);
+        if (s < 0) { s = free.length; free.push(0); }
+        free[s] = S.visEnd[i]; slot.set(i, s);
+      });
+      const DC = 2 * COLS, DS = 20, top = Math.max(colY[0], colY[1]);
+      els.push({data: {id: "u" + r, parent: "r" + r, label: `Устройства пользователей · мест ${free.length}`, kind: "devgroup"}});
+      devs.forEach(i => { const s = slot.get(i);
+        els.push({data: {id: "n" + i, parent: "u" + r, node: i, kind: "node", dev: 1},
+                  position: {x: x0 + (s % DC) * DS, y: top + Math.floor(s / DC) * DS}}); });
+      devH = Math.ceil(free.length / DC) * DS + 64;
+      colY[0] = colY[1] = top + devH;
+    }
     rowH = Math.max(rowH, Math.max(colY[0], colY[1]) - y0);
     x0 += 2 * colW + 70;
   });
@@ -412,7 +436,7 @@ function buildMap() {
   cy.on("tap", "node", e => {
     const k = e.target.data("kind"), id = e.target.id();
     if (k === "node") selected = {k, i: e.target.data("node")};
-    else if (k === "dc" || k === "region") selected = {k, i: Number(id.slice(1))};
+    else if (k === "dc" || k === "region" || k === "devgroup") selected = {k, i: Number(id.slice(1))};
     render();
   });
   cy.on("tap", e => { if (e.target === cy) { selected = null; render(); } });
@@ -432,9 +456,13 @@ function cyStyle() {
     {selector: "node[kind = 'dc'].alarm", style: {"border-color": tok("--alarm"), "border-width": 3.5}},
     {selector: "node[kind = 'region'].crisis", style: {"border-color": tok("--cluster"), "border-width": 3, "border-style": "solid"}},
     {selector: "node[kind = 'region'].alarm", style: {"border-color": tok("--alarm"), "border-width": 3, "border-style": "solid"}},
+    {selector: "node[kind = 'devgroup']", style: {"background-color": tok("--device"), "background-opacity": 0.05, "border-color": tok("--device"),
+      "border-width": 1.4, "border-style": "dashed", "shape": "round-rectangle", "label": "data(label)", "text-valign": "top",
+      "text-halign": "center", "font-size": 11, "color": tok("--device"), "padding": 10, "font-family": "Golos Text, Segoe UI, sans-serif", "text-margin-y": -3}},
     {selector: "node[kind = 'spacer']", style: {"width": 1, "height": 1, "opacity": 0}},
     {selector: "node[kind = 'node']", style: {"width": 15, "height": 15, "background-color": tok("--calm"), "border-color": tok("--ink"),
       "border-width": 1.6}},
+    {selector: "node[dev = 1]", style: {"shape": "round-rectangle", "width": 11, "height": 11, "border-width": 1.3}},
     {selector: "node.hidden", style: {"display": "none"}},
     {selector: "node.s-mid", style: {"background-color": tok("--signal")}},
     {selector: "node.s-hot", style: {"background-color": tok("--signal-hot")}},
@@ -463,6 +491,7 @@ function nodeClass(i, m, day) {
   if (truth) {
     const tn = L.truth.nodes;
     if (tn.cancelled[i] || n.join[i] == null || n.join[i] > m) return "hidden";
+    if (tn.leave[i] >= 0 && m >= tn.leave[i] + S.GONE) return "hidden";
     if (tn.leave[i] >= 0 && tn.leave[i] <= m) return "gone";
     const o = findAt(S.trOut[i], m);
     let c = tn.lam_year[i] <= S.q1 ? "r-low" : tn.lam_year[i] <= S.q2 ? "r-mid" : "r-high";
@@ -470,7 +499,7 @@ function nodeClass(i, m, day) {
     if (S.pre[i].some(p => p.start <= m && m < p.end)) c += " pre-on";
     return c;
   }
-  if (n.join[i] == null || n.join[i] > m) return "hidden";
+  if (n.join[i] == null || n.join[i] > m || m >= S.visEnd[i]) return "hidden";
   const o = findAt(S.netOut[i], m);
   if (o) return m - o.start > MIN ? "down-long" : "down";
   const s = signal(i, day);
@@ -488,8 +517,8 @@ function render() {
       const i = el.data("node");
       el.classes(nodeClass(i, m, day) + (selected && selected.k === "node" && selected.i === i ? " sel" : ""));
     });
-    cy.nodes("[kind = 'dc'], [kind = 'region']").classes("");
-    if (selected && selected.k !== "node") cy.$id((selected.k === "dc" ? "d" : "r") + selected.i).addClass("sel");
+    cy.nodes("[kind = 'dc'], [kind = 'region'], [kind = 'devgroup']").classes("");
+    if (selected && selected.k !== "node") cy.$id({dc: "d", region: "r", devgroup: "u"}[selected.k] + selected.i).addClass("sel");
     holders(m).forEach(i => cy.$id("n" + i).addClass("holder"));
     const mark = (ctype, cluster, cls) => {
       if (ctype === "dc") cy.$id("d" + cluster).addClass(cls);
@@ -549,7 +578,7 @@ function nodeCard(i, m, day) {
   const o = findAt(S.netOut[i], m);
   const age = n.join[i] == null ? null : (m - n.join[i]) / MIN;
   $("card-title").textContent = "Узел № " + i;
-  let html = `<dl><dt>Где</dt><dd>регион ${n.region[i] + 1}, ДЦ ${n.dc[i] + 1}, провайдер ${n.provider[i] + 1}</dd>`
+  let html = `<dl><dt>Где</dt><dd>${n.dc[i] < 0 ? `устройство пользователя: регион ${n.region[i] + 1}, домашний провайдер ${n.provider[i] + 1}` : `регион ${n.region[i] + 1}, ДЦ ${n.dc[i] + 1}, провайдер ${n.provider[i] + 1}`}</dd>`
     + `<dt>Класс (заявлен)</dt><dd>${hw(L.dict.hw[n.hw_claimed[i]])}</dd>`
     + `<dt>В сети</dt><dd>${age == null ? "регистрация отменена" : age < 0 ? "ещё не пришёл" : fmt(age) + " сут"}</dd>`
     + `<dt>Сейчас</dt><dd>${o ? "не отвечает " + fmt((m - o.start) / 60, 1) + " ч" : "доступен"}</dd>`
@@ -580,11 +609,12 @@ function nodeCard(i, m, day) {
   g.fillStyle = tok("--ink"); g.fillRect(X(m) - 1, 0, 2, h);
 }
 function clusterCard(k, c, m, day) {
-  const n = L.nodes, members = n.id.filter(i => (k === "dc" ? n.dc[i] : n.region[i]) === c);
-  const here = members.filter(i => n.join[i] != null && n.join[i] <= m);
+  const n = L.nodes, members = n.id.filter(i => k === "dc" ? n.dc[i] === c : k === "devgroup" ? n.dc[i] < 0 && n.region[i] === c : n.region[i] === c);
+  const here = members.filter(i => n.join[i] != null && n.join[i] <= m && m < S.visEnd[i]);
   const down = here.filter(i => findAt(S.netOut[i], m)), present = here.filter(i => !findAt(S.netOut[i], m));
   const sig = present.length ? present.reduce((a, i) => a + signal(i, day), 0) / present.length : 1;
-  $("card-title").textContent = k === "dc" ? `ДЦ ${c + 1} · провайдер ${L.world.dcs.provider[c] + 1}` : `Регион ${c + 1}`;
+  $("card-title").textContent = k === "dc" ? `ДЦ ${c + 1} · провайдер ${L.world.dcs.provider[c] + 1}`
+    : k === "devgroup" ? `Устройства пользователей · регион ${c + 1}` : `Регион ${c + 1}`;
   const ctype = S.d.ctype.indexOf(k);
   const mine = x => x.ctype === ctype && String(x.cluster) === String(c);
   let html = `<dl><dt>Узлов отвечает</dt><dd>${fmt(present.length)}</dd><dt>Не отвечает</dt><dd>${fmt(down.length)}</dd>`
@@ -779,8 +809,11 @@ function scenOptions() {                              // что можно сд�
   } else if (s && s.k === "region") {
     out.push(["crisis:exodus", `массовый уход из региона ${s.i + 1}`], ["shock:region", `шок региона ${s.i + 1}`]);
   } else if (s && s.k === "node") {
-    out.push(["node_down", `выключить узел № ${s.i}`],
-             ["crisis:wear", `износ партии «${hw(L.dict.hw[n.hw_claimed[s.i]])}» в ДЦ ${n.dc[s.i] + 1}`]);
+    out.push(["node_down", `выключить узел № ${s.i}`]);
+    if (n.dc[s.i] >= 0)                                // у устройства пользователя нет партии дата-центра
+      out.push(["crisis:wear", `износ партии «${hw(L.dict.hw[n.hw_claimed[s.i]])}» в ДЦ ${n.dc[s.i] + 1}`]);
+  } else if (s && s.k === "devgroup") {
+    out.push(["crisis:exodus", `массовый уход из региона ${s.i + 1}`], ["shock:region", `шок региона ${s.i + 1}`]);
   }
   out.push(["crisis:software", "неудачное обновление ПО (последняя версия)"]);
   return out;
@@ -924,7 +957,8 @@ function stripLegend() {
     (linkMode !== "own" ? `<span><i class="ln" style="border-color:var(--link-infra)"></i>общие отказы</span>` : "")
     + (linkMode !== "infra" ? `<span><i class="ln" style="border-color:var(--link-own)"></i>владение</span>` : "")
     + (truth ? `<span><i class="ln" style="border-color:var(--muted);border-top-style:dashed"></i>связь, которой нет в истине</span>` : "");
-  $("maplegend").innerHTML = links + (truth
+  const devLeg = S && S.device.some(x => x) ? `<span><span class="sw" style="border-radius:2px;border-color:var(--device)"></span>устройство пользователя</span>` : "";
+  $("maplegend").innerHTML = devLeg + links + (truth
     ? `<span><span class="sw" style="background:var(--risk-low)"></span>риск ниже</span><span><span class="sw" style="background:var(--risk-mid)"></span>средний</span>`
       + `<span><span class="sw" style="background:var(--risk-high)"></span>выше</span><span><span class="sw" style="border-color:var(--precursor);border-width:3px"></span>предвестник</span>`
       + `<span><span class="sw" style="background:transparent;border-style:dashed;border-color:var(--cluster)"></span>простой от кризиса</span><span><span class="sw" style="background:var(--loss);border-color:var(--loss)"></span>данные уничтожены</span>`
