@@ -135,6 +135,16 @@ class Config:
     # атака Сибиллы — вместе с модулем adversary
     cr_sybil_enabled: bool = False
 
+    # --- шаг 2, пункт 2.4. Граф связей (модель TARIS; считается только по «взгляду сети»)
+    graph_K_rho: float = 10.0              # кредибилити инфраструктурной связи: Z = n / (n + K)
+    graph_b_wallet: float = 0.95           # доказательная сила сигналов владения (noisy-OR): общий кошелёк...
+    graph_b_subnet: float = 0.6            # ...общая подсеть /24...
+    graph_b_join: float = 0.2              # ...регистрация с разницей меньше graph_join_window_days
+    graph_join_window_days: float = 1.0
+    graph_store_min: float = 0.2           # пары слабее этого не хранятся (разреженный граф)
+    graph_cluster_cut: float = 0.5         # кластеры: иерархическая кластеризация, связь не слабее этого
+    graph_snapshot_days: int = 30          # шаг снимков графа в журнале
+
     # --- 3.2. Данные и кодирование
     blocks_per_epoch: int = 20
     block_growth_per_year: float = 0.0     # рост потока блоков
