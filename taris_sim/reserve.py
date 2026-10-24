@@ -315,3 +315,29 @@ def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None, phases: in
                       ("cost", costs)):
         out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst, phases=phases)[0, -1])
     return out
+
+
+# ------------------------------------------------------------------ выбор избыточности и порога
+def evaluate_grid(k: int, sets: dict, costs: Costs | None = None, phases: int = REPAIR_PHASES):
+    """Таблица (n, R_min) -> вероятность потери до горизонта, трафик восстановления, приведённая стоимость.
+    sets: n -> (lam по эпохам, shocks [(eta_c, m_jc)], mu) — интенсивности объекта на наборе из n узлов."""
+    import pandas as pd
+    costs = costs or Costs()
+    rows = []
+    for n, (lam, shocks, mu) in sorted(sets.items()):
+        for R_min in range(0, n - k):
+            m = object_metrics(n, k, lam, shocks, R_min, mu, costs, phases)
+            rows.append({"n": n, "R_min": R_min, **m})
+    return pd.DataFrame(rows)
+
+
+def choose(table, eps: float, by: str = "cost"):
+    """(n*, R*_min) по пункту 2.5: из пар с P_loss <= eps — пара с наименьшим by ('cost' — актуарный резерв V_n(0),
+    'traffic' — трафик восстановления, как у марковского конкурента). Если допустимых пар нет — пара
+    с наименьшей вероятностью потери и признак feasible = False."""
+    ok = table[table["P_loss"] <= eps]
+    if len(ok):
+        r = ok.sort_values([by, "n", "R_min"], kind="mergesort").iloc[0]
+        return r.to_dict() | {"feasible": True}
+    r = table.sort_values(["P_loss", by], kind="mergesort").iloc[0]
+    return r.to_dict() | {"feasible": False}
