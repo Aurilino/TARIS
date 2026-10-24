@@ -1,6 +1,6 @@
 """Журнал прогона для просмотрщика (шаг 3, пункт 3.8; визуализация, этап 1).
 
-Схема — docs/42_log_schema.md, версия taris-log/1. Раздел truth — «взгляд истины»; все остальные
+Схема — docs/42_log_schema.md, версия taris-log/2. Раздел truth — «взгляд истины»; все остальные
 разделы — то, что видит сеть. Таблицы — столбцами, время — целыми минутами (-1 — нет значения),
 перечисления — номерами из раздела dict. Файл — JSON, сжатый gzip без метки времени, поэтому
 один и тот же прогон даёт побитово один и тот же журнал.
@@ -120,7 +120,7 @@ def graph_sections(world, chain, show_min: float = 0.3):
 
 def export_run(world, chain, res, path, scenario: str | None = None, agg_days: int = 1, n_sample: int = 50,
                root: Path | None = None, graph: bool = True) -> dict:
-    """Пишет журнал прогона по схеме taris-log/1 и возвращает его как словарь."""
+    """Пишет журнал прогона по схеме taris-log/2 и возвращает его как словарь."""
     w, c = world, world.cfg
     nd = w.nodes
     H = float(c.horizon_days)
