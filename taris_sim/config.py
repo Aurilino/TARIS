@@ -135,6 +135,19 @@ class Config:
     # атака Сибиллы — вместе с модулем adversary
     cr_sybil_enabled: bool = False
 
+    # --- 3.10. Устройства пользователей (слабые нестабильные узлы вне дата-центров)
+    devices_enabled: bool = False
+    dev_ratio: float = 2.0                 # устройств на один узел в дата-центре (и в начале, и среди новых)
+    dev_m_rate: float = 6.0                # множители к узлу с теми же признаками: частота простоев...
+    dev_m_dur: float = 2.0                 # ...масштаб длительности простоя...
+    dev_m_churn: float = 10.0              # ...уход из сети...
+    dev_m_micro: float = 3.0               # ...микропрерывания...
+    dev_m_silent: float = 3.0              # ...тихие потери
+    dev_capacity_mean: float = 50.0        # средняя ёмкость, фрагментов
+    dev_home_providers: int = 4            # домашние провайдеры (свои номера после провайдеров дата-центров)
+    dev_multi_share: float = 0.1           # доля пользователей с 2–3 устройствами
+    dev_hw_probs: tuple = (0.7, 0.0, 0.3)  # бытовой HDD, серверный HDD, SSD
+
     # --- шаг 2, пункт 2.4. Граф связей (модель TARIS; считается только по «взгляду сети»)
     graph_K_rho: float = 10.0              # кредибилити инфраструктурной связи: Z = n / (n + K)
     graph_b_wallet: float = 0.95           # доказательная сила сигналов владения (noisy-OR): общий кошелёк...
@@ -189,6 +202,9 @@ def scenario(name: str, **overrides) -> Config:
         "S2": dict(shocks_enabled=True),
         # S2, где шоки дата-центров заменены библиотекой кризисов (пункт 3.9)
         "S6": dict(shocks_enabled=True, crises_enabled=True,
+                   shock_rate_per_year=(0.0,) + Config.shock_rate_per_year[1:]),
+        # S6 + устройства пользователей (пункт 3.10)
+        "S8": dict(shocks_enabled=True, crises_enabled=True, devices_enabled=True,
                    shock_rate_per_year=(0.0,) + Config.shock_rate_per_year[1:]),
     }
     if name not in base:

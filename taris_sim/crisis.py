@@ -109,6 +109,8 @@ class Crises:
             for dc in range(c.n_dc):
                 self._schedule("storm", "dc", dc, dc, by_dc.get(dc, []))
             for (dc, hw), idx in sorted(by_batch.items()):
+                if dc < 0:                                   # устройства пользователей (3.10): нет партий ДЦ
+                    continue
                 self._schedule("wear", "batch", f"{dc}/{c.hw_classes[hw]}", dc * 10 + int(hw), idx)
             for r in range(c.n_regions):
                 self._schedule("exodus", "region", r, r, by_region.get(r, []))
@@ -276,9 +278,9 @@ class Crises:
                     self.audit_rows.append((int(i), lo, hi, w0, tau, rho, ep["id"]))
                 elif ch == "churn":
                     j0 = self.join[i]
-                    lam_max = float(w.churn_rate(lo - j0)) * (rho - 1.0) * 1.0001
+                    lam_max = float(w.churn_rate_node(int(i), lo - j0)) * (rho - 1.0) * 1.0001
                     g = self.stream(PRE, *key, int(i), CH_CHURN)
-                    ts = w._thin(g, lambda t: w.churn_rate(t - j0) * (rho - 1.0) * self.g_shape(u(t)),
+                    ts = w._thin(g, lambda t: w.churn_rate_node(int(i), t - j0) * (rho - 1.0) * self.g_shape(u(t)),
                                  lo, hi, lam_max, first_only=True)
                     if len(ts):
                         self.forced_rows.append((int(i), float(ts[0]), "pre_churn", ep["id"]))
@@ -332,7 +334,7 @@ class Crises:
                 elif ch == "silent":
                     m = float(nd["lam_silent"].iat[i]) * np.trapezoid(g, t); add(ch, m, m)
                 elif ch == "churn":
-                    q = 1.0 - np.exp(-np.trapezoid(w.churn_rate(t - self.join[i]) * g, t)); add(ch, q, q * (1 - q))
+                    q = 1.0 - np.exp(-np.trapezoid(w.churn_rate_node(int(i), t - self.join[i]) * g, t)); add(ch, q, q * (1 - q))
         if "join" in CHANNELS[ep["type"]]:
             region = w.nodes.index[w.nodes["region"] == ep["cluster"]].to_numpy()
             j = self.join[region]
@@ -373,9 +375,9 @@ class Crises:
                 if hi <= lo:
                     continue
                 j0 = self.join[i]
-                lam_max = float(w.churn_rate(lo - j0)) * (mult - 1.0) * 1.0001
+                lam_max = float(w.churn_rate_node(int(i), lo - j0)) * (mult - 1.0) * 1.0001
                 g = self.stream(OUT, *key, int(i))
-                ts = w._thin(g, lambda t: w.churn_rate(t - j0) * (mult - 1.0), lo, hi, lam_max, first_only=True)
+                ts = w._thin(g, lambda t: w.churn_rate_node(int(i), t - j0) * (mult - 1.0), lo, hi, lam_max, first_only=True)
                 if len(ts):
                     self.forced_rows.append((int(i), float(ts[0]), "exodus", ep["id"]))
             # во время кризиса регистрации в регионе подавлены до доли rho_join

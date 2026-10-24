@@ -108,22 +108,80 @@ class World:
 
         nodes["lin_pred"] = np.asarray(c.beta_hw)[nodes["hw_true"]] + self.beta_region[nodes["region"]]
         nodes["lam_silent"] = c.silent_rate
+        # множители класса узла (пункт 3.10): у узла в дата-центре все равны 1 — результаты те же, что без них
+        nodes["is_device"] = False
+        for col in ("m_rate", "m_dur", "m_churn", "m_micro", "cap_scale"):
+            nodes[col] = 1.0
+        if c.devices_enabled:
+            nodes = pd.concat([nodes, self._build_devices(int(nodes["owner"].max()) + 1)], ignore_index=True)
+            nodes.index.name = "node"
         self.beta0 = 0.0          # калибруется в _calibrate после построения жизней узлов
         self.nodes = nodes
+
+    def _build_devices(self, owner0: int) -> pd.DataFrame:
+        """Устройства пользователей (пункт 3.10): без дата-центра (dc = -1), домашний провайдер, регион.
+        Отдельный поток случайности и место в конце таблицы — узлы в дата-центрах не меняются."""
+        c = self.cfg
+        g = R.stream(c.seed, R.DEVICES, 0)
+        mean_size = (1 - c.dev_multi_share) + c.dev_multi_share * 2.5
+        H = c.horizon_days
+        n_u0 = int(round(c.dev_ratio * c.n_initial_nodes / mean_size))
+        joins = list(-g.exponential(c.initial_age_mean_days, n_u0))
+        # регистрации держат устройств в r_dev раз больше живых узлов в ДЦ: lambda_join_dev = r_dev * N_srv / L_dev
+        self.dev_expected_servers = self.expected_alive_servers()
+        rate = c.dev_ratio * self.dev_expected_servers / self.expected_life(c.dev_m_churn)
+        self.dev_join_rate = rate
+        joins += list(np.sort(g.uniform(0, H, g.poisson(rate / mean_size * H))))
+        rows = []
+        for u, t0 in enumerate(joins):
+            size = 1 if g.random() >= c.dev_multi_share else int(g.integers(2, 4))
+            prov = c.n_providers + int(g.integers(c.dev_home_providers))   # устройства одного пользователя — дома,
+            reg = int(g.integers(c.n_regions))                            # у одного провайдера и в одной подсети
+            t = t0
+            for k in range(size):
+                if k > 0:
+                    t += g.exponential(c.operator_join_gap_days)
+                if t >= H:
+                    break
+                rows.append(dict(owner=owner0 + u, join_t=t, dc=-1, subnet=f"h{prov}.{u}", provider=prov, region=reg))
+        d = pd.DataFrame(rows)
+        n = len(d)
+        gd = R.stream(c.seed, R.DEVICES, 1)
+        d["wallet"] = d["owner"]
+        d["hw_true"] = gd.choice(len(c.hw_classes), size=n, p=c.dev_hw_probs)
+        d["hw_claimed"] = d["hw_true"]
+        a = c.heterogeneity_a
+        if c.world_mode == "matched":
+            d["theta"] = gd.gamma(1.0 / a, a, n)
+        else:
+            s2 = np.log1p(a)
+            d["theta"] = np.exp(gd.normal(-s2 / 2, np.sqrt(s2), n))
+        d["sev_u"] = gd.normal(0.0, c.severity_node_sd, n)
+        sm2 = c.micro_noise_sd ** 2
+        d["micro_eps"] = np.exp(gd.normal(-sm2 / 2, c.micro_noise_sd, n))
+        d["lin_pred"] = np.asarray(c.beta_hw)[d["hw_true"]] + self.beta_region[d["region"]]
+        d["lam_silent"] = c.silent_rate * c.dev_m_silent
+        d["is_device"] = True
+        d["m_rate"], d["m_dur"], d["m_churn"], d["m_micro"] = c.dev_m_rate, c.dev_m_dur, c.dev_m_churn, c.dev_m_micro
+        d["cap_scale"] = c.dev_capacity_mean / c.capacity_mean_fragments
+        return d
 
     def _calibrate(self):
         """beta_0 подбирается так, чтобы средняя по сети частота страховых случаев равнялась mean_event_rate.
         Так оба режима мира (согласованный и несогласованный) имеют одинаковую общую частоту."""
         c, nd = self.cfg, self.nodes
         # по базовой жизни: кризисы (пункт 3.9) не должны менять калибровку
+        # и только по узлам в дата-центрах: устройства пользователей (3.10) не должны «оздоравливать» остальные узлы
+        srv = ~nd["is_device"].to_numpy()
         expo = (nd["alive_to_base"] - nd["alive_from"]).clip(lower=0).to_numpy()
         e0 = self.expected_own_counts(life_end="alive_to_base")
-        self.beta0 = float(np.log(c.mean_event_rate * expo.sum() / e0.sum()))
+        self.beta0 = float(np.log(c.mean_event_rate * expo[srv].sum() / e0[srv].sum()))
         lam_avg = np.where(expo > 0, e0 * np.exp(self.beta0) / np.maximum(expo, 1e-9), np.nan)
-        lam_avg = np.where(np.isnan(lam_avg), np.nanmean(lam_avg), lam_avg)
+        lam_avg = np.where(np.isnan(lam_avg), np.nanmean(lam_avg[srv]), lam_avg)
         nd["lam_avg"] = lam_avg                                   # средняя истинная интенсивность за жизнь узла
-        # Микропрерывания: lambda_micro = micro_rate * (lambda / средняя lambda)^b * eps
-        nd["lam_micro"] = c.micro_rate * (lam_avg / lam_avg.mean()) ** c.micro_info_b * nd["micro_eps"]
+        # Микропрерывания: lambda_micro = micro_rate * (lambda / средняя lambda)^b * eps (* множитель устройства)
+        nd["lam_micro"] = (c.micro_rate * (lam_avg / lam_avg[srv].mean()) ** c.micro_info_b * nd["micro_eps"]
+                           * nd["m_micro"])
 
     # ---- истинная интенсивность страховых случаев
     def age_factor(self, age_days: np.ndarray) -> np.ndarray:
@@ -141,11 +199,46 @@ class World:
         join = nd["join_t_base"] if "join_t_base" in nd else nd["join_t"]
         age = np.asarray(t) - join.to_numpy()[node_idx]
         return (np.exp(self.beta0 + nd["lin_pred"].to_numpy()[node_idx])
-                * nd["theta"].to_numpy()[node_idx] * self.age_factor(age))
+                * nd["theta"].to_numpy()[node_idx] * self.age_factor(age) * nd["m_rate"].to_numpy()[node_idx])
 
     def churn_rate(self, age_days):
         c = self.cfg
         return c.churn_extra_new * np.exp(-np.maximum(age_days, 0) / c.churn_A_days) + c.churn_base
+
+    def churn_rate_node(self, i: int, age_days):
+        """Интенсивность ухода узла i. У устройства пользователя (пункт 3.10) на dev_m_churn умножен только
+        уход «старожилов» (churn_base): новички уходят так же часто, как новые узлы в дата-центрах."""
+        return self.churn_rate_m(age_days, float(self.nodes["m_churn"].iat[i]))
+
+    def churn_rate_m(self, age_days, m_churn: float = 1.0):
+        c = self.cfg
+        return c.churn_extra_new * np.exp(-np.maximum(age_days, 0) / c.churn_A_days) + c.churn_base * m_churn
+
+    def survival(self, m_churn: float = 1.0, max_age: float | None = None):
+        """Функция выживания ухода по возрасту (сетка в сутки): S(a) = exp(-int_0^a lambda_churn)."""
+        a = np.arange(int(max_age or self.cfg.horizon_days) + 1, dtype=float)
+        lam = self.churn_rate_m(a, m_churn)
+        return a, np.exp(-np.concatenate([[0.0], np.cumsum((lam[1:] + lam[:-1]) / 2)]))
+
+    def expected_life(self, m_churn: float = 1.0) -> float:
+        """Ожидаемая жизнь нового узла в пределах горизонта, сутки: интеграл функции выживания ухода."""
+        a, S = self.survival(m_churn)
+        return float(np.trapezoid(S, a))
+
+    def expected_alive_servers(self) -> float:
+        """Среднее за горизонт ожидаемое число живых узлов в дата-центрах по модели ухода (пункт 3.10):
+        начальные узлы (возраст ~ Exp со средним initial_age_mean_days) доживают с S(a + t) / S(a),
+        новые приходят с интенсивностью node_join_rate и доживают с S(t - s)."""
+        c = self.cfg
+        H = int(c.horizon_days)
+        A_max = H + int(10 * c.initial_age_mean_days)
+        a, S = self.survival(1.0, A_max)
+        ages = np.arange(int(10 * c.initial_age_mean_days) + 1, dtype=float)
+        f = np.exp(-ages / c.initial_age_mean_days); f /= f.sum()           # распределение начального возраста
+        t = np.arange(H + 1)
+        init = np.array([(f * S[ages.astype(int) + k] / S[ages.astype(int)]).sum() for k in t])
+        new = c.node_join_rate * np.concatenate([[0.0], np.cumsum((S[1:H + 1] + S[:H]) / 2)])
+        return float(np.mean(c.n_initial_nodes * init + new))
 
     # ------------------------------------------------------------ жизнь узлов
     @staticmethod
@@ -166,8 +259,8 @@ class World:
         for i, j0 in enumerate(nd["join_t"].to_numpy()):
             g = R.stream(c.seed, R.CHURN, i)
             start = max(0.0, j0)
-            lam_max = float(self.churn_rate(start - j0)) * 1.0001
-            ts = self._thin(g, lambda t: self.churn_rate(t - j0), start, H, lam_max, first_only=True)
+            lam_max = float(self.churn_rate_node(i, start - j0)) * 1.0001
+            ts = self._thin(g, lambda t: self.churn_rate_node(i, t - j0), start, H, lam_max, first_only=True)
             if len(ts):
                 leave[i] = ts[0]
         # Базовая жизнь — без кризисов. Все потоки узла генерируются на ней и потом обрезаются
@@ -228,13 +321,14 @@ class World:
         d_h = c.franchise_d_hours
         hw = int(self.nodes["hw_true"].iat[node_idx])
         u_i = float(self.nodes["sev_u"].iat[node_idx])
+        m_d = float(self.nodes["m_dur"].iat[node_idx])       # длительнее у устройств пользователей (3.10)
         U = g.random(m)
         if c.world_mode == "matched":
             k = c.weibull_shape
-            th = c.weibull_scale_hours * np.exp(c.alpha_hw[hw] + u_i)
+            th = c.weibull_scale_hours * np.exp(c.alpha_hw[hw] + u_i) * m_d
             L = th * ((d_h / th) ** k - np.log(U)) ** (1.0 / k)
         else:
-            mu = np.log(c.lognorm_median_hours) + c.alpha_hw[hw] + u_i
+            mu = np.log(c.lognorm_median_hours) + c.alpha_hw[hw] + u_i + np.log(m_d)
             s = c.lognorm_sigma
             Fd = stats.norm.cdf((np.log(d_h) - mu) / s)
             L = np.exp(mu + s * stats.norm.ppf(Fd + U * (1 - Fd)))
@@ -245,12 +339,13 @@ class World:
         c = self.cfg
         hw = int(self.nodes["hw_true"].iat[node_idx])
         u_i = float(self.nodes["sev_u"].iat[node_idx])
+        m_d = float(self.nodes["m_dur"].iat[node_idx])       # длительнее у устройств пользователей (3.10)
         d_h, T_h = c.franchise_d_hours, c.T_rep_hours
         if c.world_mode == "matched":
             k = c.weibull_shape
-            th = c.weibull_scale_hours * np.exp(c.alpha_hw[hw] + u_i)
+            th = c.weibull_scale_hours * np.exp(c.alpha_hw[hw] + u_i) * m_d
             return float(np.exp(-(T_h / th) ** k + (d_h / th) ** k))
-        mu = np.log(c.lognorm_median_hours) + c.alpha_hw[hw] + u_i
+        mu = np.log(c.lognorm_median_hours) + c.alpha_hw[hw] + u_i + np.log(m_d)
         s = c.lognorm_sigma
         return float(stats.norm.sf((np.log(T_h) - mu) / s) / stats.norm.sf((np.log(d_h) - mu) / s))
 
@@ -286,6 +381,8 @@ class World:
             for ti, ctype in enumerate(CLUSTER_TYPES):
                 rate = c.shock_rate_per_year[ti] / YEAR
                 for cl, idx in members[ctype].items():
+                    if int(cl) < 0:                          # устройства пользователей (3.10): дата-центра нет
+                        continue
                     g = R.stream(c.seed, R.SHOCK, ti, int(cl))
                     m = g.poisson(rate * c.horizon_days)
                     for t in np.sort(g.uniform(0, c.horizon_days, m)):
