@@ -128,8 +128,84 @@ def window_checks(w, R):
           f"отброшено ≤ {dropped:.1e}")
 
 
+def gillespie(n, k, lam, shocks, R_min, mu, H, M, g):
+    """Монте-Карло той же цепи объекта: доля потерянных до H и средний трафик восстановления (в объёмах объекта)."""
+    lost, traffic = 0, 0.0
+    for _ in range(M):
+        s, t = n, 0.0
+        while True:
+            rep = mu if (s < n and s - k <= R_min) else 0.0
+            rates = np.array([s * lam] + [eta for eta, _ in shocks] + [rep])
+            tot = rates.sum()
+            t += g.exponential(1.0 / tot)
+            if t >= H:
+                break
+            j = int(np.searchsorted(np.cumsum(rates), g.random() * tot, side="right"))
+            if j == 0:
+                s -= 1
+            elif j <= len(shocks):
+                s -= shocks[j - 1][1]
+            else:
+                traffic += (k + n - s) / k
+                s = n
+            if s < k:
+                lost += 1
+                break
+    return lost / M, traffic / M
+
+
+def thiele_checks(w, R):
+    from scipy.linalg import expm
+    print("\n3. Уравнение Тиле")
+    c = w.cfg
+    n, k, mu = 13, c.k, RS.repair_mu(c)
+    # (а) при нулевых затратах и W = 1 — обратное уравнение Колмогорова: P(потерян к H) = [exp(Q H)]_{n, потерян}
+    lam, H, shocks = 0.02, 365, [(0.004, 3), (0.002, 2)]
+    for R_min in (0, 1, 2):
+        V = RS.thiele_const(n, k, lam, H, shocks, R_min, mu, RS.Costs.loss_probability())
+        Q, _ = RS.generator(n, k, lam, shocks, R_min, mu, RS.Costs.loss_probability())
+        kol = expm(Q * H)[-1, 0]
+        check(f"Тиле = Колмогоров, R_min = {R_min}", abs(V[0, -1] - kol) < 1e-10 * max(kol, 1e-30) + 1e-15,
+              f"{V[0, -1]:.6e} против {kol:.6e}")
+    # (б) интенсивности, меняющиеся во времени: две половины горизонта = произведение экспонент
+    lam_t = np.r_[np.full(100, 0.01), np.full(100, 0.05)]
+    V = RS.thiele(n, k, lam_t, [], 1, mu, RS.Costs.loss_probability())
+    Q1, _ = RS.generator(n, k, 0.01, [], 1, mu, RS.Costs.loss_probability())
+    Q2, _ = RS.generator(n, k, 0.05, [], 1, mu, RS.Costs.loss_probability())
+    kol = (expm(Q1 * 100) @ expm(Q2 * 100))[-1, 0]
+    check("меняющиеся интенсивности: Тиле = произведение экспонент", abs(V[0, -1] - kol) < 1e-10 * kol, f"{V[0, -1]:.6e} против {kol:.6e}")
+    # (в) Монте-Карло той же цепи: интенсивности завышены, чтобы потери были заметны
+    g = np.random.default_rng(11)
+    lam, H, shocks = 0.03, 200, [(0.003, 3)]
+    for R_min in (0, 2):
+        m = RS.object_metrics(n, k, np.full(H, lam), shocks, R_min, mu)
+        p, tr = gillespie(n, k, lam, shocks, R_min, mu, H, 20000, g)
+        se = np.sqrt(p * (1 - p) / 20000)
+        check(f"Монте-Карло цепи, R_min = {R_min}: вероятность потери", abs(m["P_loss"] - p) < 3 * se + 1e-4,
+              f"Тиле {m['P_loss']:.4f}, Монте-Карло {p:.4f} ± {se:.4f}")
+        check(f"Монте-Карло цепи, R_min = {R_min}: трафик восстановления", abs(m["traffic"] - tr) < 0.03 * m["traffic"],
+              f"Тиле {m['traffic']:.2f}, Монте-Карло {tr:.2f} объёма")
+    # (г) справочно: объект на 13 узлах основного мира, выбранных оракулом (лимиты разнесения), горизонт 365 суток
+    from taris_sim.policy import OraclePolicy
+    t0 = 400.0
+    alive = w.alive_at(np.arange(len(w.nodes)), t0)
+    pick = OraclePolicy(w, n)._choose_spread(np.random.default_rng(3), alive, n)
+    lam_t, sh = RS.object_rates(R, pick, t0, 365)
+    mu_obj = RS.object_mu(R, pick, t0, sh)
+    print(f"  справочно: объект на 13 узлах оракула (S2, сутки {t0:g}), средняя интенсивность потери фрагмента "
+          f"{lam_t.mean():.4f} в сутки, шоков кластеров {len(sh)}, больше всего фрагментов в одном кластере "
+          f"{max(m for _, m in sh)}; средняя задержка восстановления {1 / mu_obj:.2f} сут (консервативная {1 / mu:.2f})")
+    rows = []
+    for R_min in range(0, n - k):
+        m = RS.object_metrics(n, k, lam_t, sh, R_min, mu_obj)
+        rows.append({"R_min": R_min, "P_loss за год": f"{m['P_loss']:.2e}", "трафик, объёмов": round(m["traffic"], 3),
+                     "стоимость": round(m["cost"], 3)})
+    print(pd.DataFrame(rows).to_string(index=False))
+
+
 w, R = rates_vs_world("S2", "matched")
 window_checks(w, R)
+thiele_checks(w, R)
 rates_vs_world("S2", "mismatched")
 rates_vs_world("S8", "matched")
 
