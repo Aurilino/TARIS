@@ -26,15 +26,18 @@
 | `taris_sim/export.py` | 3.8 | Журнал прогона для просмотрщика по схеме `taris-log/1` (`docs/42_log_schema.md`) |
 | `scripts/export_run.py` | 3.8 | Прогон политики и журнал основного (около 200 узлов) или полного мира |
 | `scripts/check_export.py` | 3.8 | Проверки журнала: схема, сверка с прогоном, «взгляд сети» без полей истины, воспроизводимость |
-| `viewer/viewer_template.html`, `scripts/build_viewer.py` | 3.8 | Просмотрщик прогона: карта сети, проигрывание, «сеть / истина», карточки, лента событий, резерв объекта |
+| `viewer/viewer_template.html`, `scripts/build_viewer.py` | 3.8 | Просмотрщик прогона: карта сети, проигрывание, «сеть / истина», карточки, лента событий, резерв объекта, граф связей |
+| `taris_sim/graph.py` | шаг 2, 2.4 | Граф связей узлов: инфраструктурная связь с кредибилити, связь по владению (noisy-OR), подозрительность, кластеры |
+| `scripts/check_graph.py` | 2.4 | Проверки графа: корреляция, без истины, без будущего, смысл, воспроизводимость |
 
-Дальше: граф связей в просмотрщике, сценарии и вмешательства, `adversary` (3.5), `validate` (3.7).
+Дальше: сценарии и вмешательства в просмотрщике, `adversary` (3.5), `validate` (3.7).
 
 ## Просмотрщик
 
 ```powershell
 python scripts\export_run.py runs main                     # журнал основного мира (оракул кризисов, около 5 минут)
 python scripts\check_export.py                              # проверки журнала
+python scripts\check_graph.py                               # проверки графа связей
 python scripts\build_viewer.py runs\main_crisis_oracle13_matched.taris.json.gz
 start viewer\build\taris_viewer.html                        # страница со встроенным журналом; «Открыть журнал» — любой другой
 ```
