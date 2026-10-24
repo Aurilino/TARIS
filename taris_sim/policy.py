@@ -212,3 +212,93 @@ class CrisisOraclePolicy(OraclePolicy):
                 if to:
                     out.append((obj, idx, to[0]))
         return out
+
+
+class ReservePolicy(OraclePolicy):
+    """Оракул с резервом информации (шаг 3, пункт 3.11): размещение как у оракула, восстановление — по порогу запаса.
+
+    Восстановление объекта (всех признанных утраченными фрагментов разом) запускается, когда запас
+    не выше порога R_min. Три варианта для H7:
+    - mode="thiele" — TARIS-резерв: порог свой у каждого объекта, из уравнения Тиле по меняющимся во времени
+      истинным интенсивностям его узлов (минимум приведённой стоимости при P_loss <= eps за горизонт H);
+      запас — фактический, с поправками IBNR и RBNS; порог пересчитывается при смене набора узлов и раз в 30 суток;
+    - mode="markov" — марковский конкурент: порог на объект при размещении по постоянной интенсивности
+      (минимум трафика при P_loss <= eps), запас — по карте, без поправок;
+    - mode="fixed" — эвристический порог R_fixed для всех объектов (R_fixed = n - k - 1 — немедленное восстановление).
+    Если eps недостижим, берётся немедленное восстановление.
+    """
+
+    def __init__(self, world, n: int = 15, mode: str = "thiele", eps: float = 1e-3, H: int = 365,
+                 R_fixed: int | None = None, gamma: float = 1.0, block: int = 30):
+        from . import reserve as RS
+        super().__init__(world, n, gamma)
+        self.RS, self.mode, self.eps, self.H, self.block = RS, mode, eps, H, block
+        self.rates = RS.TrueRates(world)
+        self.R_fixed = n - self.k - 1 if R_fixed is None else R_fixed
+        self.costs = RS.Costs()
+        self.thr = {}          # объект -> (ключ набора узлов, порог)
+        self.memo = {}         # округлённые интенсивности -> порог
+        self.name = {"thiele": f"Резерв (Тиле), n={n}", "markov": f"Марковский порог, n={n}",
+                     "fixed": f"Порог R_min={self.R_fixed}, n={n}"}[mode]
+
+    def _threshold(self, obj, nodes, t, view):
+        if self.mode == "fixed":
+            return self.R_fixed
+        T_end = view.L.T
+        key = frozenset(nodes) if self.mode == "markov" else (frozenset(nodes), int(t // self.block))
+        old = self.thr.get(obj)
+        if old is not None and (self.mode == "markov" or old[0] == key):
+            return old[1]
+        RS, k, n = self.RS, self.k, self.n
+        Hrem = int(min(self.H, max(T_end - t, self.block)))
+        nb = max(1, int(np.ceil(Hrem / self.block)))
+        nodes = np.asarray(sorted(nodes), int)
+        cl = self.rates.shock_clusters(nodes, t)
+        shocks = [(eta, int(m.sum())) for _, _, eta, m in cl]
+        mu = RS.object_mu(self.rates, nodes, t, shocks)
+        if self.mode == "markov":
+            lam = np.full(nb, self.rates.fragment_loss(nodes, t).mean())
+        else:
+            lam = np.array([self.rates.fragment_loss(nodes, t + (b + 0.5) * self.block).mean() for b in range(nb)])
+        # кэш порогов: интенсивности округляются ступенями 5% (логарифмическая сетка), задержка — до 0,05 суток
+        q = lambda x: float(np.exp(np.round(np.log(max(x, 1e-12)) * 20) / 20))
+        lam = np.array([q(x) for x in lam])
+        shocks = sorted((q(e), m) for e, m in shocks)
+        mu = 1.0 / (round(20.0 / mu) / 20.0)
+        mkey = (self.mode, tuple(lam), tuple(shocks), mu)
+        if mkey not in self.memo:
+            best, R_best = None, n - k - 1
+            for R_min in range(0, n - k):
+                m = RS.object_metrics(n, k, lam, shocks, R_min, mu, self.costs, dt=self.block)
+                if m["P_loss"] <= self.eps:
+                    v = m["cost"] if self.mode == "thiele" else m["traffic"]
+                    if best is None or v < best:
+                        best, R_best = v, R_min
+            self.memo[mkey] = R_best
+        R = self.memo[mkey]
+        self.thr[obj] = (key, R)
+        return R
+
+    def on_epoch(self, t, view):
+        self._g = self._rng(view)
+        cand = self._cand(t, view)
+        reqs = []
+        need = view.needs_repair()
+        if self.mode == "thiele" and need:
+            last_ok, down = view.last_audit_ok(), view.down_since()
+        for obj in need:
+            holders = view.holders(obj)
+            if len(holders) < self.k:
+                continue
+            thr = self._threshold(obj, holders, t, view)
+            if self.mode == "thiele":
+                R_eff, _ = self.RS.effective_reserve(self.rates, view, obj, t, self.k, last_ok, down)
+            else:
+                R_eff = len(holders) - self.k
+            if R_eff > thr:
+                continue
+            idx = sorted(view.missing(obj))
+            nodes = self._choose_spread(self._g, cand, len(idx), held=holders)
+            if nodes:
+                reqs.append((obj, idx, nodes))
+        return reqs

@@ -306,14 +306,15 @@ def object_rates(rates, nodes, t0: float, H: int):
     return lam, shocks
 
 
-def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None, phases: int = REPAIR_PHASES) -> dict:
+def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None, phases: int = REPAIR_PHASES,
+                   dt: float = 1.0) -> dict:
     """Три величины таблицы пункта 2.5 из состояния n в начале горизонта: вероятность потери, ожидаемый трафик
     восстановления (в объёмах объекта) и ожидаемая приведённая стоимость."""
     costs = costs or Costs()
     out = {}
     for name, cst in (("P_loss", Costs.loss_probability(costs.size)), ("traffic", Costs.repair_traffic(costs.size)),
                       ("cost", costs)):
-        out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst, phases=phases)[0, -1])
+        out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst, dt=dt, phases=phases)[0, -1])
     return out
 
 
