@@ -94,7 +94,9 @@ class Ledger:
         self.T = c.horizon_days
         nd = world.nodes
         self.N = len(nd)
-        self.capacity = data.capacity
+        # ёмкость устройства пользователя меньше (пункт 3.10): множитель cap_scale, у узлов в ДЦ он равен 1
+        scale = nd["cap_scale"].to_numpy() if "cap_scale" in nd else np.ones(len(nd))
+        self.capacity = np.where(scale == 1.0, data.capacity, np.maximum(1, np.round(data.capacity * scale)).astype(data.capacity.dtype))
         self.join = nd["join_t"].to_numpy()
         self.owner = nd["owner"].to_numpy()
         # наблюдаемый простой на границах эпох (что видит политика)

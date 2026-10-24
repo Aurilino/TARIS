@@ -24,7 +24,7 @@ from taris_sim.scenario import MAIN          # основной мир прос�
 
 # столбцы каждой таблицы по схеме (раздел -> таблица -> столбцы)
 TABLES = {
-    "world": {"regions": ["id"], "providers": ["id"], "dcs": ["id", "provider", "region"]},
+    "world": {"regions": ["id"], "providers": ["id", "home"], "dcs": ["id", "provider", "region"]},
     "net": {"outages": ["node", "start", "end", "cls"], "micro": ["node", "bin0", "counts"],
             "audits": ["node", "bin0", "fails"], "versions": ["version", "t"], "updates": ["node", "version", "t"]},
     "policy": {"alarms": ["t", "type", "ctype", "cluster", "prob", "horizon"],
@@ -47,7 +47,7 @@ TABLES = {
 GRAPH_CHECK = {"pairs": ["same_dc", "same_provider", "same_owner"],
                "snap": ["t", "infra_edges", "infra_same_dc", "own_edges", "own_same_owner", "own_recall",
                         "ari_owner", "ari_infra_dc"]}
-FLAT = {"nodes": ["id", "dc", "provider", "region", "subnet", "hw_claimed", "wallet", "join"],
+FLAT = {"nodes": ["id", "dc", "provider", "region", "subnet", "hw_claimed", "wallet", "device", "join"],
         "daily": ["epoch", "fragments", "objects_alive", "lost_cum", "repair_traffic", "migration_traffic",
                   "repairs", "migrations", "alarms_active"]}
 ENUMS = {("net", "outages", "cls"): "outage_cls", ("truth", "outages", "kind"): "outage_kind",

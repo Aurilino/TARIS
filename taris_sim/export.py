@@ -133,6 +133,8 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
     nodes = {"id": list(range(len(nd))), "dc": ints(nd["dc"]), "provider": ints(nd["provider"]),
              "region": ints(nd["region"]), "subnet": code(nd["subnet"], subnets),
              "hw_claimed": ints(nd["hw_claimed"]), "wallet": ints(nd["wallet"]),
+             # заявленный класс узла: 1 — устройство пользователя (пункт 3.10, dc = -1), 0 — узел в дата-центре
+             "device": ints(nd["is_device"]) if "is_device" in nd else [0] * len(nd),
              # регистрация может быть до начала горизонта (отрицательные минуты); отменённая кризисом — null
              "join": [None if cancelled[i] else m for i, m in enumerate(minutes(nd["join_t"]))]}
     ob = chain.observed
@@ -260,7 +262,9 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
                  "interventions": [{k_: plain(v) for k_, v in it.items()} for it in w.interventions]},
         "dict": {"outage_kind": OUTAGE_KIND, "outage_cls": OUTAGE_CLS, "frag_end": FRAG_END, "leave_reason": LEAVE_REASON,
                  "crisis_type": CRISIS_TYPES, "ctype": CTYPES, "hw": list(c.hw_classes), "subnet": [str(s) for s in subnets]},
-        "world": {"regions": {"id": list(range(c.n_regions))}, "providers": {"id": list(range(c.n_providers))},
+        "world": {"regions": {"id": list(range(c.n_regions))},
+                  "providers": {"id": list(range(int(nd["provider"].max()) + 1)),        # с домашними провайдерами (3.10)
+                                "home": [int(p >= c.n_providers) for p in range(int(nd["provider"].max()) + 1)]},
                   "dcs": {"id": list(range(c.n_dc)), "provider": ints(w.dc_provider), "region": ints(w.dc_region)}},
         "nodes": nodes, "net": net, "policy": policy, "objects": objects, "outcomes": outcomes, "daily": daily,
         "truth": truth,

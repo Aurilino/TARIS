@@ -89,10 +89,15 @@ class OraclePolicy(UniformPolicy):
         nd = world.nodes
         phi = np.array([world.true_phi(i) for i in range(len(nd))])
         q = nd["lam_avg"].to_numpy() * phi
+        # устройства пользователей (3.10) ещё и уходят чаще: добавляется избыточный уход старожилов (у узлов в ДЦ — 0)
+        q = q + (nd["m_churn"].to_numpy() - 1.0) * world.cfg.churn_base
         self.w = (1.0 / np.maximum(q, 1e-9)) ** gamma
         self.dc, self.prov, self.reg, self.own = (nd[c].to_numpy() for c in ("dc", "provider", "region", "owner"))
+        # у устройства нет дата-центра: оно — свой отдельный домен отказа (номера после дата-центров)
+        dev = self.dc < 0
+        self.dc = np.where(dev, world.cfg.n_dc + np.arange(len(nd)), self.dc)
         self.k = world.cfg.k
-        self.n_dc, self.n_prov, self.n_reg = world.cfg.n_dc, world.cfg.n_providers, world.cfg.n_regions
+        self.n_dc, self.n_prov, self.n_reg = int(self.dc.max()) + 1, int(self.prov.max()) + 1, world.cfg.n_regions
 
     def _choose_spread(self, rng, cand, m, held=()):
         """Выбор с разнесением. Если при лимите r на регион и провайдера не набрать m узлов
