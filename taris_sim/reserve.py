@@ -194,67 +194,90 @@ def object_mu(rates, nodes, t: float, shocks=()) -> float:
     return den / num if num > 0 else 1.0 / D["own"]
 
 
-def generator(n: int, k: int, lam: float, shocks, R_min: int, mu: float, costs: Costs):
+REPAIR_PHASES = 3      # фаз Эрланга у задержки восстановления (пункт 3.11; выбор — check_reserve.py, раздел 4)
+
+
+def chain_states(n: int, k: int, R_min: int, phases: int) -> list[tuple[int, int]]:
+    """Состояния цепи объекта: (0, -1) — «потерян»; (s, 0) — s фрагментов, восстановления нет;
+    (s, j), j = 1..phases — s фрагментов, идёт восстановление, фаза j задержки. Последнее состояние — (n, 0)."""
+    st = [(0, -1)]
+    for s in range(k, n + 1):
+        if s < n and s - k <= R_min:
+            st += [(s, j) for j in range(1, phases + 1)]
+        else:
+            st.append((s, 0))
+    return st
+
+
+def generator(n: int, k: int, lam: float, shocks, R_min: int, mu: float, costs: Costs, phases: int = REPAIR_PHASES):
     """Генератор цепи объекта и платежи на одну эпоху с постоянными интенсивностями.
 
-    Состояния: 0 — «потерян», 1 + (s - k) — s существующих фрагментов, s = k..n.
-    lam — средняя интенсивность потери одного фрагмента (Lambda_s = s * lam);
-    shocks — [(eta_c, m_jc)]: шок кластера уносит m_jc фрагментов;
-    восстановление пачкой до n с интенсивностью mu в состояниях s <= k + R_min (s < n).
-    Возвращает (Q, b): Q — интенсивности переходов (строка — откуда), b — интенсивность платежей в каждом
-    состоянии: хранение v * s плюс ожидаемые платежи при переходах (W при потере, g(r) при восстановлении).
+    lam — средняя интенсивность потери одного фрагмента (Lambda_s = s * lam); shocks — [(eta_c, m_jc)]: шок кластера
+    уносит m_jc фрагментов. Восстановление начинается, как только запас s - k опускается до R_min, и через
+    задержку (Эрланг с phases фазами и средним 1 / mu) возвращает объект в n фрагментов; потери во время
+    восстановления его не прерывают. phases = 1 — экспоненциальная задержка.
+    Возвращает (Q, b): Q — интенсивности переходов (строка — откуда), b — интенсивность платежей в состоянии:
+    хранение v * s плюс ожидаемые платежи при переходах (W при потере, g(r) при завершении восстановления).
     """
-    m = n - k + 2
+    st = chain_states(n, k, R_min, phases)
+    ix = {x: a for a, x in enumerate(st)}
+    m = len(st)
     Q = np.zeros((m, m))
     b = np.zeros(m)
     c = costs
-    for s in range(k, n + 1):
-        a = 1 + s - k
+
+    def target(s2, j):
+        if s2 < k:
+            return 0
+        if j >= 1:
+            return ix[(s2, j)]
+        return ix[(s2, 1)] if (s2, 1) in ix else ix[(s2, 0)]
+
+    for a, (s, j) in enumerate(st):
+        if j < 0:
+            continue
         b[a] += c.v * s
-        # потеря одного фрагмента
-        to = 0 if s - 1 < k else a - 1
-        Q[a, to] += s * lam
-        if to == 0:
-            b[a] += s * lam * c.W
-        # шоки кластеров
-        for eta, mj in shocks:
-            if eta <= 0 or mj <= 0:
-                continue
-            to = 0 if s - mj < k else a - mj
-            Q[a, to] += eta
+        moves = [(s * lam, s - 1)] + [(eta, s - mj) for eta, mj in shocks if eta > 0 and mj > 0]
+        for r, s2 in moves:
+            to = target(s2, j)
+            Q[a, to] += r
             if to == 0:
-                b[a] += eta * c.W
-        # восстановление пачкой: r = n - s фрагментов, трафик (k + r) * size / k
-        if s < n and s - k <= R_min and mu > 0:
-            Q[a, m - 1] += mu
-            b[a] += mu * c.c_tr * (k + n - s) * c.size / k
+                b[a] += r * c.W
+        if j >= 1 and mu > 0:                       # фаза задержки восстановления
+            r = phases * mu
+            if j < phases:
+                Q[a, ix[(s, j + 1)]] += r
+            else:
+                Q[a, ix[(n, 0)]] += r
+                b[a] += r * c.c_tr * (k + n - s) * c.size / k
     np.fill_diagonal(Q, 0.0)
     Q[np.diag_indices(m)] = -Q.sum(1)
     return Q, b
 
 
 def thiele(n: int, k: int, lam, shocks=(), R_min: int = 0, mu: float = 1.0, costs: Costs | None = None,
-           dt: float = 1.0) -> np.ndarray:
+           dt: float = 1.0, phases: int = REPAIR_PHASES) -> np.ndarray:
     """Решение уравнения Тиле назад по эпохам (пункт 3.11).
 
     dV/dt = delta * V - b(t) - Q(t) V, V(H) = 0. lam — интенсивность потери фрагмента по эпохам (массив длины E,
     горизонт H = E * dt; при постоянных интенсивностях — thiele_const); shocks — [(eta_c, m_jc)], где eta_c —
     число или массив по эпохам.
     Внутри эпохи коэффициенты постоянны, и шаг точный: экспонента расширенной матрицы [[-A, b], [0, 0]],
-    A = delta * I - Q. Возвращает V размера (E + 1, n - k + 2): V[e, state] в начале эпохи e; V[E] = 0.
+    A = delta * I - Q. Возвращает V размера (E + 1, число состояний chain_states): V[e, состояние] в начале
+    эпохи e, V[E] = 0; последний столбец — состояние (n, 0), первый — «потерян».
     """
     from scipy.linalg import expm
     costs = costs or Costs()
     lam = np.atleast_1d(np.asarray(lam, float))
     E = len(lam)
-    m = n - k + 2
+    m = len(chain_states(n, k, R_min, phases))
     V = np.zeros((E + 1, m))
     cache = {}
     for e in range(E - 1, -1, -1):
         sh = tuple((float(np.atleast_1d(eta)[min(e, np.size(eta) - 1)]), int(mj)) for eta, mj in shocks)
         key = (float(lam[e]), sh)
         if key not in cache:
-            Q, b = generator(n, k, lam[e], sh, R_min, mu, costs)
+            Q, b = generator(n, k, lam[e], sh, R_min, mu, costs, phases)
             A = costs.delta * np.eye(m) - Q
             M = np.zeros((m + 1, m + 1))
             M[:m, :m] = -A
@@ -266,10 +289,11 @@ def thiele(n: int, k: int, lam, shocks=(), R_min: int = 0, mu: float = 1.0, cost
     return V
 
 
-def thiele_const(n, k, lam: float, H: float, shocks=(), R_min=0, mu=1.0, costs=None, dt=1.0) -> np.ndarray:
+def thiele_const(n, k, lam: float, H: float, shocks=(), R_min=0, mu=1.0, costs=None, dt=1.0,
+                 phases: int = REPAIR_PHASES) -> np.ndarray:
     """То же при постоянных интенсивностях на горизонте H (сутки)."""
     E = int(round(H / dt))
-    return thiele(n, k, np.full(E, float(lam)), [(float(eta), mj) for eta, mj in shocks], R_min, mu, costs, dt)
+    return thiele(n, k, np.full(E, float(lam)), [(float(eta), mj) for eta, mj in shocks], R_min, mu, costs, dt, phases)
 
 
 def object_rates(rates, nodes, t0: float, H: int):
@@ -282,12 +306,12 @@ def object_rates(rates, nodes, t0: float, H: int):
     return lam, shocks
 
 
-def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None) -> dict:
+def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None, phases: int = REPAIR_PHASES) -> dict:
     """Три величины таблицы пункта 2.5 из состояния n в начале горизонта: вероятность потери, ожидаемый трафик
     восстановления (в объёмах объекта) и ожидаемая приведённая стоимость."""
     costs = costs or Costs()
     out = {}
     for name, cst in (("P_loss", Costs.loss_probability(costs.size)), ("traffic", Costs.repair_traffic(costs.size)),
                       ("cost", costs)):
-        out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst)[0, -1])
+        out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst, phases=phases)[0, -1])
     return out
