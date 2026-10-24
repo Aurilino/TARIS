@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-SCHEMA = "taris-log/1"
+SCHEMA = "taris-log/2"          # v2 = v1 + раздел graph (граф связей, пункт 2.4) и truth.graph_check
 OUTAGE_KIND = ["own", "shock", "storm", "crisis", "pre_short", "leave"]
 OUTAGE_CLS = ["micro", "partial", "total"]
 FRAG_END = ["", "простой > T_rep", "тихая потеря (аудит)", "перенос"]
@@ -81,8 +81,45 @@ def by_node(df: pd.DataFrame, col: str) -> dict:
     return {int(i): np.sort(g[col].to_numpy()) for i, g in df.groupby("node")}
 
 
+def graph_sections(world, chain, show_min: float = 0.3):
+    """Раздел graph (снимки графа связей — «взгляд сети») и truth.graph_check (сверка с истиной)."""
+    from .graph import LinkGraph, ari, partition
+    nd = world.nodes
+    dc, prov, own = nd["dc"].to_numpy(), nd["provider"].to_numpy(), nd["owner"].to_numpy()
+    snaps = LinkGraph(world, chain).snapshots()
+    g = {"t": [], "pairs": {k: [] for k in ["snap", "i", "l", "rho_hat", "n_inf", "rho", "own", "conf"]},
+         "nodes": {"suspicion": [], "cluster": [], "cluster_infra": []}}
+    chk = {"pairs": {"same_dc": [], "same_provider": [], "same_owner": []},
+           "snap": {k: [] for k in ["t", "infra_edges", "infra_same_dc", "own_edges", "own_same_owner",
+                                    "own_recall", "ari_owner", "ari_infra_dc"]}}
+    for k, s in enumerate(snaps):
+        p = s.pairs
+        g["t"] += minutes([s.t])
+        P = g["pairs"]
+        P["snap"] += [k] * len(p); P["i"] += ints(p["i"]); P["l"] += ints(p["l"])
+        P["rho_hat"] += rounded(p["rho_hat"], 3); P["n_inf"] += ints(p["n_inf"])
+        P["rho"] += rounded(p["rho"], 3); P["own"] += rounded(p["own"], 3); P["conf"] += rounded(p["conf"], 3)
+        g["nodes"]["suspicion"].append(rounded(s.suspicion, 3))
+        g["nodes"]["cluster"].append(ints(s.clusters)); g["nodes"]["cluster_infra"].append(ints(s.clusters_infra))
+        i, l = p["i"].to_numpy(), p["l"].to_numpy()
+        sd, sp, so = dc[i] == dc[l], prov[i] == prov[l], own[i] == own[l]
+        chk["pairs"]["same_dc"] += ints(sd); chk["pairs"]["same_provider"] += ints(sp); chk["pairs"]["same_owner"] += ints(so)
+        reg = np.flatnonzero(~np.isnan(s.suspicion))
+        inf_e, own_e = p["rho"].to_numpy() >= show_min, p["own"].to_numpy() >= show_min
+        same_owner_pairs = sum(n * (n - 1) // 2 for n in np.bincount(own[reg]))
+        S = chk["snap"]
+        S["t"] += minutes([s.t]); S["infra_edges"].append(int(inf_e.sum()))
+        S["infra_same_dc"].append(plain(float(sd[inf_e].mean())) if inf_e.any() else None)
+        S["own_edges"].append(int(own_e.sum()))
+        S["own_same_owner"].append(plain(float(so[own_e].mean())) if own_e.any() else None)
+        S["own_recall"].append(plain(float((so & own_e).sum() / same_owner_pairs)) if same_owner_pairs else None)
+        S["ari_owner"].append(round(ari(partition(s.clusters, reg), own[reg]), 4))
+        S["ari_infra_dc"].append(round(ari(partition(s.clusters_infra, reg), dc[reg]), 4))
+    return g, chk
+
+
 def export_run(world, chain, res, path, scenario: str | None = None, agg_days: int = 1, n_sample: int = 50,
-               root: Path | None = None) -> dict:
+               root: Path | None = None, graph: bool = True) -> dict:
     """Пишет журнал прогона по схеме taris-log/1 и возвращает его как словарь."""
     w, c = world, world.cfg
     nd = w.nodes
@@ -226,6 +263,9 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
         "nodes": nodes, "net": net, "policy": policy, "objects": objects, "outcomes": outcomes, "daily": daily,
         "truth": truth,
     }
+    if graph:
+        log["graph"], truth["graph_check"] = graph_sections(w, chain)
+        log["meta"]["graph_show_min"] = 0.3
     raw = json.dumps(log, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)

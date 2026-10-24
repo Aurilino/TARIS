@@ -41,7 +41,12 @@ TABLES = {
               "audit_windows": ["node", "start", "end", "w0", "tau", "rho", "crisis"], "silent": ["node", "t"],
               "disclosures": ["obj", "owner", "t"],
               "crisis_report": ["id", "lost", "stored", "loss_share", "lead_h", "overlap"], "alarm_check": ["correct"]},
+    "graph": {"pairs": ["snap", "i", "l", "rho_hat", "n_inf", "rho", "own", "conf"],
+              "nodes": ["suspicion", "cluster", "cluster_infra"]},
 }
+GRAPH_CHECK = {"pairs": ["same_dc", "same_provider", "same_owner"],
+               "snap": ["t", "infra_edges", "infra_same_dc", "own_edges", "own_same_owner", "own_recall",
+                        "ari_owner", "ari_infra_dc"]}
 FLAT = {"nodes": ["id", "dc", "provider", "region", "subnet", "hw_claimed", "wallet", "join"],
         "daily": ["epoch", "fragments", "objects_alive", "lost_cum", "repair_traffic", "migration_traffic",
                   "repairs", "migrations", "alarms_active"]}
@@ -88,6 +93,19 @@ def check_schema(log):
                 problems.append(f"{sec}.{name}: столбцы {sorted(set(tab) ^ set(cols))}")
             elif len({len(v) for v in tab.values()}) > 1:
                 problems.append(f"{sec}.{name}: разная длина столбцов")
+    # граф связей (v2): снимки, пары, по снимку на каждый узел; сверка с истиной — построчно к парам
+    g, gc = log.get("graph", {}), log["truth"].get("graph_check", {})
+    n_snap, N = len(g.get("t", [])), len(log["nodes"]["id"])
+    if any(len(v) != n_snap or any(len(x) != N for x in v) for v in g.get("nodes", {}).values()):
+        problems.append("graph.nodes: не по снимку на каждый узел")
+    for name, cols in GRAPH_CHECK.items():
+        tab = gc.get(name, {})
+        if set(tab) != set(cols) or len({len(v) for v in tab.values()}) > 1:
+            problems.append(f"truth.graph_check.{name}: столбцы или длины")
+    if len(gc.get("pairs", {}).get("same_dc", [])) != len(g.get("pairs", {}).get("i", [])):
+        problems.append("truth.graph_check.pairs не совпадает по длине с graph.pairs")
+    if len(gc.get("snap", {}).get("t", [])) != n_snap:
+        problems.append("truth.graph_check.snap не совпадает по числу снимков")
     for (sec, name, col), voc in ENUMS.items():
         vals = log[sec][name].get(col, []) if log[sec][name] else []
         if vals and (min(vals) < 0 or max(vals) >= len(log["dict"][voc])):
@@ -119,6 +137,10 @@ def check_counts(log, w, ch, res):
     pairs.append(("последняя строка daily: потеряно нарастающим итогом", log["daily"]["lost_cum"][-1], len(res.losses)))
     sample = set(log["objects"]["sample"]["obj"])
     pairs.append(("фрагменты выборки", len(log["objects"]["fragments"]["obj"]), int(res.fragments["obj"].isin(sample).sum())))
+    from taris_sim.graph import LinkGraph
+    snaps = LinkGraph(w, ch).snapshots()
+    pairs.append(("снимки графа", len(log["graph"]["t"]), len(snaps)))
+    pairs.append(("пары графа во всех снимках", len(log["graph"]["pairs"]["i"]), sum(len(s.pairs) for s in snaps)))
     bad = [f"{n}: {a} против {b}" for n, a, b in pairs if a != b]
     report("2. Сверка с прогоном", not bad, "; ".join(bad) if bad else f"{len(pairs)} сверок")
 
@@ -133,7 +155,7 @@ def check_net_view(log):
                     leaks.append(f"{where}.{k}")
                 walk(v, f"{where}.{k}")
 
-    for sec in ["world", "nodes", "net", "policy", "objects", "outcomes", "daily"]:
+    for sec in ["world", "nodes", "net", "policy", "objects", "outcomes", "daily", "graph"]:
         walk(log[sec], sec)
     report("3. Взгляд сети без полей истины", not leaks, ", ".join(leaks))
 

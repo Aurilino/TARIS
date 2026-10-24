@@ -20,6 +20,26 @@ import numpy as np
 import pandas as pd
 from scipy.cluster.hierarchy import fcluster, linkage
 from scipy.spatial.distance import squareform
+from scipy.special import comb
+
+
+def ari(a, b) -> float:
+    """Скорректированный индекс Рэнда двух разбиений одних и тех же элементов (метрика H6)."""
+    _, ia = np.unique(a, return_inverse=True)
+    _, ib = np.unique(b, return_inverse=True)
+    ct = np.zeros((ia.max() + 1, ib.max() + 1))
+    np.add.at(ct, (ia, ib), 1)
+    s, sa, sb = comb(ct, 2).sum(), comb(ct.sum(1), 2).sum(), comb(ct.sum(0), 2).sum()
+    n = comb(len(a), 2)
+    e = sa * sb / n if n else 0.0
+    den = 0.5 * (sa + sb) - e
+    return float((s - e) / den) if den else 1.0
+
+
+def partition(labels: np.ndarray, idx: np.ndarray) -> np.ndarray:
+    """Разбиение узлов idx: найденный кластер или одиночка (каждая одиночка — свой класс)."""
+    lab = labels[idx]
+    return np.where(lab >= 0, lab, -(idx + 1))
 
 
 @dataclass

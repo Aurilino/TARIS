@@ -632,7 +632,7 @@ window.addEventListener("resize", () => {
 });
 
 function start(log) {
-  if (log.schema !== "taris-log/1") { showLoading("Это не журнал TARIS (ожидается схема taris-log/1)."); return; }
+  if (!["taris-log/1", "taris-log/2"].includes(log.schema)) { showLoading("Это не журнал TARIS (ожидается схема taris-log/1 или taris-log/2)."); return; }
   L = log; S = prepare(log);
   const me = log.meta, pol = me.policy, mode = me.world_mode === "matched" ? "согласованный мир" : "несогласованный мир";
   $("run").innerHTML = `<b>${me.scenario || "сценарий"}</b> · ${mode} · ${pol} · узлов за горизонт ${fmt(S.N)} · зерно ${me.seed}`;
