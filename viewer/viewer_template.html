@@ -110,6 +110,8 @@ select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel
 .card .bar-rep{height:6px; border-radius:3px; background:var(--line); margin-top:4px; overflow:hidden}
 .card .bar-rep span{display:block; height:100%; background:var(--cluster)}
 .links{margin:4px 0 0; padding-left:18px; font-size:13px}
+.graphp canvas{display:block; width:100%; height:92px}
+.graphp .note b{color:var(--ink); font-weight:500}
 .obj select{width:100%}
 .obj canvas{display:block; width:100%; height:96px; margin-top:8px}
 .feed{display:flex; flex-direction:column; min-height:0}
@@ -179,6 +181,11 @@ body.truth .truthonly{display:inline}
     <div class="panel">
       <h2>Сейчас в сети</h2>
       <div class="tiles" id="tiles"></div>
+    </div>
+    <div class="panel graphp" id="graph-panel" hidden>
+      <h2>Граф связей</h2>
+      <canvas id="graph-chart" aria-label="Число связей по снимкам графа"></canvas>
+      <p class="note" id="graph-note"></p>
     </div>
     <div class="panel obj">
       <h2>Объект и его резерв</h2>
@@ -434,7 +441,7 @@ function render() {
   const y = Math.floor(t / 365) + 1, dd = Math.floor(t % 365) + 1;
   $("clock").innerHTML = "сутки <b>" + fmt(Math.floor(t)) + "</b> из " + fmt(S.H) + " · год " + y + ", день " + dd;
   updateEdges(m);
-  renderTiles(day); renderObj(m); renderNow(m); renderCard(m, day); renderFeed(m); drawStrip();
+  renderTiles(day); renderGraphPanel(m); renderObj(m); renderNow(m); renderCard(m, day); renderFeed(m); drawStrip();
 }
 function renderTiles(day) {
   const d = L.daily, k = Math.min(day, d.epoch.length - 1);
@@ -569,6 +576,60 @@ document.querySelectorAll("#maptools [data-link]").forEach(b => b.onclick = () =
   stripLegend(); render();
 });
 $("link-min").oninput = e => { linkMin = Number(e.target.value); $("link-min-v").textContent = fmt(linkMin, 2); render(); };
+// число связей не слабее порога по снимкам — это видит и сама сеть; сверка с истиной — только во «взгляде истины»
+let countCache = {key: "", infra: [], own: []};
+function linkCounts() {
+  const key = String(linkMin);
+  if (countCache.key !== key) {
+    const P = S.graph.p, infra = [], own = [];
+    for (let k = 0; k < S.graph.t.length; k++) {
+      let a = 0, b = 0;
+      for (let r = S.graph.off[k]; r < S.graph.off[k + 1]; r++) { if ((P.rho[r] || 0) >= linkMin) a++; if ((P.own[r] || 0) >= linkMin) b++; }
+      infra.push(a); own.push(b);
+    }
+    countCache = {key, infra, own};
+  }
+  return countCache;
+}
+function renderGraphPanel(m) {
+  if (!S.graph) return;
+  const k = snapAt(m), {infra, own} = linkCounts(), T = S.graph.t;
+  const cv = $("graph-chart"), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "11px " + tok("--font-body");
+  const top = Math.max(1, ...infra, ...own), x0 = 30, xr = Math.ceil(g.measureText("общие отказы").width) + 12;
+  const X = mm => x0 + mm / (S.H * MIN) * (w - x0 - xr), Y = v => h - 12 - v / top * (h - 20);
+  g.font = "11px " + tok("--font-mono"); g.fillStyle = tok("--muted"); g.textAlign = "right";
+  [0, top].forEach(v => g.fillText(fmt(v), x0 - 5, Y(v) + 4));
+  g.strokeStyle = tok("--line"); g.beginPath(); g.moveTo(x0, Y(0)); g.lineTo(w - xr, Y(0)); g.stroke();
+  [[infra, "--link-infra", "общие отказы"], [own, "--link-own", "владение"]].forEach(([s, c, lab], j) => {
+    g.strokeStyle = tok(c); g.lineWidth = 2; g.beginPath();
+    s.forEach((v, q) => q ? g.lineTo(X(T[q]), Y(v)) : g.moveTo(X(T[q]), Y(v))); g.stroke(); g.lineWidth = 1;
+    g.fillStyle = tok("--ink"); g.textAlign = "left"; g.font = "11px " + tok("--font-body");
+    const yl = Y(s[s.length - 1]) + 4 + (j && Math.abs(Y(own[own.length - 1]) - Y(infra[infra.length - 1])) < 12 ? 12 : 0);
+    g.fillText(lab, w - xr + 6, yl);
+  });
+  if (k >= 0) { g.fillStyle = tok("--ink"); g.fillRect(X(T[k]) - 1, 2, 2, h - 14); }
+  if (k < 0) { $("graph-note").textContent = "Первый снимок графа — на 30-е сутки."; return; }
+  let html = `Снимок на сутках <b>${fmt(T[k] / MIN)}</b>: связей по общим отказам <b>${fmt(infra[k])}</b>, по владению <b>${fmt(own[k])}</b> (сила не ниже ${fmt(linkMin, 2)}).`;
+  const C = S.graph.chk && S.graph.chk.snap;
+  if (truth && C) {
+    const pct = v => v == null ? "—" : fmt(100 * v) + "%";
+    const sameDc = [], sameOwn = [];                     // доли верных при текущем пороге — из построчной сверки
+    const P = S.graph.p, CP = S.graph.chk.pairs;
+    for (let r = S.graph.off[k]; r < S.graph.off[k + 1]; r++) {
+      if ((P.rho[r] || 0) >= linkMin) sameDc.push(CP.same_dc[r]);
+      if ((P.own[r] || 0) >= linkMin) sameOwn.push(CP.same_owner[r]);
+    }
+    const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+    html += ` Истина: связи по отказам в одном дата-центре — <b>${pct(mean(sameDc))}</b>; связи по владению верны — <b>${pct(mean(sameOwn))}</b>,`
+      + ` найдено пар одного владельца <b>${pct(C.own_recall[k])}</b> (при пороге 0,3). ARI кластеров с владельцами <b>${fmt(C.ari_owner[k], 2)}</b>,`
+      + ` кластеров по отказам с дата-центрами <b>${fmt(C.ari_infra_dc[k], 2)}</b>.`
+      + ` <br>Владение находится точно потому, что у честного оператора общий кошелёк выплат на все узлы; проверка H6 станет содержательной с оператором Сибиллы.`;
+  }
+  $("graph-note").innerHTML = html;
+}
 function nodeLinks(i, m) {                            // подозрительность и самые сильные связи узла на текущем снимке
   if (!S.graph) return "";
   const k = snapAt(m);
@@ -737,7 +798,7 @@ function start(log) {
   $("slider").max = S.H; $("slider").disabled = false; $("play").disabled = false;
   if (cy) cy.destroy();
   buildMap(); fillObjects();
-  $("maptools").hidden = !S.graph; edgeKey = "";
+  $("maptools").hidden = !S.graph; $("graph-panel").hidden = !S.graph; edgeKey = ""; countCache.key = "";
   if (S.graph && me.graph_show_min) { linkMin = me.graph_show_min; $("link-min").value = linkMin; $("link-min-v").textContent = fmt(linkMin, 2); }
   $("loading").hidden = true;
   t = Math.min(S.H, 200); setView(truth);
