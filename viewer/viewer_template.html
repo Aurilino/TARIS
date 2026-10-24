@@ -114,6 +114,21 @@ select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel
 .graphp canvas{display:block; width:100%; height:92px}
 .graphp .note b{color:var(--ink); font-weight:500}
 .obj select{width:100%}
+.scen-base, .scen-form{display:flex; flex-wrap:wrap; gap:6px 10px; font-size:12px; color:var(--muted); align-items:center}
+.scen-base select, .scen-form select, .scen-base input, .scen-form input[type=number], .sc-name input{font-size:12px; max-width:100%}
+.scen-base input[type=number], .scen-form input[type=number]{width:72px; border:1.5px solid var(--line); border-radius:6px; padding:2px 6px; background:var(--panel)}
+.scen-add{margin-top:10px; border-top:1px solid var(--line); padding-top:8px}
+.scen-add .btn{padding:2px 12px; font-size:12px}
+#sc-list{margin:8px 0; padding-left:20px; font-size:13px}
+#sc-list li{margin:2px 0}
+#sc-list button{border:0; background:transparent; color:var(--loss); cursor:pointer; font-size:12px}
+.sc-name{display:flex; gap:6px; align-items:center; font-size:12px; color:var(--muted)}
+.sc-name input{border:1.5px solid var(--line); border-radius:6px; padding:2px 6px; background:var(--panel); flex:1; min-width:0}
+#sc-json{width:100%; margin-top:6px; font-family:var(--font-mono); font-size:11px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); resize:vertical}
+.scen-actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:6px}
+.scen-actions .btn{padding:3px 12px; font-size:12px}
+code{font-family:var(--font-mono); font-size:11.5px; overflow-wrap:anywhere}
 .obj canvas{display:block; width:100%; height:96px; margin-top:8px}
 .feed{display:flex; flex-direction:column; min-height:0}
 .filters{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px}
@@ -201,6 +216,37 @@ body.truth .truthonly{display:inline}
     <div class="panel card">
       <h2 id="card-title">Карточка</h2>
       <div id="card"><p class="empty">Нажмите на узел или дата-центр на карте.</p></div>
+    </div>
+    <div class="panel scen" id="scen-panel" hidden>
+      <h2>Сценарий: что изменить в мире</h2>
+      <div class="scen-base">
+        <label>сценарий <select id="sc-scn"><option>S6</option><option>S2</option><option>S0</option></select></label>
+        <label>мир <select id="sc-mode"><option value="matched">согласованный</option><option value="mismatched">несогласованный</option></select></label>
+        <label>зерно <input id="sc-seed" type="number" min="1" step="1" value="1"></label>
+        <label>размер <select id="sc-world"><option value="main">основной (~200 узлов)</option><option value="full">полный</option></select></label>
+        <label>политика <select id="sc-pol"><option value="crisis_oracle13">оракул кризисов</option><option value="oracle13">оракул</option><option value="uniform13">равномерное, n=13</option><option value="uniform15">равномерное, n=15</option></select></label>
+      </div>
+      <div class="scen-add">
+        <p class="note" id="sc-target">Выберите на карте дата-центр, регион или узел — или добавьте сбой ПО.</p>
+        <div class="scen-form">
+          <label>что <select id="sc-kind"></select></label>
+          <label>сутки <input id="sc-t" type="number" min="0" step="0.5" value="0"></label>
+          <label class="sc-hours">часов <input id="sc-hours" type="number" min="0.5" step="0.5" value="24"></label>
+          <label class="sc-pred"><input id="sc-pred" type="checkbox" checked> с предвестником</label>
+          <label class="sc-W">окно, сут <input id="sc-W" type="number" min="0.25" step="0.25" placeholder="случайно"></label>
+          <label class="sc-destr"><input id="sc-destr" type="checkbox"> данные уничтожены</label>
+          <button class="btn" id="sc-add">Добавить</button>
+        </div>
+      </div>
+      <ol id="sc-list"></ol>
+      <label class="sc-name">имя файла <input id="sc-file" value="my_scenario"></label>
+      <textarea id="sc-json" readonly rows="6" aria-label="Файл сценария"></textarea>
+      <div class="scen-actions">
+        <button class="btn primary" id="sc-copy">Скопировать файл</button>
+        <button class="btn" id="sc-save">Скачать</button>
+        <span class="note" id="sc-msg"></span>
+      </div>
+      <p class="note">Сохраните текст в <code>scenarios\<span class="fname">my_scenario</span>.json</code> и запустите<br><code>python scripts\run_scenario.py scenarios\<span class="fname">my_scenario</span>.json</code> — получится новый журнал и страница. В опубликованной странице скачивание не работает, только копирование.</p>
     </div>
     <div class="panel feed">
       <h2>Лента событий</h2>
@@ -458,6 +504,7 @@ function render() {
   const y = Math.floor(t / 365) + 1, dd = Math.floor(t % 365) + 1;
   $("clock").innerHTML = "сутки <b>" + fmt(Math.floor(t)) + "</b> из " + fmt(S.H) + " · год " + y + ", день " + dd;
   updateEdges(m);
+  syncScenForm();
   renderTiles(day); renderGraphPanel(m); renderObj(m); renderNow(m); renderCard(m, day); renderFeed(m); drawStrip();
 }
 function renderTiles(day) {
@@ -708,6 +755,112 @@ function renderObj(m) {
     + `Восстановлений ${nr}, переносов ${nm} (засечки снизу: чёрные и жёлтые).` + (o.lost >= 0 ? ` Потерян на сутках ${fmt(o.lost / MIN, 1)}.` : "");
 }
 
+// ------------------------------------------------------------------ конструктор сценария (этап 6.3)
+// Страница не исполняет Python: она собирает файл taris-scenario/1, его прогоняет scripts/run_scenario.py
+let scen = [], scenSel = "", tTouched = false;
+function initScenario() {
+  const me = L.meta;
+  const m = /^(Оракул кризисов|Оракул|Равномерное), n=(\d+)/.exec(me.policy || "");
+  const pol = m ? {"Оракул кризисов": "crisis_oracle", "Оракул": "oracle", "Равномерное": "uniform"}[m[1]] + m[2] : "crisis_oracle13";
+  $("sc-scn").value = me.scenario || "S6"; $("sc-mode").value = me.world_mode; $("sc-seed").value = me.seed;
+  $("sc-world").value = me.agg_days > 1 ? "full" : "main";
+  if ([...$("sc-pol").options].some(o => o.value === pol)) $("sc-pol").value = pol;
+  scen = (me.interventions || []).map(({n_hit, ...it}) => it);      // n_hit — результат прогона, в файл не пишется
+  scenSel = ""; tTouched = false;
+  $("scen-panel").hidden = false;
+  renderScen();
+}
+function scenOptions() {                              // что можно сделать с выбранным на карте
+  const s = selected, n = L.nodes, out = [];
+  if (s && s.k === "dc") {
+    const p = L.world.dcs.provider[s.i] + 1;
+    out.push(["crisis:storm", `буря в ДЦ ${s.i + 1}`], ["crisis:fire", `пожар в ДЦ ${s.i + 1}`],
+             ["shock:dc", `шок ДЦ ${s.i + 1}`], ["shock:provider", `шок провайдера ${p}`]);
+  } else if (s && s.k === "region") {
+    out.push(["crisis:exodus", `массовый уход из региона ${s.i + 1}`], ["shock:region", `шок региона ${s.i + 1}`]);
+  } else if (s && s.k === "node") {
+    out.push(["node_down", `выключить узел № ${s.i}`],
+             ["crisis:wear", `износ партии «${hw(L.dict.hw[n.hw_claimed[s.i]])}» в ДЦ ${n.dc[s.i] + 1}`]);
+  }
+  out.push(["crisis:software", "неудачное обновление ПО (последняя версия)"]);
+  return out;
+}
+function syncScenForm() {
+  const key = selected ? selected.k + selected.i : "";
+  if (key !== scenSel) {
+    scenSel = key;
+    $("sc-kind").innerHTML = scenOptions().map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+    $("sc-target").textContent = selected ? "Что сделать с выбранным на карте:" : "Выберите на карте дата-центр, регион или узел — или добавьте сбой ПО.";
+    scenFields();
+  }
+  if (!tTouched && document.activeElement !== $("sc-t")) $("sc-t").value = Math.floor(t * 2) / 2;
+}
+function scenFields() {
+  const v = $("sc-kind").value || "", crisis = v.startsWith("crisis:");
+  document.querySelector(".sc-hours").hidden = crisis;
+  document.querySelector(".sc-destr").hidden = crisis;
+  document.querySelector(".sc-pred").hidden = !crisis || v === "crisis:fire";
+  document.querySelector(".sc-W").hidden = !crisis || v === "crisis:fire" || !$("sc-pred").checked;
+}
+$("sc-kind").onchange = scenFields;
+$("sc-pred").onchange = scenFields;
+$("sc-t").oninput = () => { tTouched = true; };
+$("sc-add").onclick = () => {
+  const v = $("sc-kind").value, tt = Number($("sc-t").value), s = selected, n = L.nodes;
+  if (!(tt >= 0 && tt < S.H)) { $("sc-msg").textContent = `Сутки — от 0 до ${S.H}.`; return; }
+  const hours = Number($("sc-hours").value), destroyed = $("sc-destr").checked;
+  let it;
+  if (v.startsWith("crisis:")) {
+    const type = v.slice(7);
+    const cluster = type === "storm" || type === "fire" ? s.i : type === "exodus" ? s.i
+      : type === "wear" ? `${n.dc[s.i]}/${L.dict.hw[n.hw_claimed[s.i]]}` : null;
+    it = {kind: "crisis", type, cluster, t: tt};
+    if (type !== "fire") {
+      it.predictable = $("sc-pred").checked;
+      const W = Number($("sc-W").value);
+      if (it.predictable && W > 0) it.W_days = W;
+    }
+  } else if (v.startsWith("shock:")) {
+    const ctype = v.slice(6);
+    const cluster = ctype === "provider" ? L.world.dcs.provider[s.i] : s.i;
+    it = {kind: "shock", ctype, cluster, t: tt, hours, destroyed};
+  } else it = {kind: "node_down", node: s.i, t: tt, hours, destroyed};
+  if (!(it.kind === "crisis" || hours > 0)) { $("sc-msg").textContent = "Длительность — больше 0 часов."; return; }
+  scen.push(it); tTouched = false; $("sc-msg").textContent = ""; $("sc-W").value = "";
+  renderScen();
+};
+function scenText() {
+  const name = $("sc-file").value.trim() || "my_scenario";
+  return JSON.stringify({
+    format: "taris-scenario/1", name, description: "Собрано в просмотрщике TARIS",
+    base: {scenario: $("sc-scn").value, world_mode: $("sc-mode").value, seed: Number($("sc-seed").value) || 1,
+           world: $("sc-world").value, policy: $("sc-pol").value, overrides: {}},
+    interventions: scen}, null, 2);
+}
+function renderScen() {
+  const fake = {meta: {interventions: scen}};
+  const texts = manualOf(fake);
+  $("sc-list").innerHTML = scen.length ? scen.map((it, k) => `<li>сутки ${fmt(it.t, 1)}: ${texts[k].text.replace(/ \(узлов —\)/, "")} `
+    + `<button data-k="${k}" aria-label="Удалить вмешательство">удалить</button></li>`).join("") : `<li class="empty" style="list-style:none">Вмешательств пока нет.</li>`;
+  $("sc-list").querySelectorAll("button").forEach(b => b.onclick = () => { scen.splice(Number(b.dataset.k), 1); renderScen(); });
+  $("sc-json").value = scenText();
+  document.querySelectorAll(".fname").forEach(x => x.textContent = $("sc-file").value.trim() || "my_scenario");
+}
+["sc-scn", "sc-mode", "sc-seed", "sc-world", "sc-pol", "sc-file"].forEach(id => $(id).addEventListener("input", renderScen));
+$("sc-copy").onclick = () => {
+  const text = scenText();
+  const fallback = () => { $("sc-json").focus(); $("sc-json").select(); $("sc-msg").textContent = "Текст выделен — нажмите Ctrl+C."; };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => { $("sc-msg").textContent = "Скопировано."; }, fallback);
+  else fallback();
+};
+$("sc-save").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([scenText()], {type: "application/json"}));
+  a.download = ($("sc-file").value.trim() || "my_scenario") + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  $("sc-msg").textContent = "Если файл не скачался, скопируйте текст.";
+};
+
 // ------------------------------------------------------------------ лента событий
 function renderFilters() {
   $("filters").innerHTML = Object.entries(CATS).map(([k, v]) =>
@@ -820,7 +973,7 @@ function start(log) {
     + (nMan ? ` · <b>вмешательств ${nMan}</b>` : "");
   $("slider").max = S.H; $("slider").disabled = false; $("play").disabled = false;
   if (cy) cy.destroy();
-  buildMap(); fillObjects();
+  buildMap(); fillObjects(); initScenario();
   $("maptools").hidden = !S.graph; $("graph-panel").hidden = !S.graph; edgeKey = ""; countCache.key = "";
   if (S.graph && me.graph_show_min) { linkMin = me.graph_show_min; $("link-min").value = linkMin; $("link-min-v").textContent = fmt(linkMin, 2); }
   $("loading").hidden = true;
