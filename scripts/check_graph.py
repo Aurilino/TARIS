@@ -17,7 +17,7 @@ from taris_sim.world import World
 from taris_sim.chain import Chain
 from taris_sim.graph import LinkGraph
 
-MAIN = dict(n_initial_nodes=200, node_join_rate=0.12, blocks_per_epoch=4, n_dc=16, n_providers=6, n_regions=5)
+from taris_sim.scenario import MAIN          # основной мир просмотрщика
 ok_all = True
 
 

@@ -29,8 +29,12 @@ from .config import scenario as base_scenario
 from .crisis import MANUAL_TYPES
 
 FORMAT = "taris-scenario/1"
-# основной мир просмотрщика (около 200 узлов) и полный мир; второе число — интервал агрегации журнала, сутки
-MAIN = dict(n_initial_nodes=200, node_join_rate=0.12, blocks_per_epoch=4, n_dc=16, n_providers=6, n_regions=5)
+# Основной мир просмотрщика: около 200 узлов в сети одновременно. Вместе с сетью уменьшены частота регистраций
+# и поток блоков (ёмкость узлов). Дата-центров не меньше n = 13 (оракул кладёт в дата-центр один фрагмент,
+# а второй — только в крайнем случае), провайдеров и регионов — столько, чтобы при лимите r = 3 набиралось 13 узлов.
+# Больше дата-центров — не нейтрально: частота бурь и пожаров задана на один дата-центр.
+# WORLDS: мир -> (правки параметров, интервал агрегации журнала в сутках)
+MAIN =dict(n_initial_nodes=200, node_join_rate=0.12, blocks_per_epoch=4, n_dc=16, n_providers=6, n_regions=5)
 WORLDS = {"main": (MAIN, 1), "full": ({}, 7)}
 POLICIES = ("uniform15", "uniform13", "oracle13", "crisis_oracle13")
 

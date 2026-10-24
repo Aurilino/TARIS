@@ -20,7 +20,7 @@ from taris_sim.ledger import Ledger
 from taris_sim.policy import CrisisOraclePolicy
 from taris_sim.export import export_run, load, SCHEMA
 
-MAIN = dict(n_initial_nodes=200, node_join_rate=0.12, blocks_per_epoch=4, n_dc=16, n_providers=6, n_regions=5)
+from taris_sim.scenario import MAIN          # основной мир просмотрщика
 
 # столбцы каждой таблицы по схеме (раздел -> таблица -> столбцы)
 TABLES = {

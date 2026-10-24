@@ -103,6 +103,7 @@ select{border:1.5px solid var(--line); border-radius:8px; background:var(--panel
 .chip{flex:0 0 auto; font-size:11px; border-radius:999px; padding:0 8px; border:1.5px solid currentColor; white-space:nowrap}
 .chip.crisis{color:var(--cluster)} .chip.pre{color:var(--precursor)} .chip.alarm{color:var(--alarm)} .chip.loss{color:var(--loss)}
 .chip.fa{color:var(--muted)}
+.chip.manual{color:var(--ink); background:color-mix(in srgb, var(--ink) 10%, transparent)}
 .empty{color:var(--muted); font-size:13px}
 .card dl{display:grid; grid-template-columns:auto 1fr; gap:3px 12px; margin:0; font-size:13px}
 .card dt{color:var(--muted)} .card dd{margin:0; min-width:0; overflow-wrap:anywhere}
@@ -286,22 +287,38 @@ function prepare(log) {
   return S0;
 }
 // лента: события сети (тревоги, потери, долгие простои, версии) и истины (кризисы, предвестники, шоки)
-const CATS = {alarm: "тревоги", loss: "потери", outage: "долгие простои", version: "версии ПО",
+const CATS = {manual: "вмешательства", alarm: "тревоги", loss: "потери", outage: "долгие простои", version: "версии ПО",
               crisis: "кризисы", pre: "предвестники", shock: "шоки"};
 const TRUTH_CATS = new Set(["crisis", "pre", "shock"]);
 function buildEvents(log, s) {
   const ev = [], d = log.dict;
+  manualOf(log).forEach(x => ev.push({m: x.m, cat: "manual", text: x.text}));
   s.episodes.forEach(a => ev.push({m: a.t0, cat: "alarm", text: `тревога: ${TYPE_RU[d.crisis_type[a.type]]}, ${where(a.ctype, a.cluster, d)}`}));
   s.losses.forEach(l => ev.push({m: l.t, cat: "loss", text: `потерян объект № ${l.obj}`}));
   rows(log.net.outages).forEach(o => { if (o.cls === 2) ev.push({m: o.start, cat: "outage", node: o.node, text: `узел № ${o.node} не отвечает больше суток`}); });
   rows(log.net.versions).forEach(v => { if (v.t >= 0) ev.push({m: v.t, cat: "version", text: `выпущена версия клиента ${v.version}`}); });
   s.crises.forEach(c => {
     const what = `${TYPE_RU[d.crisis_type[c.type]]}, ${where(c.ctype, c.cluster, d)}`;
-    if (!c.false_alarm) ev.push({m: c.tau, cat: "crisis", text: `кризис: ${what}${c.predictable ? "" : " (внезапный)"}`});
+    if (!c.false_alarm) ev.push({m: c.tau, cat: "crisis", text: `кризис: ${what}${c.predictable ? "" : " (внезапный)"}${c.manual ? " — вмешательство" : ""}`});
     if (c.predictable || c.false_alarm) ev.push({m: Math.max(0, c.w0), cat: "pre", text: `${c.false_alarm ? "ложный предвестник" : "предвестник"}: ${what}`});
   });
   rows(log.truth.shocks).forEach(sh => ev.push({m: sh.start, cat: "shock", text: `шок: ${where(sh.ctype, sh.cluster, d)}${sh.destroyed ? ", данные уничтожены" : ""}`}));
   return ev.sort((a, b) => a.m - b.m);
+}
+// вмешательства из файла сценария (meta.interventions) — их задал пользователь, поэтому видны в обоих взглядах
+function manualOf(log) {
+  const CT = {dc: "ДЦ", provider: "провайдер", region: "регион"};
+  return (log.meta.interventions || []).map(it => {
+    let text;
+    if (it.kind === "crisis") {
+      const cl = it.type === "exodus" ? `регион ${it.cluster + 1}` : it.type === "software" ? `версия ${it.cluster ?? "последняя"}`
+        : it.type === "wear" ? `партия «${hw(String(it.cluster).split("/")[1])}» в ДЦ ${Number(String(it.cluster).split("/")[0]) + 1}` : `ДЦ ${it.cluster + 1}`;
+      text = `${TYPE_RU[it.type]}: ${cl}${it.type === "fire" ? "" : it.predictable === false ? ", без предвестника" : ", с предвестником"}`;
+    } else if (it.kind === "shock") {
+      text = `шок: ${CT[it.ctype]} ${it.cluster + 1}, ${fmt(it.hours)} ч${it.destroyed ? ", данные уничтожены" : ""} (узлов ${it.n_hit ?? "—"})`;
+    } else text = `выключение узла № ${it.node} на ${fmt(it.hours)} ч`;
+    return {m: Math.round(it.t * MIN), text};
+  });
 }
 const feedOn = new Set(Object.keys(CATS).filter(k => k !== "outage"));   // долгих простоев много — по умолчанию скрыты
 function findAt(list, m) {                            // интервал, идущий в момент m (интервалы узла не пересекаются)
@@ -713,7 +730,7 @@ function renderFeed(m) {
   const key = list.length + ":" + (list[0] ? list[0].m : 0) + ":" + truth + ":" + [...feedOn].join();
   if (key === feedKey) return;
   feedKey = key;
-  const chip = {alarm: "alarm", loss: "loss", crisis: "crisis", pre: "pre", shock: "crisis", outage: "fa", version: "fa"};
+  const chip = {manual: "manual", alarm: "alarm", loss: "loss", crisis: "crisis", pre: "pre", shock: "crisis", outage: "fa", version: "fa"};
   $("feed").innerHTML = list.length ? list.map(e => `<li data-m="${e.m}"><span class="when">сут. ${fmt(Math.floor(e.m / MIN))}</span>`
     + `<span class="chip ${chip[e.cat]}">${CATS[e.cat]}</span><span>${e.text}</span></li>`).join("")
     : `<li class="empty" style="cursor:default">За последние 60 суток событий нет.</li>`;
@@ -740,10 +757,14 @@ function drawStrip() {
   // ряд 3: потери объектов
   g.fillStyle = tok("--loss");
   S.losses.forEach(l => g.fillRect(X(l.t) - 0.5, 25, 1.5, 7));
-  g.fillStyle = tok("--ink"); g.fillRect(X(t * MIN) - 1, 0, 2, h);
+  // вмешательства — чёрные треугольники над шкалой
+  g.fillStyle = tok("--ink");
+  manualOf(L).forEach(x => { const cx = X(x.m); g.beginPath(); g.moveTo(cx - 4, 0); g.lineTo(cx + 4, 0); g.lineTo(cx, 7); g.closePath(); g.fill(); });
+  g.fillRect(X(t * MIN) - 1, 0, 2, h);
 }
 function stripLegend() {
-  $("tl-legend").innerHTML = `<span><i style="background:var(--alarm)"></i>тревоги политики</span>`
+  const nMan = L && (L.meta.interventions || []).length;
+  $("tl-legend").innerHTML = (nMan ? `<span>▼ вмешательства</span>` : "") + `<span><i style="background:var(--alarm)"></i>тревоги политики</span>`
     + `<span class="truthonly"><i style="background:var(--cluster)"></i>кризисы (бледные — внезапные, контур — ложные тревоги)</span>`
     + `<span><i style="background:var(--loss)"></i>потери объектов</span>`;
   const links = linkMode === "none" ? "" :
@@ -794,7 +815,9 @@ function start(log) {
   if (!["taris-log/1", "taris-log/2"].includes(log.schema)) { showLoading("Это не журнал TARIS (ожидается схема taris-log/1 или taris-log/2)."); return; }
   L = log; S = prepare(log);
   const me = log.meta, pol = me.policy, mode = me.world_mode === "matched" ? "согласованный мир" : "несогласованный мир";
-  $("run").innerHTML = `<b>${me.scenario || "сценарий"}</b> · ${mode} · ${pol} · узлов за горизонт ${fmt(S.N)} · зерно ${me.seed}`;
+  const nMan = (me.interventions || []).length;
+  $("run").innerHTML = `<b>${me.scenario || "сценарий"}</b> · ${mode} · ${pol} · узлов за горизонт ${fmt(S.N)} · зерно ${me.seed}`
+    + (nMan ? ` · <b>вмешательств ${nMan}</b>` : "");
   $("slider").max = S.H; $("slider").disabled = false; $("play").disabled = false;
   if (cy) cy.destroy();
   buildMap(); fillObjects();
