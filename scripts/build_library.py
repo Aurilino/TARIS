@@ -24,7 +24,8 @@ def run_one(path: str) -> str:
     w, ch, res = SC.run(sc)
     b = sc["base"]
     export_run(w, ch, res, out, scenario=b.get("scenario", "S6"), agg_days=SC.WORLDS[b.get("world", "main")][1])
-    return f"{stem}: {time.time() - t0:.0f} с, потеряно {len(res.losses)}, {os.path.getsize(out) / 2**20:.2f} МБ"
+    warn = "".join(f"\n    ПРЕДУПРЕЖДЕНИЕ: {m}" for m in SC.empty_targets(w))
+    return f"{stem}: {time.time() - t0:.0f} с, потеряно {len(res.losses)}, {os.path.getsize(out) / 2**20:.2f} МБ" + warn
 
 
 def main():

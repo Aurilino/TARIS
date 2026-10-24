@@ -28,6 +28,8 @@ export_run(w, ch, res, log_path, scenario=b.get("scenario", "S6"), agg_days=SC.W
 print(f"прогон и журнал: {time.time() - t0:.0f} с, {os.path.getsize(log_path) / 2**20:.2f} МБ — {log_path}")
 for it in w.interventions:
     print("  вмешательство:", {k: v for k, v in it.items()})
+for msg in SC.empty_targets(w):
+    print("  ПРЕДУПРЕЖДЕНИЕ:", msg)
 here = os.path.dirname(os.path.abspath(__file__))
 build = os.path.join(here, "..", "viewer", "build", f"scenario_{stem}")
 subprocess.run([sys.executable, os.path.join(here, "build_viewer.py"), log_path, build], check=True)

@@ -110,6 +110,27 @@ def make_policy(name: str, world):
             "oracle13": lambda: OraclePolicy(world, 13), "crisis_oracle13": lambda: CrisisOraclePolicy(world, 13)}[name]()
 
 
+def empty_targets(w) -> list[str]:
+    """Предупреждения о вмешательствах, которые ничего не задели: файл годен, но цель в момент вмешательства
+    пуста (кризис по пустой партии или кластеру, шок кластера без живых узлов, выключение мёртвого узла).
+    Проверка файла (validate) мир не строит, поэтому это видно только после построения мира."""
+    out, manual = [], []
+    if w.crisis is not None:
+        manual = [e for e in w.crisis.episodes if e.get("manual")]
+    k_cr = 0
+    for k, it in enumerate(w.interventions):
+        if it["kind"] == "crisis":
+            n = len(manual[k_cr]["targets"]) if k_cr < len(manual) else 0
+            k_cr += 1
+            what = f"кризис {it['type']}, кластер {it.get('cluster')}"
+        else:
+            n = int(it.get("n_hit", 0))
+            what = f"шок {it['ctype']} {it['cluster']}" if it["kind"] == "shock" else f"выключение узла {it['node']}"
+        if n == 0:
+            out.append(f"вмешательство {k + 1} ({what}, t={it['t']}): в цели 0 живых узлов — оно ничего не изменит")
+    return out
+
+
 def run(sc: dict):
     """Мир со вмешательствами, цепочка и прогон политики."""
     from .world import World
