@@ -40,7 +40,7 @@ def check(w: World) -> pd.DataFrame:
         t = np.linspace(a0, c.horizon_days, 400)
         if t[-1] <= t[0]:
             continue
-        cum = np.trapezoid(w.churn_rate(t - j0), t)
+        cum = np.trapezoid(w.churn_rate_node(i, t - j0), t)     # у устройств пользователей (3.10) — свой уход
         exp_leave += 1 - np.exp(-cum)
     obs_leave = int(np.isfinite(nd["leave_t"]).sum())
     rows.append(("Уход из сети", obs_leave, exp_leave, z(obs_leave, exp_leave)))

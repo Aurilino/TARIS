@@ -28,6 +28,7 @@
 | `scripts/check_export.py` | 3.8 | Проверки журнала: схема, сверка с прогоном, «взгляд сети» без полей истины, воспроизводимость |
 | `viewer/viewer_template.html`, `scripts/build_viewer.py` | 3.8 | Просмотрщик прогона: карта сети, проигрывание, «сеть / истина», карточки, лента событий, резерв объекта, граф связей |
 | `taris_sim/graph.py` | шаг 2, 2.4 | Граф связей узлов: инфраструктурная связь с кредибилити, связь по владению (noisy-OR), подозрительность, кластеры |
+| `scripts/check_devices.py` | 3.7, 3.10 | Проверки устройств пользователей (S8): частоты против параметров, численность, кризисы ДЦ не задевают устройства, узлы в ДЦ совпадают с S6 |
 | `scripts/check_graph.py` | 2.4 | Проверки графа: корреляция, без истины, без будущего, смысл, воспроизводимость |
 | `taris_sim/scenario.py`, `scripts/run_scenario.py`, `scenarios/` | 3.8 | Файл сценария `taris-scenario/1` (основа и вмешательства: кризисы из библиотеки, шоки, выключения узлов) и его исполнение одной командой |
 
@@ -58,6 +59,7 @@ python scripts\plot_world.py figures   # графики A–D
 python scripts\plot_chain.py figures   # графики E–F
 python scripts\check_ledger.py         # проверки учёта (около минуты)
 python scripts\check_crisis.py 10      # проверки кризисов в сценарии S6 по 10 зёрнам (около 25 минут)
+python scripts\check_devices.py        # проверки устройств пользователей в сценарии S8
 foreach ($p in "uniform15","uniform13","oracle13") { python scripts\run_baselines.py runs $p }   # 1–3 минуты каждая
 foreach ($p in "oracle13","crisis_oracle13") { python scripts\run_baselines.py runs $p S6 matched }   # S6: 5 и около 16 минут
 python scripts\plot_ledger.py runs figures   # графики G–H
