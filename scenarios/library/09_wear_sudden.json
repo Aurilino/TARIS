@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Тот же износ без предвестника",
+  "description": "Тот же износ партии, но внезапный. Объекты всё равно не теряются: партия лежит в одном дата-центре, а в дата-центре у объекта не больше одного фрагмента — внезапное страхуется разнесением, без прогноза.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "wear", "cluster": "11/consumer_hdd", "t": 500, "predictable": false}]
+}

@@ -1,0 +1,7 @@
+{
+  "format": "taris-scenario/1",
+  "name": "Износ партии с предвестником",
+  "description": "Износ крупнейшей партии (ДЦ 12, потребительские HDD) на сутках 500 с предвестником: растут провалы аудитов и тихие потери, оракул поднимает тревогу и уводит фрагменты заранее.",
+  "base": {"scenario": "S6", "world_mode": "matched", "seed": 1, "world": "main", "policy": "crisis_oracle13", "overrides": {}},
+  "interventions": [{"kind": "crisis", "type": "wear", "cluster": "11/consumer_hdd", "t": 500, "predictable": true}]
+}
