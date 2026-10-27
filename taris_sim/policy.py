@@ -98,6 +98,7 @@ class OraclePolicy(UniformPolicy):
         self.dc = np.where(dev, world.cfg.n_dc + np.arange(len(nd)), self.dc)
         self.k = world.cfg.k
         self.n_dc, self.n_prov, self.n_reg = int(self.dc.max()) + 1, int(self.prov.max()) + 1, world.cfg.n_regions
+        self.n_own = int(self.own.max()) + 1
 
     def _choose_spread(self, rng, cand, m, held=()):
         """Выбор с разнесением: в дата-центре — один фрагмент объекта, у провайдера, в регионе и у владельца —
@@ -122,16 +123,13 @@ class OraclePolicy(UniformPolicy):
         cd = np.bincount(self.dc[held], minlength=self.n_dc)
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
         cr = np.bincount(self.reg[held], minlength=self.n_reg)
-        co = {}
-        for h in held:
-            co[self.own[h]] = co.get(self.own[h], 0) + 1
+        co = np.bincount(self.own[held], minlength=self.n_own)          # фрагменты объекта у каждого владельца
         cand = cand[~np.isin(cand, held)] if len(held) else cand
         w = self.w[cand].astype(float)
+        dc_c, prov_c, reg_c, own_c = self.dc[cand], self.prov[cand], self.reg[cand], self.own[cand]
         out = []
         for _ in range(m):
-            ok = (cd[self.dc[cand]] < dc_cap) & (cp[self.prov[cand]] < r_prov) & (cr[self.reg[cand]] < r_reg)
-            if co:
-                ok &= np.array([co.get(o, 0) < r_own for o in self.own[cand]]) if len(co) else ok
+            ok = (cd[dc_c] < dc_cap) & (cp[prov_c] < r_prov) & (cr[reg_c] < r_reg) & (co[own_c] < r_own)
             ww = w * ok
             tot = ww.sum()
             if tot <= 0:
@@ -140,7 +138,7 @@ class OraclePolicy(UniformPolicy):
             j = min(j, len(cand) - 1)
             c = int(cand[j]); out.append(c)
             cd[self.dc[c]] += 1; cp[self.prov[c]] += 1; cr[self.reg[c]] += 1
-            co[self.own[c]] = co.get(self.own[c], 0) + 1
+            co[self.own[c]] += 1
             w[j] = 0.0
         return out
 

@@ -86,7 +86,17 @@ def jobs(seeds, curve=False):
     return sorted(out, key=lambda j: -slow(j))
 
 
+def keep_awake():
+    """Пока идёт пакет, просит Windows не засыпать от бездействия (как проигрыватель видео): настройки не меняются,
+    запрос снимается вместе с процессом; закрытая крышка или ручной сон по-прежнему усыпляют компьютер."""
+    if os.name == "nt":
+        import ctypes
+        ES_CONTINUOUS, ES_SYSTEM_REQUIRED = 0x80000000, 0x00000001
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
+
+
 if __name__ == "__main__":
+    keep_awake()
     workers = int(sys.argv[1]) if len(sys.argv) > 1 else 4
     a, b = (sys.argv[2] if len(sys.argv) > 2 else "1-20").split("-")
     seeds = range(int(a), int(b) + 1)
