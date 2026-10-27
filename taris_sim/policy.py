@@ -226,13 +226,17 @@ class ReservePolicy(OraclePolicy):
       (минимум трафика при P_loss <= eps), запас — по карте, без поправок;
     - mode="fixed" — эвристический порог R_fixed для всех объектов (R_fixed = n - k - 1 — немедленное восстановление).
     Если eps недостижим, берётся немедленное восстановление.
+    Абляции TARIS-резерва (H7): corr=False — запас по карте, без IBNR и RBNS; time_varying=False — интенсивности
+    на горизонте постоянны (берутся на момент расчёта порога, без старения узлов).
     """
 
     def __init__(self, world, n: int = 15, mode: str = "thiele", eps: float = 1e-3, H: int = 365,
-                 R_fixed: int | None = None, gamma: float = 1.0, block: int = 30):
+                 R_fixed: int | None = None, gamma: float = 1.0, block: int = 30, corr: bool = True,
+                 time_varying: bool = True):
         from . import reserve as RS
         super().__init__(world, n, gamma)
         self.RS, self.mode, self.eps, self.H, self.block = RS, mode, eps, H, block
+        self.corr, self.time_varying = corr and mode == "thiele", time_varying
         self.rates = RS.TrueRates(world)
         self.R_fixed = n - self.k - 1 if R_fixed is None else R_fixed
         self.costs = RS.Costs()
@@ -240,6 +244,10 @@ class ReservePolicy(OraclePolicy):
         self.memo = {}         # округлённые интенсивности -> порог
         self.name = {"thiele": f"Резерв (Тиле), n={n}", "markov": f"Марковский порог, n={n}",
                      "fixed": f"Порог R_min={self.R_fixed}, n={n}"}[mode]
+        if mode == "thiele" and not corr:
+            self.name += ", без IBNR/RBNS"
+        if mode == "thiele" and not time_varying:
+            self.name += ", постоянные интенсивности"
 
     def _threshold(self, obj, nodes, t, view):
         if self.mode == "fixed":
@@ -256,7 +264,7 @@ class ReservePolicy(OraclePolicy):
         cl = self.rates.shock_clusters(nodes, t)
         shocks = [(eta, int(m.sum())) for _, _, eta, m in cl]
         mu = RS.object_mu(self.rates, nodes, t, shocks)
-        if self.mode == "markov":
+        if self.mode == "markov" or not self.time_varying:
             lam = np.full(nb, self.rates.fragment_loss(nodes, t).mean())
         else:
             lam = np.array([self.rates.fragment_loss(nodes, t + (b + 0.5) * self.block).mean() for b in range(nb)])
@@ -265,15 +273,18 @@ class ReservePolicy(OraclePolicy):
         lam = np.array([q(x) for x in lam])
         shocks = sorted((q(e), m) for e, m in shocks)
         mu = 1.0 / (round(20.0 / mu) / 20.0)
-        mkey = (self.mode, tuple(lam), tuple(shocks), mu)
+        mkey = (self.mode, tuple(lam), tuple(shocks), mu)       # порог зависит только от этих величин
         if mkey not in self.memo:
+            # P_loss убывает с ростом порога (восстановление раньше): допустимые пороги — от некоторого R и выше.
+            # Перебор сверху вниз до первого недопустимого проверяет все допустимые — выбор тот же, что при полном.
             best, R_best = None, n - k - 1
-            for R_min in range(0, n - k):
+            for R_min in range(n - k - 1, -1, -1):
                 m = RS.object_metrics(n, k, lam, shocks, R_min, mu, self.costs, dt=self.block)
-                if m["P_loss"] <= self.eps:
-                    v = m["cost"] if self.mode == "thiele" else m["traffic"]
-                    if best is None or v < best:
-                        best, R_best = v, R_min
+                if m["P_loss"] > self.eps:
+                    break
+                v = m["cost"] if self.mode == "thiele" else m["traffic"]
+                if best is None or v < best:
+                    best, R_best = v, R_min
             self.memo[mkey] = R_best
         R = self.memo[mkey]
         self.thr[obj] = (key, R)
@@ -284,14 +295,14 @@ class ReservePolicy(OraclePolicy):
         cand = self._cand(t, view)
         reqs = []
         need = view.needs_repair()
-        if self.mode == "thiele" and need:
+        if self.corr and need:
             last_ok, down = view.last_audit_ok(), view.down_since()
         for obj in need:
             holders = view.holders(obj)
             if len(holders) < self.k:
                 continue
             thr = self._threshold(obj, holders, t, view)
-            if self.mode == "thiele":
+            if self.corr:
                 R_eff, _ = self.RS.effective_reserve(self.rates, view, obj, t, self.k, last_ok, down)
             else:
                 R_eff = len(holders) - self.k

@@ -170,6 +170,7 @@ class Config:
     ping_interval_minutes: float = 5.0
     ping_noise: float = 0.001              # ложный провал пинга (шум на стороне сети)
     audits_per_epoch: int = 1
+    audit_interval_days: int = 1           # аудит раз в столько суток (абляция H7: редкие аудиты; 1 — каждые сутки)
     audit_noise: float = 0.005             # ложный провал аудита PDP
 
     # --- 3.4 / 3.6. Восстановление и учёт

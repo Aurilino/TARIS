@@ -149,7 +149,10 @@ class Chain:
                 continue
             g = R.stream(c.seed, R.AUDIT, i)
             e0, e1 = int(np.floor(a0)), int(np.ceil(a1))
-            ep = np.repeat(np.arange(e0, e1), c.audits_per_epoch)
+            ep = np.arange(e0, e1)
+            if c.audit_interval_days > 1:                          # редкие аудиты: сутки со сдвигом по номеру узла
+                ep = ep[(ep - i) % c.audit_interval_days == 0]
+            ep = np.repeat(ep, c.audits_per_epoch)
             t = ep + g.random(len(ep))
             t = t[(t >= a0) & (t < a1)]
             noise = g.random(len(t)) < c.audit_noise

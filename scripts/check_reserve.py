@@ -7,7 +7,7 @@
 3. Уравнение Тиле: совпадение с уравнением Колмогорова, меняющиеся интенсивности, Монте-Карло той же цепи.
 4. Модель объекта против Монте-Карло по фрагментам с настоящими задержками учёта и разнородными узлами:
    допуск приближения — модель не оптимистична, завышает вероятность потери не больше чем на 25%, трафик — до 10%.
-5. IBNR и RBNS против истины мира (S0 в обоих режимах; S2 — справочно): ожидаемое число необнаруженных тихих
+5. IBNR и RBNS против истины мира (S0 в обоих режимах и с аудитом раз в 7 суток; S2 — справочно): ожидаемое число необнаруженных тихих
    потерь и простоев, которые превысят T_rep, против фактического.
 
     python scripts/check_reserve.py
@@ -341,13 +341,13 @@ class ScaledRates:
         return [(a, b, eta * self.s, m) for a, b, eta, m in self.b.shock_clusters(nodes, t)]
 
 
-def ibnr_rbns_checks(scn, mode, strict=True):
+def ibnr_rbns_checks(scn, mode, strict=True, **over):
     """Прогноз IBNR и RBNS против истины мира в начале каждой эпохи (сутки 30..H)."""
     from taris_sim.chain import Chain
     from taris_sim.data import DataStream
     from taris_sim.ledger import Ledger, NetworkView
-    print(f"\n5. IBNR и RBNS против истины мира: {scn}, {mode}")
-    w = World(scenario(scn, world_mode=mode, **MAIN))
+    print(f"\n5. IBNR и RBNS против истины мира: {scn}, {mode}" + (f", {over}" if over else ""))
+    w = World(scenario(scn, world_mode=mode, **MAIN, **over))
     c = w.cfg
     R = RS.TrueRates(w)
     ch = Chain(w)
@@ -393,6 +393,7 @@ delay_checks(w, R)
 ibnr_rbns_checks("S0", "matched")
 ibnr_rbns_checks("S0", "mismatched")
 ibnr_rbns_checks("S2", "matched", strict=False)
+ibnr_rbns_checks("S0", "matched", audit_interval_days=7)
 rates_vs_world("S2", "mismatched")
 rates_vs_world("S8", "matched")
 

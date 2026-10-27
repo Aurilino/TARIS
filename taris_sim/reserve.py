@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+from functools import lru_cache
 from itertools import combinations
 
 import numpy as np
@@ -37,6 +38,9 @@ class TrueRates:
         self.m_churn = nd["m_churn"].to_numpy()
         self.lam_sil = nd["lam_silent"].to_numpy()
         self.member = {ct: nd[ct].to_numpy() for ct in CLUSTER_TYPES}
+        # множитель интенсивности страховых случаев без возраста — как в world.rate, заранее для всех узлов
+        self.base = (np.exp(world.beta0 + nd["lin_pred"].to_numpy()) * nd["theta"].to_numpy())
+        self.m_rate = nd["m_rate"].to_numpy()
         rates = np.array(c.shock_rate_per_year, float) / 365.0 if c.shocks_enabled else np.zeros(3)
         self.storm = c.world_mode != "matched"
         if self.storm:
@@ -57,7 +61,7 @@ class TrueRates:
         """Слагаемые интенсивности потери фрагмента на узлах nodes в момент t (в сутки)."""
         nodes = np.asarray(nodes, int)
         w = self.w
-        lam = w.rate(nodes, np.full(len(nodes), float(t)))
+        lam = self.base[nodes] * w.age_factor(float(t) - self.join[nodes]) * self.m_rate[nodes]   # = world.rate
         own = lam * self.phi[nodes] * (1.0 + self.storm_factor)
         age = np.maximum(float(t) - self.join[nodes], 0.0)
         c = w.cfg
@@ -173,7 +177,7 @@ def path_delays(cfg) -> dict:
     - уход узла и шок с полной гибелью: исчезает сразу, признан через T_rep;
     - тихая потеря: исчезает сразу, признана при следующем успешном аудите (в среднем полинтервала)."""
     base = 0.5 + cfg.repair_hours * HOUR
-    aud = 1.0 / max(cfg.audits_per_epoch, 1)
+    aud = cfg.audit_interval_days / max(cfg.audits_per_epoch, 1)
     return {"own": base, "churn": cfg.T_rep + base, "silent": 0.5 * aud + base,
             "shock": base, "shock_destroyed": cfg.T_rep + base}
 
@@ -306,16 +310,81 @@ def object_rates(rates, nodes, t0: float, H: int):
     return lam, shocks
 
 
+@lru_cache(maxsize=4096)
+def _structure(n: int, k: int, R_min: int, phases: int, ms: tuple, size: float):
+    """Устройство цепи объекта при единичных интенсивностях (цепь линейна по lam, eta и mu):
+    A_lam, l_lam — переходы и интенсивность «потерян» на единицу lam; для каждого размера скачка m из ms —
+    A_m, l_m на единицу eta; A_mu, tr_mu — фазы восстановления и трафик на единицу mu; S — число фрагментов."""
+    z = Costs(0.0, 0.0, 0.0, 0.0, size)
+    one = Costs(0.0, 0.0, 0.0, 1.0, size)
+    Q, _ = generator(n, k, 1.0, (), R_min, 0.0, z, phases)
+    _, l_lam = generator(n, k, 1.0, (), R_min, 0.0, one, phases)
+    A_m, l_m = [], []
+    for m in ms:
+        Qm, lm = generator(n, k, 0.0, ((1.0, m),), R_min, 0.0, one, phases)
+        A_m.append(Qm); l_m.append(lm)
+    Qmu, tr = generator(n, k, 0.0, (), R_min, 1.0, Costs(0.0, 0.0, 1.0, 0.0, size), phases)
+    _, S = generator(n, k, 0.0, (), R_min, 0.0, Costs(0.0, 1.0, 0.0, 0.0, size), phases)
+    return Q, l_lam, A_m, l_m, Qmu, tr, S
+
+
+def chain_parts(n: int, k: int, lam: float, shocks, R_min: int, mu: float, phases: int = REPAIR_PHASES,
+                size: float = 1.0):
+    """Цепь объекта на одну эпоху без стоимостей: Q и три вектора интенсивностей платежей на единицу цены —
+    S (число фрагментов: хранение), Lr (интенсивность перехода в «потерян»: ценность W),
+    Tr (трафик завершения восстановления в единицу времени: стоимость трафика c_tr).
+    Платежи уравнения Тиле: b = v * S + W * Lr + c_tr * Tr (то же, что generator)."""
+    eta_m = {}
+    for eta, m in shocks:
+        if eta > 0 and m > 0:
+            eta_m[int(m)] = eta_m.get(int(m), 0.0) + float(eta)       # шоки с одинаковым скачком складываются
+    ms = tuple(sorted(eta_m))
+    A_lam, l_lam, A_m, l_m, A_mu, tr, S = _structure(n, k, R_min, phases, ms, float(size))
+    Q = lam * A_lam + mu * A_mu
+    Lr = lam * l_lam
+    for m, Am, lm in zip(ms, A_m, l_m):
+        Q = Q + eta_m[m] * Am
+        Lr = Lr + eta_m[m] * lm
+    return Q, S, Lr, mu * tr
+
+
 def object_metrics(n, k, lam, shocks=(), R_min=0, mu=1.0, costs=None, phases: int = REPAIR_PHASES,
                    dt: float = 1.0) -> dict:
     """Три величины таблицы пункта 2.5 из состояния n в начале горизонта: вероятность потери, ожидаемый трафик
-    восстановления (в объёмах объекта) и ожидаемая приведённая стоимость."""
-    costs = costs or Costs()
-    out = {}
-    for name, cst in (("P_loss", Costs.loss_probability(costs.size)), ("traffic", Costs.repair_traffic(costs.size)),
-                      ("cost", costs)):
-        out[name] = float(thiele(n, k, lam, shocks, R_min, mu, cst, dt=dt, phases=phases)[0, -1])
-    return out
+    восстановления (в объёмах объекта) и ожидаемая приведённая стоимость.
+    Один обратный проход: цепь строится раз на эпоху; вероятность потери, трафик и хранение (без дисконта) —
+    одной экспонентой расширенной матрицы, приведённая стоимость при delta > 0 — второй."""
+    from scipy.linalg import expm
+    c = costs or Costs()
+    lam = np.atleast_1d(np.asarray(lam, float))
+    E = len(lam)
+    const_sh = all(np.size(eta) == 1 for eta, _ in shocks)
+    sh_c = tuple((float(np.atleast_1d(eta)[0]), int(mj)) for eta, mj in shocks) if const_sh else None
+    m = len(chain_states(n, k, R_min, phases))
+    VL, VT, VC = np.zeros(m), np.zeros(m), np.zeros(m)
+    cache = {}
+    for e in range(E - 1, -1, -1):
+        sh = sh_c if const_sh else tuple((float(np.atleast_1d(eta)[min(e, np.size(eta) - 1)]), int(mj)) for eta, mj in shocks)
+        key = (float(lam[e]), sh)
+        if key not in cache:
+            Q, S, Lr, Tr = chain_parts(n, k, lam[e], sh, R_min, mu, phases, c.size)
+            M = np.zeros((m + 3, m + 3))
+            M[:m, :m] = Q
+            M[:m, m], M[:m, m + 1], M[:m, m + 2] = Lr, Tr, S
+            X = expm(M * dt)
+            P0, fL, fT, fS = X[:m, :m], X[:m, m], X[:m, m + 1], X[:m, m + 2]
+            if c.delta > 0:
+                M2 = np.zeros((m + 1, m + 1))
+                M2[:m, :m] = Q - c.delta * np.eye(m)
+                M2[:m, m] = c.v * S + c.W * Lr + c.c_tr * Tr
+                X2 = expm(M2 * dt)
+                P1, fC = X2[:m, :m], X2[:m, m]
+            else:
+                P1, fC = P0, c.v * fS + c.W * fL + c.c_tr * fT
+            cache[key] = (P0, fL, fT, P1, fC)
+        P0, fL, fT, P1, fC = cache[key]
+        VL, VT, VC = P0 @ VL + fL, P0 @ VT + fT, P1 @ VC + fC
+    return {"P_loss": float(VL[-1]), "traffic": float(VT[-1]), "cost": float(VC[-1])}
 
 
 # ------------------------------------------------------------------ выбор избыточности и порога
