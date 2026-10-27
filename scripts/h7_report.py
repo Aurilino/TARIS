@@ -19,7 +19,8 @@ from scipy import stats
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 OUT = os.path.join(ROOT, "runs", "h7")
 NAMES = {"immediate": "немедленное", "lazy2": "порог R_min = 2", "markov": "марковский конкурент",
-         "thiele": "TARIS-резерв", "thiele_nocorr": "TARIS без IBNR/RBNS", "thiele_const": "TARIS, постоянные интенсивности"}
+         "thiele": "TARIS-резерв", "thiele_nocorr": "TARIS без IBNR/RBNS", "thiele_const": "TARIS, постоянные интенсивности",
+         "thiele_agent": "TARIS, оценки агента", "thiele_agent_ver": "TARIS, оценки агента (проверяемые)"}
 ORDER = list(NAMES)
 
 
@@ -96,7 +97,8 @@ def figure(df, eps):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     colors = {"immediate": "#6b7280", "lazy2": "#d97706", "markov": "#7c3aed", "thiele": "#0f766e",
-              "thiele_nocorr": "#2563eb", "thiele_const": "#db2777"}
+              "thiele_nocorr": "#2563eb", "thiele_const": "#db2777",
+              "thiele_agent": "#16a34a", "thiele_agent_ver": "#65a30d"}
     groups = [(s, a) for s in ("S0", "S2") for a in (1, 7) if len(df[(df.scn == s) & (df.audit == a) & (df.eps == eps)])]
     fig, axes = plt.subplots(1, len(groups), figsize=(4.2 * len(groups), 3.8), squeeze=False)
     for ax, (s, a) in zip(axes[0], groups):

@@ -457,7 +457,9 @@ def rbns(rates, nodes, t: float, down_since) -> np.ndarray:
     on = np.isfinite(ds) & (a_h >= c.franchise_d_hours) & (a_h < c.T_rep_hours)
     out = np.zeros(len(nodes))
     if on.any():
-        out[on] = duration_sf(rates.w, nodes[on], c.T_rep_hours) / duration_sf(rates.w, nodes[on], a_h[on])
+        est = getattr(rates, "p_total_given", None)      # оценки агента (risk.EstimatedRates) — вместо истины
+        out[on] = est(nodes[on], a_h[on]) if est else \
+            duration_sf(rates.w, nodes[on], c.T_rep_hours) / duration_sf(rates.w, nodes[on], a_h[on])
     return out
 
 

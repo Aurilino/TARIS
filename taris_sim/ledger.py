@@ -32,6 +32,7 @@ class NetworkView:
         self.L = ledger
         self.t = 0.0
         self.seed = b"\0" * 32
+        self.step = None                         # вывод chain.step() текущей эпохи
 
     def candidates(self) -> np.ndarray:
         """Узлы, зарегистрированные к моменту t, не находящиеся в наблюдаемом простое и не заполненные."""
@@ -99,6 +100,15 @@ class NetworkView:
             if j >= 0 and t < e[j]:
                 out[i] = s[j]
         return out
+
+    # ---- для модели риска агента (шаг 5, пункт 5.1)
+    def silent_declared(self) -> list:
+        """Тихие потери, признанные по аудиту к моменту t: (момент, узел)."""
+        return [x for x in self.L.log_silent if x[0] <= self.t]
+
+    def stored(self) -> np.ndarray:
+        """Число фрагментов на каждом узле по карте размещения."""
+        return self.L.used.copy()
 
     def node_versions(self) -> np.ndarray:
         """Заявленная версия клиента каждого узла в момент t; -1 у ещё не зарегистрированных."""
@@ -174,6 +184,7 @@ class Ledger:
         self.owner_idx = {}
         self.mig_pending = {}                                    # объект -> номера фрагментов в переносе
         self.log_loss, self.log_repair, self.log_disc, self.log_migr, self.log_alarm = [], [], [], [], []
+        self.log_silent = []                  # признанные по аудиту тихие потери: (t, узел) — это видит сеть
         self.log_short = []                   # объекты, размещённые не полностью: (объект, t, размещено, нужно)
         self.stalled = 0                      # объекто-эпохи, когда объект ждал восстановления, а политика его не запросила
         self.heap, self.seq = [], 0
@@ -228,6 +239,8 @@ class Ledger:
         self._destroy(f, t)
         node, obj = self.f_node[f], self.f_obj[f]
         self.f_to[f] = t; self.f_end[f] = reason
+        if reason.startswith("тихая"):
+            self.log_silent.append((t, node))
         self.node_frags[node].discard(f); self.obj_frags[obj].discard(f); self.used[node] -= 1
         if self.obj_lost_t[obj] == np.inf:
             self.missing[obj].add(self.f_idx[f]); self.need_repair.add(obj)
@@ -337,6 +350,7 @@ class Ledger:
         for t in range(T):
             step = self.ch.step()
             view.t, view.seed = float(t), bytes.fromhex(step["seed"])
+            view.step = step                     # наблюдения эпохи — для таблицы опыта агента (шаг 5)
             for a in policy.alarm(float(t), view):
                 self.log_alarm.append((float(t), a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
                                        float(a.get("horizon", 1.0))))

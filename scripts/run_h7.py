@@ -11,6 +11,7 @@
 
     python scripts/run_h7.py [число потоков, по умолчанию 4] [зёрна, например 1-20]
     python scripts/run_h7.py 4 1-20 eps        # Н6: кривая по eps (TARIS и марковский, S0, eps = 1e-2 и 1e-4)
+    python scripts/run_h7.py 4 1-20 agent      # шаг 5, А9: TARIS-резерв на оценках агента (с заявленными признаками и без)
 """
 import sys, os, time, pickle
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -30,7 +31,9 @@ def make(w, which, eps):
             "markov": lambda: ReservePolicy(w, N, "markov", eps),
             "thiele": lambda: ReservePolicy(w, N, "thiele", eps),
             "thiele_nocorr": lambda: ReservePolicy(w, N, "thiele", eps, corr=False),
-            "thiele_const": lambda: ReservePolicy(w, N, "thiele", eps, time_varying=False)}[which]()
+            "thiele_const": lambda: ReservePolicy(w, N, "thiele", eps, time_varying=False),
+            "thiele_agent": lambda: ReservePolicy(w, N, "thiele", eps, rates="agent"),
+            "thiele_agent_ver": lambda: ReservePolicy(w, N, "thiele", eps, rates="agent", claimed=False)}[which]()
 
 
 def name(scn, audit, which, seed, eps):
@@ -66,15 +69,19 @@ def run(job):
         years.append(lost / stored if stored > 0 else 0.0)
     out = {"job": job, "metrics": m, "year_loss_share": years, "seconds": round(time.time() - t0),
            "thresholds": dict(Counter(v[1] for v in pol.thr.values())) if pol.thr else {pol.R_fixed: -1},
+           "fits": getattr(pol, "fits", None),
            "losses": res.losses, "daily": d}
     with open(os.path.join(OUT, name(*job) + ".pkl"), "wb") as fh:
         pickle.dump(out, fh)
     return job, out["seconds"], m["Потеряно объектов"], m["Трафик восстановления в год"]
 
 
-def jobs(seeds, curve=False):
+def jobs(seeds, curve=False, agent=False):
     out = []
     for seed in seeds:
+        if agent:
+            out += [(scn, 1, p, seed, EPS) for scn in ("S0", "S2") for p in ("thiele_agent", "thiele_agent_ver")]
+            continue
         if curve:
             out += [("S0", 1, p, seed, e) for e in (1e-2, 1e-4) for p in ("thiele", "markov")]
             continue
@@ -101,8 +108,9 @@ if __name__ == "__main__":
     a, b = (sys.argv[2] if len(sys.argv) > 2 else "1-20").split("-")
     seeds = range(int(a), int(b) + 1)
     curve = len(sys.argv) > 3 and sys.argv[3] == "eps"
+    agent = len(sys.argv) > 3 and sys.argv[3] == "agent"
     os.makedirs(OUT, exist_ok=True)
-    todo = [j for j in jobs(seeds, curve) if not os.path.exists(os.path.join(OUT, name(*j) + ".pkl"))]
+    todo = [j for j in jobs(seeds, curve, agent) if not os.path.exists(os.path.join(OUT, name(*j) + ".pkl"))]
     log = open(os.path.join(OUT, "progress.log"), "a", encoding="utf-8")
     print(f"{time.strftime('%Y-%m-%d %H:%M')} к расчёту {len(todo)} прогонов, потоков {workers}", file=log, flush=True)
     print(f"к расчёту {len(todo)} прогонов", flush=True)

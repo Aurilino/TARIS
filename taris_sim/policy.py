@@ -230,12 +230,22 @@ class ReservePolicy(OraclePolicy):
 
     def __init__(self, world, n: int = 15, mode: str = "thiele", eps: float = 1e-3, H: int = 365,
                  R_fixed: int | None = None, gamma: float = 1.0, block: int = 30, corr: bool = True,
-                 time_varying: bool = True):
+                 time_varying: bool = True, rates: str = "true", claimed: bool = True):
         from . import reserve as RS
         super().__init__(world, n, gamma)
         self.RS, self.mode, self.eps, self.H, self.block = RS, mode, eps, H, block
         self.corr, self.time_varying = corr and mode == "thiele", time_varying
-        self.rates = RS.TrueRates(world)
+        self.agent = rates == "agent"
+        if self.agent:
+            # оценки агента (шаг 5, пункт 5.1): обучение раз в block эпох; до первого обучения — немедленное восстановление
+            from .experience import Experience
+            from .risk import RiskModel, EstimatedRates
+            self.exp = Experience(world, block)
+            self.model = RiskModel(self.exp, claimed=claimed)
+            self.rates = EstimatedRates(world, self.model)
+            self.fits = []
+        else:
+            self.rates = RS.TrueRates(world)
         self.R_fixed = n - self.k - 1 if R_fixed is None else R_fixed
         self.costs = RS.Costs()
         self.thr = {}          # объект -> (ключ набора узлов, порог)
@@ -246,10 +256,14 @@ class ReservePolicy(OraclePolicy):
             self.name += ", без IBNR/RBNS"
         if mode == "thiele" and not time_varying:
             self.name += ", постоянные интенсивности"
+        if self.agent:
+            self.name += ", оценки агента" + ("" if claimed else " (только проверяемые признаки)")
 
     def _threshold(self, obj, nodes, t, view):
         if self.mode == "fixed":
             return self.R_fixed
+        if self.agent and not self.model.fitted:
+            return self.n - self.k - 1
         T_end = view.L.T
         key = frozenset(nodes) if self.mode == "markov" else (frozenset(nodes), int(t // self.block))
         old = self.thr.get(obj)
@@ -290,17 +304,24 @@ class ReservePolicy(OraclePolicy):
 
     def on_epoch(self, t, view):
         self._g = self._rng(view)
+        if self.agent:
+            self.exp.update(t, view)
+            if t > 0 and int(t) % self.block == 0:
+                self.model.fit(t)
+                if self.model.fitted:
+                    self.model.refresh(t)
+                    self.fits.append((t, self.model.a_hat, self.model.pearson, self.model.churn_share))
         cand = self._cand(t, view)
         reqs = []
         need = view.needs_repair()
-        if self.corr and need:
+        if self.corr and need and (not self.agent or self.model.fitted):
             last_ok, down = view.last_audit_ok(), view.down_since()
         for obj in need:
             holders = view.holders(obj)
             if len(holders) < self.k:
                 continue
             thr = self._threshold(obj, holders, t, view)
-            if self.corr:
+            if self.corr and (not self.agent or self.model.fitted):
                 R_eff, _ = self.RS.effective_reserve(self.rates, view, obj, t, self.k, last_ok, down)
             else:
                 R_eff = len(holders) - self.k
