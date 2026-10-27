@@ -32,7 +32,7 @@ class NetworkView:
         self.L = ledger
         self.t = 0.0
         self.seed = b"\0" * 32
-        self.step = None                         # вывод chain.step() текущей эпохи
+        self.step = None                         # вывод chain.step() прошлой эпохи: то, что известно к моменту t
 
     def candidates(self) -> np.ndarray:
         """Узлы, зарегистрированные к моменту t, не находящиеся в наблюдаемом простое и не заполненные."""
@@ -347,10 +347,13 @@ class Ledger:
         daily = []
         created = self.data.objects["created_epoch"].to_numpy()
         n_created = 0
+        prev_step = None
         for t in range(T):
             step = self.ch.step()
             view.t, view.seed = float(t), bytes.fromhex(step["seed"])
-            view.step = step                     # наблюдения эпохи — для таблицы опыта агента (шаг 5)
+            # наблюдения, известные к моменту решения t, — эпохи t - 1 (вывод step() эпохи t описывает [t, t + 1))
+            view.step = prev_step
+            prev_step = step
             for a in policy.alarm(float(t), view):
                 self.log_alarm.append((float(t), a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
                                        float(a.get("horizon", 1.0))))
