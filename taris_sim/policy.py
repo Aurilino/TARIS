@@ -276,6 +276,7 @@ class AgentCrisisPolicy(OraclePolicy):
             self.w_loss = world.cfg.T_rep_hours * HOUR + world.cfg.repair_hours * HOUR   # окно до конца восстановления
             self.q_hit = {k: [0.0, 0.0] for k in self.labels}     # выбито узлов и всего узлов в верных эпизодах
             self.econ_log = []                                    # (t, группа, порог, kappa_экв, B, C)
+            self._coef_memo, self._econ_mark = {}, {}
         self.name = ("Агент кризисов" if forecast else "Оракул без прогноза") + f", n={n}" + \
             (", шаг тревог 1 ч" if fast and hours < 24 else "") + (", экономический порог" if self.econ else "")
 
@@ -319,8 +320,8 @@ class AgentCrisisPolicy(OraclePolicy):
         from scipy.stats import binom
         return float(binom.sf(m - self.k, m, p)) if m >= self.k else 1.0
 
-    def _value(self, lab, snap):
-        """Выгода верной тревоги B и цена переноса C для эпизода со снимком snap (Э1)."""
+    def _coef(self, lab, f):
+        """Выгода b_f и цена c_f на один объект с f фрагментами в группе (Э1); кэш по (q, p) текущей оценки."""
         from scipy.stats import binom
         c, k, n, fc = self.costs, self.k, self.n, self.fc
         m, N = self.q_hit[lab]
@@ -328,14 +329,21 @@ class AgentCrisisPolicy(OraclePolicy):
         day = min(fc.cum_day, fc.T)
         lam = (fc.cum["longst"][:, day].sum() + 0.5) / max(fc.cum["up"][:, day].sum() / fc.cpd, 1.0)
         p = 1.0 - np.exp(-lam * self.w_loss)              # фрагмент гибнет за окно восстановления (фон)
-        F = sum(f * cnt for f, cnt in snap.items())
-        C = c.c_tr * c.size * F / k
-        R = dL = 0.0
-        base = self._p_loss(n, p)
+        key = (lab, q, p, f)
+        if key not in self._coef_memo:
+            base = self._p_loss(n, p)
+            R = c.size * ((1.0 - (1.0 - q) ** f) + q * f / k)
+            dL = sum(binom.pmf(r, f, q) * self._p_loss(n - r, p) for r in range(f + 1)) - base
+            self._coef_memo[key] = (c.c_tr * R + c.W * dL, c.c_tr * c.size * f / k)
+        return self._coef_memo[key]
+
+    def _value(self, lab, snap):
+        """Выгода верной тревоги B и цена переноса C для эпизода со снимком snap (Э1)."""
+        B = C = 0.0
         for f, cnt in snap.items():
-            R += cnt * c.size * ((1.0 - (1.0 - q) ** f) + q * f / k)
-            dL += cnt * (sum(binom.pmf(r, f, q) * self._p_loss(n - r, p) for r in range(f + 1)) - base)
-        return c.c_tr * R + c.W * dL, C
+            b, cc = self._coef(lab, f)
+            B += cnt * b; C += cnt * cc
+        return B, C
 
     def _learn(self, t):
         keep = []
@@ -359,6 +367,11 @@ class AgentCrisisPolicy(OraclePolicy):
                 continue
             pk = np.array([v[0] for v in L]); y = np.array([v[1] for v in L], bool)
             if self.econ:
+                mark = (len(L), int(t))
+                if self._econ_mark.get(lab) == mark:     # пересчёт — при новых метках или раз в сутки (фон p)
+                    continue
+                self._econ_mark[lab] = mark
+                self._coef_memo = {}
                 BC = np.array([self._value(lab, v[2]) for v in L])
                 gv = y * BC[:, 0] - BC[:, 1]
                 grid = self.GRID + (np.inf,)
