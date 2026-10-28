@@ -9,15 +9,19 @@
 где O — наблюдаемое число событий группы в окне, E — ожидаемое по фону.
 
 Группы и каналы (П1):
-- буря и каскад — дата-центр (заявленный), начала простоев за последние сутки; тревога «каскад», если в другом
-  дата-центре того же провайдера за последние 2 суток был массовый простой (сеть видит первичный кризис);
+- буря и каскад — дата-центр (заявленный), начала простоев за последние 6, 12 или 24 ч (лучший из счётов; при
+  суточном шаге — за 1, 2 или 3 суток); тревога «каскад», если в другом дата-центре того же провайдера за последние
+  2 суток был массовый простой (сеть видит первичный кризис);
 - износ партии — дата-центр × класс оборудования (заявленные), проваленные аудиты и тихие потери за 7 суток;
-- уязвимость ПО — узлы одной версии клиента, начала простоев за сутки;
-- массовый уход — регион, простои без конца дольше суток, начавшиеся за последние 7 суток.
+- уязвимость ПО — узлы одной версии клиента, начала простоев (окна те же, что у бури);
+- массовый уход — регион, простои, ставшие длиннее суток (узел, похоже, ушёл) за последние 7 суток.
 Фон узла — его собственная частота до начала окна исключения (сглаженная к средней по сети на c0 суток).
 
+Счётчики ведутся по ячейкам длины step_hours (Ч4): 24 — раз в сутки, 1 — раз в час для политики с подшагами
+тревог (ledger, alarm_step_hours). Данные приходят через view.step за отрезок [t0, t1) с прошлого вызова.
+
 Порог тревоги своего типа (П3) агент учит сам по своей истории: кризис в группе он видит как массовый простой
-(не меньше половины узлов группы начинают простой длиннее франшизы в одни сутки) или волну полных гибелей.
+(не меньше половины узлов группы начинают простой длиннее франшизы за один отрезок) или волну полных гибелей.
 """
 from __future__ import annotations
 
@@ -26,7 +30,7 @@ import numpy as np
 from .config import HOUR
 
 TYPES = ("storm", "cascade", "wear", "software", "exodus")
-WINDOW = {"storm": 1, "cascade": 1, "software": 1, "wear": 7, "exodus": 7}       # окно счёта, сутки
+WINDOW = {"storm": 1, "cascade": 1, "software": 1, "wear": 7, "exodus": 7}       # окно счёта, сутки (для разметки)
 GAP = {"storm": 7, "cascade": 7, "software": 7, "wear": 60, "exodus": 30}        # исключение из фона перед окном
 
 
@@ -38,24 +42,31 @@ def lr_score(O, E):
 
 
 class Forecaster:
-    """Счёт аномалий по группам узлов на каждую эпоху; ведёт историю для обучения порогов."""
+    """Счёт аномалий по группам узлов; данные копятся по ячейкам длины step_hours."""
 
-    def __init__(self, world, exp, c0: float = 30.0):
+    def __init__(self, world, exp, c0: float = 30.0, step_hours: int = 24):
         c = world.cfg
         self.exp, self.reg = exp, exp.reg
         self.T, self.N = c.horizon_days, exp.N
         self.d = c.franchise_d_hours * HOUR
         self.hw_names = c.hw_classes
         self.c0 = c0
-        self.starts = np.zeros((self.N, self.T))        # начала простоев по эпохам
-        self.longst = np.zeros((self.N, self.T))        # начала простоев, которые длятся дольше суток (уходы)
-        self.audf = np.zeros((self.N, self.T))          # проваленные аудиты и признанные тихие потери
-        self.up = np.zeros((self.N, self.T))            # экспозиция: узел в реестре и не в долгом простое
-        self.mass = np.zeros((self.N, self.T), bool)    # узел начал простой длиннее d в эпоху массового простоя группы
+        self.cpd = int(round(24 / step_hours))           # ячеек в сутках
+        C = self.T * self.cpd
+        f32 = np.float32
+        self.starts = np.zeros((self.N, C), f32)         # начала простоев по ячейкам
+        self.longst = np.zeros((self.N, C), f32)         # начала простоев, которые длятся дольше суток (уходы)
+        self.audf = np.zeros((self.N, C), f32)           # проваленные аудиты и признанные тихие потери
+        self.up = np.zeros((self.N, C), f32)             # экспозиция в ячейках: узел в реестре и не в долгом простое
+        self.mass = np.zeros((self.N, self.T), bool)     # узел начал простой длиннее d при массовом простое дата-центра
+        # накопленные по суткам суммы (для фона): индекс d — сумма по суткам < d
+        self.cum = {k: np.zeros((self.N, self.T + 1)) for k in ("starts", "longst", "audf", "up")}
+        self.cum_day = 0
         self.version = np.full(self.N, -1)
         self.n_silent = 0
+        self.cell = -1                                   # последняя заполненная ячейка
         r = self.reg
-        self.groups = {}                                 # тип -> список (ctype, кластер, метка, массив узлов)
+        self.groups = {}
         dcs = np.unique(r.dc[r.dc >= 0])
         self.groups["storm"] = [("dc", int(d), int(d), np.flatnonzero(r.dc == d)) for d in dcs]
         self.groups["wear"] = [("batch", f"{int(d)}/{self.hw_names[h]}", (int(d), int(h)),
@@ -63,106 +74,132 @@ class Forecaster:
                                for d in dcs for h in range(len(self.hw_names)) if ((r.dc == d) & (r.hw == h)).any()]
         self.groups["exodus"] = [("region", int(g), int(g), np.flatnonzero(r.region == g)) for g in np.unique(r.region)]
         self.dc_prov = {int(d): int(r.provider[r.dc == d][0]) for d in dcs}
-        self.t = -1
+
+    def _cells(self, x):
+        return np.minimum(np.floor(np.asarray(x, float) * self.cpd + 1e-9).astype(int), self.T * self.cpd - 1)
 
     # ------------------------------------------------------------ накопление
     def update(self, t: float, view):
-        """Забирает наблюдения эпохи e = t - 1 (view.step): в момент t известны события до t."""
+        """Забирает наблюдения view.step за [t0, t1) — то, что стало известно с прошлого вызова."""
         st = view.step
         if st is None:
             return
-        e = int(st["epoch"])
-        self.t = e
-        reg = view.join_times() <= t
-        on = np.zeros(self.N, bool)
+        t0, t1 = (st["t0"], st["t1"]) if "t0" in st else (float(st["epoch"]), float(st["epoch"]) + 1.0)
+        c0 = int(self._cells(t0))
+        c1 = min(int(np.ceil(t1 * self.cpd - 1e-6)) - 1, self.T * self.cpd - 1)     # последняя ячейка внутри [t0, t1)
+        self.cell = c1
+        reg = view.join_times() <= t1
         og = st["outages_ongoing"]
+        on = np.zeros(self.N, bool)
         if len(og):
-            on[og["node"].to_numpy()] = (t - og["start"].to_numpy()) > 1.0
-        self.up[:, e] = reg & ~on
+            on[og["node"].to_numpy()] = (t1 - og["start"].to_numpy()) > 1.0
+        self.up[:, c0:c1 + 1] = (reg & ~on)[:, None]
         s = st["outages_started"]
         if len(s):
-            np.add.at(self.starts[:, e], s["node"].to_numpy(), 1.0)
+            np.add.at(self.starts, (s["node"].to_numpy(), self._cells(s["start"].to_numpy())), 1.0)
         a = st["audits"]
         if len(a):
             f = a[~a["passed_avail"]]
-            np.add.at(self.audf[:, e], f["node"].to_numpy(), 1.0)
+            np.add.at(self.audf, (f["node"].to_numpy(), self._cells(f["t"].to_numpy())), 1.0)
         sil = view.silent_declared()
-        for _, n in sil[self.n_silent:]:
-            self.audf[n, e] += 1.0
+        for ts, n in sil[self.n_silent:]:
+            self.audf[n, self._cells(ts)] += 1.0
         self.n_silent = len(sil)
-        # простои, идущие дольше суток: отмечаются в эпоху начала (видны через сутки)
         if len(og):
-            el = t - og["start"].to_numpy()
-            new_long = (el > 1.0) & (el <= 2.0)
-            np.add.at(self.longst, (og["node"].to_numpy()[new_long], np.floor(og["start"].to_numpy()[new_long]).astype(int)), 1.0)
+            # простой стал длиннее суток за этот отрезок — отмечается в последней ячейке отрезка (когда это стало
+            # известно): задним числом нельзя, накопленные суммы для фона по прошедшим суткам уже посчитаны
+            st_og = og["start"].to_numpy()
+            new_long = ((t1 - st_og) > 1.0) & ((t0 - st_og) <= 1.0)
+            np.add.at(self.longst[:, c1], og["node"].to_numpy()[new_long], 1.0)
         self.version = view.node_versions()
-        # массовый простой дата-центра в эту эпоху: не меньше половины узлов в сети начали простой длиннее d
+        # массовый простой дата-центра: не меньше половины узлов в сети начали простой длиннее d за отрезок
         ended = st["outages_ended"]
-        big = set(og["node"].to_numpy()[(t - og["start"].to_numpy()) > self.d].tolist()) if len(og) else set()
+        big = set(og["node"].to_numpy()[(t1 - og["start"].to_numpy()) > self.d].tolist()) if len(og) else set()
         if len(ended):
             big |= set(ended["node"].to_numpy()[ended["dur"].to_numpy() > self.d].tolist())
         started_now = set(s["node"].to_numpy().tolist()) if len(s) else set()
         hit = np.zeros(self.N, bool)
         hit[list(big & started_now)] = True
+        e = min(int(t1 - 1e-9), self.T - 1)
         for _, _, _, g in self.groups["storm"]:
-            n_up = self.up[g, max(e - 1, 0)].sum()
-            if n_up >= 2 and hit[g].sum() >= 0.5 * n_up:
+            n_hit = int(hit[g].sum())
+            n_up = int((reg[g] & ~on[g]).sum()) + n_hit
+            if n_hit >= 2 and n_hit >= 0.5 * n_up:
                 self.mass[g[hit[g]], e] = True
+        # накопленные суммы по завершённым суткам
+        while self.cum_day < min(int(np.floor(t1 + 1e-9)), self.T):
+            d0 = self.cum_day
+            sl = slice(d0 * self.cpd, (d0 + 1) * self.cpd)
+            for k in self.cum:
+                self.cum[k][:, d0 + 1] = self.cum[k][:, d0] + getattr(self, k)[:, sl].sum(1)
+            self.cum_day += 1
 
     # ------------------------------------------------------------ счёт
-    def _bg(self, M, nodes, e, gap):
-        """Фоновая частота канала у узлов nodes по истории до e - gap (сглаженная к средней по сети)."""
-        h = max(e - gap, 0)
-        if h == 0:
-            return np.full(len(nodes), np.nan)
-        cnt, ex = M[:, :h].sum(1), self.up[:, :h].sum(1)
+    def _bg(self, key, day):
+        """Фоновая частота канала (в сутки) у всех узлов по истории до суток day (сглаженная к средней по сети)."""
+        day = int(min(max(day, 0), self.cum_day))
+        if day == 0:
+            return None
+        cnt = self.cum[key][:, day]
+        ex = self.cum["up"][:, day] / self.cpd
         m = cnt.sum() / max(ex.sum(), 1e-9)
-        return (cnt[nodes] + m * self.c0) / (ex[nodes] + self.c0)
+        return (cnt + m * self.c0) / (ex + self.c0)
+
+    def _window(self, M, g, cells, bg):
+        a = max(self.cell - cells + 1, 0)
+        O = float(M[g, a:self.cell + 1].sum())
+        E = float((bg[g] * self.up[g, a:self.cell + 1].sum(1)).sum() / self.cpd)
+        return O, E
 
     def scores(self) -> list:
-        """Счёт по всем группам по данным до последней известной эпохи: (тип, ctype, кластер, S, O, E, узлы)."""
-        e = self.t
+        """Счёт по всем группам по данным до последней заполненной ячейки: (тип, ctype, кластер, S, O, E, узлы)."""
+        if self.cell < 0:
+            return []
+        day = (self.cell + 1) / self.cpd                   # момент конца данных, сутки
+        if day < 30:
+            return []
         out = []
-        if e < 30:
-            return out
-        r = self.reg
-        # буря / каскад: дата-центр, начала простоев за сутки
-        bg = self._bg(self.starts, np.arange(self.N), e, GAP["storm"])
+        # буря / каскад / ПО: начала простоев; окна 6, 12, 24 ч (при суточных ячейках — 1, 2, 3 суток)
+        wins = (1, 2, 3) if self.cpd == 1 else tuple(max(1, int(round(h * self.cpd / 24))) for h in (6, 12, 24))
+        bg = self._bg("starts", int(day) - GAP["storm"])
+        if bg is None:
+            return []
+        e = min(int(day - 1e-9), self.T - 1)
         recent_mass = {}
         for ct, cl, key, g in self.groups["storm"]:
             if self.mass[g, max(e - 2, 0):e + 1].any():
-                recent_mass[self.dc_prov[cl]] = recent_mass.get(self.dc_prov[cl], set()) | {cl}
-        for ct, cl, key, g in self.groups["storm"]:
-            # предвестник растёт к концу окна (пункт 3.9): лучший из счётов за 1, 2 и 3 последние эпохи
-            best = (0.0, 0.0, 0.0)
-            for h in (1, 2, 3):
-                a = max(e - h + 1, 0)
-                O = self.starts[g, a:e + 1].sum(); E = (bg[g][:, None] * self.up[g, a:e + 1]).sum()
+                recent_mass.setdefault(self.dc_prov[cl], set()).add(cl)
+
+        def best(g):
+            b = None
+            for h in wins:
+                O, E = self._window(self.starts, g, h, bg)
                 S = float(lr_score(O, E))
-                if S > best[0] or h == 1:
-                    best = max(best, (S, O, E))
+                if b is None or S > b[0]:
+                    b = (S, O, E)
+            return b
+
+        for ct, cl, key, g in self.groups["storm"]:
+            S, O, E = best(g)
             sibling = recent_mass.get(self.dc_prov[cl], set()) - {cl}
-            out.append(("cascade" if sibling else "storm", ct, cl, best[0], best[1], best[2], g))
-        # износ партии: аудиты и тихие потери за 7 суток
-        h = WINDOW["wear"]
-        bg = self._bg(self.audf, np.arange(self.N), e - h + 1, GAP["wear"])
-        for ct, cl, key, g in self.groups["wear"]:
-            O = self.audf[g, e - h + 1:e + 1].sum(); E = (bg[g][:, None] * self.up[g, e - h + 1:e + 1]).sum()
-            out.append(("wear", ct, cl, float(lr_score(O, E)), O, E, g))
-        # уязвимость ПО: версии клиента новее исходной
-        bg = self._bg(self.starts, np.arange(self.N), e, GAP["software"])
+            out.append(("cascade" if sibling else "storm", ct, cl, S, O, E, g))
         for v in np.unique(self.version[self.version > 0]):
             g = np.flatnonzero(self.version == v)
-            O = self.starts[g, e].sum(); E = (bg[g] * self.up[g, e]).sum()
-            out.append(("software", "version", int(v), float(lr_score(O, E)), O, E, g))
-        # массовый уход: простои дольше суток, начавшиеся за 7 суток (последние сутки ещё не видны)
-        h = WINDOW["exodus"]
-        a, b = max(e - h, 0), max(e - 1, 0)
-        if b > a:
-            cnt = self.longst[:, :max(a - GAP["exodus"], 1)].sum(1)
-            ex = self.up[:, :max(a - GAP["exodus"], 1)].sum(1)
+            S, O, E = best(g)
+            out.append(("software", "version", int(v), S, O, E, g))
+        # износ партии: аудиты и тихие потери за 7 суток
+        bgw = self._bg("audf", int(day) - 7 - GAP["wear"])
+        if bgw is not None:
+            for ct, cl, key, g in self.groups["wear"]:
+                O, E = self._window(self.audf, g, 7 * self.cpd, bgw)
+                out.append(("wear", ct, cl, float(lr_score(O, E)), O, E, g))
+        # массовый уход: простои, ставшие длиннее суток за последние 7 суток
+        cut = min(int(day) - 7 - GAP["exodus"], self.cum_day)
+        if cut > 0:
+            cnt, ex = self.cum["longst"][:, cut], self.cum["up"][:, cut] / self.cpd
+            a, b = max(self.cell - 7 * self.cpd + 1, 0), self.cell + 1
             for ct, cl, key, g in self.groups["exodus"]:
                 rate = (cnt[g].sum() + 0.5) / max(ex[g].sum(), 1.0)
-                O = self.longst[g, a:b].sum(); E = rate * self.up[g, a:b].sum()
+                O = float(self.longst[g, a:b].sum()); E = rate * float(self.up[g, a:b].sum()) / self.cpd
                 out.append(("exodus", ct, cl, float(lr_score(O, E)), O, E, g))
         return out
