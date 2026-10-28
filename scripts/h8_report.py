@@ -14,7 +14,8 @@ from scipy import stats
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 OUT = os.path.join(ROOT, "runs", "h8")
 NAMES = {"none": "без прогноза", "agent_d": "агент, раз в сутки", "agent_h": "агент, раз в час",
-         "agent_h5": "агент, раз в час, порог 5", "oracle_h": "оракул кризисов, раз в час"}
+         "agent_h5": "агент, раз в час, порог 5", "oracle_h": "оракул кризисов, раз в час",
+         "agent_d_econ": "агент, раз в сутки, эконом. порог", "agent_h_econ": "агент, раз в час, эконом. порог"}
 
 
 def ci(x):
@@ -72,14 +73,26 @@ if __name__ == "__main__":
     yy = Y.groupby(["pol", "year"]).agg(n=("n", "sum"), det=("det", "sum"), ae=("ae", "sum"), ok=("ok", "sum")).reset_index()
     yy["полнота"] = (yy.det / yy.n.clip(lower=1)).round(2)
     yy["точность"] = (yy.ok / yy.ae.clip(lower=1)).round(2)
-    yy = yy[yy.pol.isin(["agent_d", "agent_h", "agent_h5"])].assign(pol=lambda x: x.pol.map(NAMES))
+    yy = yy[yy.pol.isin(["agent_d", "agent_h", "agent_h5", "agent_d_econ", "agent_h_econ"])].assign(pol=lambda x: x.pol.map(NAMES))
     yy = yy.rename(columns={"pol": "политика", "year": "год", "n": "предсказуемых", "det": "замечено",
                             "ae": "эпизодов тревог", "ok": "верных"})
     text = ("### Сводка\n\n" + md(pd.DataFrame(main)) + "\n\n### Полнота по типам кризисов\n\n" + md(tt) +
             "\n\n### Кривая обучения (по годам прогона)\n\n" + md(yy))
-    thr = [(d["job"], d["thr"]) for d in runs if d.get("thr") and d["job"][0] in ("agent_d", "agent_h")]
+    thr = [(d["job"], d["thr"]) for d in runs if d.get("thr") and d["job"][0] in ("agent_d", "agent_h", "agent_d_econ", "agent_h_econ")]
     if thr:
         text += "\n\n### Выученные пороги к концу прогона\n\n" + md(pd.DataFrame(
             [{"политика": NAMES[j[0]], "зерно": j[1], **{k: v for k, v in t.items()}} for j, t in thr]).sort_values(["политика", "зерно"]))
+    ek = []
+    for d in runs:
+        for lab, last in {r[1]: r for r in (d.get("econ_log") or [])}.items():
+            ek.append(dict(pol=d["job"][0], seed=d["job"][1], lab=lab, thr=last[2], kap=last[3], B=last[4], C=last[5],
+                           q=(d["q_hit"][lab][0] + 1) / (d["q_hit"][lab][1] + 2)))
+    if ek:
+        E = pd.DataFrame(ek)
+        g = E.groupby(["pol", "lab"]).agg(порог=("thr", "median"), kappa_экв=("kap", "median"), B=("B", "mean"),
+                                          C=("C", "mean"), q=("q", "mean"), зёрен=("seed", "count")).round(3).reset_index()
+        g["pol"] = g.pol.map(NAMES)
+        text += ("\n\n### Экономический порог: к концу прогона (медиана порога и kappa_экв, средние B, C, q)\n\n" +
+                 md(g.rename(columns={"pol": "политика", "lab": "группа"})))
     print(text)
     open(os.path.join(OUT, "report.md"), "w", encoding="utf-8").write(text + "\n")

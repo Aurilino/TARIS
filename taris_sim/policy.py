@@ -230,7 +230,15 @@ class AgentCrisisPolicy(OraclePolicy):
     некуда переехать из-за лимитов на кластеры, до конца тревог больше не пробуется. Тревога держится не меньше
     шага решений; группу больше max_share узлов в реестре (например, версию ПО, на которую обновилась почти вся
     сеть) агент отмечает тревогой, но не избегает; если без групп в тревоге кандидатов меньше 3n, размещение и
-    перенос идут по всем кандидатам. fixed_thr — постоянные пороги (без обучения): показывает, что даёт сам прогноз."""
+    перенос идут по всем кандидатам. fixed_thr — постоянные пороги (без обучения): показывает, что даёт сам прогноз.
+
+    kappa="econ" — экономический критерий (Э1): эпизод весит не 1 и kappa, а деньгами по ценам резерва
+    (reserve.Costs: c_tr за единицу трафика, W за объект). В начале всплеска агент снимает по своей карте
+    размещения, сколько объектов держат в группе f фрагментов. Перенос стоит C = c_tr * F / k (F — фрагменты в
+    группе) и в верном, и в ложном эпизоде; верный эпизод ещё и приносит B = c_tr * R + W * dL — избегнутый трафик
+    восстановления и избегнутые потери при доле q узлов группы, выбитых кризисом (q агент оценивает по своей
+    разметке). Порог — максимум суммы (y * B - C) по эпизодам с пиком не ниже порога; «не тревожить» (порог inf)
+    тоже допустим."""
 
     GRID = (2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0)
     HOLD = {"storm": 0.25, "cascade": 0.25, "software": 0.25, "wear": 7.0, "exodus": 7.0}   # сутки
@@ -260,8 +268,16 @@ class AgentCrisisPolicy(OraclePolicy):
         self.step = hours / 24.0    # шаг решений о тревогах, сутки: тревога держится не меньше шага
         self.max_share = 0.25       # группу больше этой доли узлов в реестре агент не избегает (только тревога)
         self.nomove = set()         # фрагменты, которым при текущих тревогах некуда переехать
+        self.econ = kappa == "econ"
+        if self.econ:
+            from .reserve import Costs
+            from .config import HOUR
+            self.costs = Costs()
+            self.w_loss = world.cfg.T_rep_hours * HOUR + world.cfg.repair_hours * HOUR   # окно до конца восстановления
+            self.q_hit = {k: [0.0, 0.0] for k in self.labels}     # выбито узлов и всего узлов в верных эпизодах
+            self.econ_log = []                                    # (t, группа, порог, kappa_экв, B, C)
         self.name = ("Агент кризисов" if forecast else "Оракул без прогноза") + f", n={n}" + \
-            (", шаг тревог 1 ч" if fast and hours < 24 else "")
+            (", шаг тревог 1 ч" if fast and hours < 24 else "") + (", экономический порог" if self.econ else "")
 
     # ---- разметка своих всплесков (П3)
     def _crisis_seen(self, lab, nodes, t0, t1):
@@ -277,22 +293,84 @@ class AgentCrisisPolicy(OraclePolicy):
         rate = (fc.cum["longst"][nodes, min(cut, fc.cum_day)].sum() + 0.5) / max(fc.cum["up"][nodes, min(cut, fc.cum_day)].sum() / fc.cpd, 1.0)
         return n_long >= max(3.0, 3.0 * rate * len(nodes) * (t1 - t0))
 
+    def _hit_share(self, lab, nodes, t0, t1):
+        """Сколько узлов группы кризис выбил надолго (по данным сети): для дата-центра — узлы массового простоя,
+        для партии и региона — узлы, чей простой стал длиннее суток."""
+        fc = self.fc
+        if lab == "dc":
+            d0, d1 = int(max(t0, 0)), int(min(t1, fc.T - 1))
+            return int(fc.mass[nodes, d0:d1 + 1].any(1).sum())
+        c0, c1 = int(t0 * fc.cpd), int(min(t1, fc.T) * fc.cpd)
+        return int((fc.longst[nodes, c0:c1].sum(1) > 0).sum())
+
+    def _snapshot(self, view, g):
+        """Число объектов по числу f своих фрагментов в группе g (по карте размещения): {f: объектов}."""
+        cnt = {}
+        for node in g:
+            for obj, _ in view.on_node(int(node)):
+                cnt[obj] = cnt.get(obj, 0) + 1
+        out = {}
+        for f in cnt.values():
+            out[f] = out.get(f, 0) + 1
+        return out
+
+    def _p_loss(self, m, p):
+        """Вероятность потерять объект с m фрагментами за окно восстановления: больше m - k гибелей из m."""
+        from scipy.stats import binom
+        return float(binom.sf(m - self.k, m, p)) if m >= self.k else 1.0
+
+    def _value(self, lab, snap):
+        """Выгода верной тревоги B и цена переноса C для эпизода со снимком snap (Э1)."""
+        from scipy.stats import binom
+        c, k, n, fc = self.costs, self.k, self.n, self.fc
+        m, N = self.q_hit[lab]
+        q = (m + 1.0) / (N + 2.0)
+        day = min(fc.cum_day, fc.T)
+        lam = (fc.cum["longst"][:, day].sum() + 0.5) / max(fc.cum["up"][:, day].sum() / fc.cpd, 1.0)
+        p = 1.0 - np.exp(-lam * self.w_loss)              # фрагмент гибнет за окно восстановления (фон)
+        F = sum(f * cnt for f, cnt in snap.items())
+        C = c.c_tr * c.size * F / k
+        R = dL = 0.0
+        base = self._p_loss(n, p)
+        for f, cnt in snap.items():
+            R += cnt * c.size * ((1.0 - (1.0 - q) ** f) + q * f / k)
+            dL += cnt * (sum(binom.pmf(r, f, q) * self._p_loss(n - r, p) for r in range(f + 1)) - base)
+        return c.c_tr * R + c.W * dL, C
+
     def _learn(self, t):
         keep = []
         for r in self.pending:
-            start, peak, last, nodes, typ, lab = r
+            start, peak, last, nodes, typ, lab = r[:6]
             due = last + self.LABEL[typ]
             if t < due:
                 keep.append(r)
                 continue
-            self.labels[lab].append((peak, self._crisis_seen(lab, nodes, start, due)))
+            y = self._crisis_seen(lab, nodes, start, due)
+            if self.econ:
+                if y:
+                    self.q_hit[lab][0] += self._hit_share(lab, nodes, start, due)
+                    self.q_hit[lab][1] += len(nodes)
+                self.labels[lab].append((peak, y, r[6]))
+            else:
+                self.labels[lab].append((peak, y))
         self.pending = keep
         for lab, L in self.labels.items():
-            if not self.learn or sum(y for _, y in L) < self.min_pos:
+            if not self.learn or sum(v[1] for v in L) < self.min_pos:
                 continue
-            pk = np.array([p for p, _ in L]); y = np.array([v for _, v in L], bool)
-            gain = [(y & (pk >= c)).sum() - self.kappa * (~y & (pk >= c)).sum() for c in self.GRID]
-            c = self.GRID[int(np.argmax(gain))]
+            pk = np.array([v[0] for v in L]); y = np.array([v[1] for v in L], bool)
+            if self.econ:
+                BC = np.array([self._value(lab, v[2]) for v in L])
+                gv = y * BC[:, 0] - BC[:, 1]
+                grid = self.GRID + (np.inf,)
+                gain = np.array([gv[pk >= c].sum() for c in grid])
+                c = grid[int(np.flatnonzero(gain >= gain.max() - 1e-12)[-1])]   # при равенстве — больший порог
+                Bm, Cm = float(BC[y, 0].mean()), float(BC[:, 1].mean())
+                kap = Cm / (Bm - Cm) if Bm > Cm else np.inf
+                if not self.econ_log or self.econ_log[-1][1:3] != (lab, c) or t - self.econ_log[-1][0] >= 30:
+                    self.econ_log.append((t, lab, c, kap, Bm, Cm))
+            else:
+                gain = [(y & (pk >= c)).sum() - self.kappa * (~y & (pk >= c)).sum() for c in self.GRID]
+                c = self.GRID[int(np.argmax(gain))]
             if c != self.thr[lab]:
                 self.thr[lab] = c
                 self.thr_log.append((t, lab, c, len(L), int(y.sum())))
@@ -323,6 +401,8 @@ class AgentCrisisPolicy(OraclePolicy):
             if S > self.floor:
                 if run is None:
                     self.runs[gk] = [t, S, t, g, typ, lab]
+                    if self.econ and lab != "software":
+                        self.runs[gk].append(self._snapshot(view, g))     # до переносов этого вызова
                 else:
                     run[1] = max(run[1], S); run[2] = t; run[4] = typ
             elif run is not None and t - run[2] > self.HOLD[typ]:
