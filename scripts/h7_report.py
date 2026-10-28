@@ -106,16 +106,24 @@ def figure(df, eps):
         for p in [x for x in ORDER if x in set(g.policy)]:
             x = g[g.policy == p]
             (mt, ht), (ml, hl) = ci(x.traffic), ci(x.lost)
-            ax.errorbar(mt / 1000, ml, xerr=ht / 1000, yerr=hl, fmt="o", ms=7, lw=1.5, color=colors[p], label=NAMES[p])
+            hl = 0.0 if not np.isfinite(hl) else hl
+            # потери неотрицательны: нижняя граница интервала обрезается нулём
+            ax.errorbar(mt / 1000, ml, xerr=ht / 1000, yerr=[[min(hl, ml)], [hl]], fmt="o", ms=7, lw=1.5,
+                        color=colors[p], label=NAMES[p])
         ax.set_title(f"{s}, аудит раз в {a} сут", fontsize=10)
         ax.set_xlabel("трафик восстановления, тыс. объёмов в год", fontsize=9)
         ax.grid(alpha=0.25, lw=0.6)
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)
     axes[0][0].set_ylabel("потеряно объектов за 3 года (из 4 380)", fontsize=9)
-    axes[0][-1].legend(fontsize=8, frameon=False, loc="upper right")
+    handles, labels = {}, {}
+    for ax in axes[0]:
+        for h, l in zip(*ax.get_legend_handles_labels()):
+            handles.setdefault(l, h)
+    order = [NAMES[p] for p in ORDER if NAMES[p] in handles]
+    fig.legend([handles[l] for l in order], order, fontsize=8, frameon=False, loc="lower center", ncol=4)
     fig.suptitle(f"H7: трафик восстановления и потери, среднее и 95% ДИ по зёрнам (ε = {eps:g} за год)", fontsize=10)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.1, 1, 1))
     os.makedirs(os.path.join(ROOT, "figures"), exist_ok=True)
     path = os.path.join(ROOT, "figures", "h7_traffic_loss.png" if eps == 1e-3 else f"h7_traffic_loss_e{eps:g}.png")
     fig.savefig(path, dpi=150)
