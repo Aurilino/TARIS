@@ -213,6 +213,150 @@ class CrisisOraclePolicy(OraclePolicy):
         return out
 
 
+class AgentCrisisPolicy(OraclePolicy):
+    """Агент с прогнозом кризисов (шаг 5, Ч5): размещение как у оракула, тревоги — по счёту аномалий агента
+    (forecast.Forecaster) только по данным сети. Пока тревога по группе узлов действует, новые фрагменты в группу
+    не кладутся, а с её узлов фрагменты переносятся заранее — как у оракула кризисов, но без знания истины.
+
+    Тревога поднимается, когда счёт группы выше порога своего типа, и держится hold суток после последнего
+    превышения. Порог агент учит сам (П3): каждый всплеск счёта выше floor становится эпизодом; через
+    горизонт разметки агент смотрит, случился ли в группе кризис (массовый простой дата-центра — для бури
+    и каскада; не меньше двух узлов партии, ушедших в простой дольше суток, — для износа; уходы в регионе
+    втрое выше фона — для массового ухода). Порог — максимум (верные - kappa * ложные) по эпизодам с пиком
+    не ниже порога; пока верных эпизодов меньше min_pos — начальный порог c_init. Для сбоя ПО (эпизодов
+    мало) порог постоянный — c_init.
+    fast=True — тревоги и перенос каждый подшаг (ledger, alarm_step_hours); forecast=False — та же политика
+    без прогноза (нижняя граница для H8). За один вызов — не больше max_moves переносов; фрагмент, которому
+    некуда переехать из-за лимитов на кластеры, до конца тревог больше не пробуется. Тревога держится не меньше
+    шага решений; группу больше max_share узлов в реестре (например, версию ПО, на которую обновилась почти вся
+    сеть) агент отмечает тревогой, но не избегает; если без групп в тревоге кандидатов меньше 3n, размещение и
+    перенос идут по всем кандидатам. fixed_thr — постоянные пороги (без обучения): показывает, что даёт сам прогноз."""
+
+    GRID = (2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0, 20.0, 30.0)
+    HOLD = {"storm": 0.25, "cascade": 0.25, "software": 0.25, "wear": 7.0, "exodus": 7.0}   # сутки
+    LABEL = {"storm": 1.0, "cascade": 1.0, "software": 1.0, "wear": 30.0, "exodus": 14.0}  # горизонт разметки
+    LEARN = {"storm": "dc", "cascade": "dc", "wear": "wear", "exodus": "exodus", "software": None}
+
+    def __init__(self, world, n: int = 13, gamma: float = 1.0, fast: bool = False, forecast: bool = True,
+                 c_init: float = 10.0, floor: float = 2.0, kappa: float = 0.5, min_pos: int = 3,
+                 max_moves: int = 2000, fixed_thr: dict | None = None):
+        from .experience import Experience
+        from .forecast import Forecaster
+        super().__init__(world, n, gamma)
+        self.fast, self.forecast = fast, forecast
+        hours = world.cfg.alarm_step_hours if fast else 24
+        self.fc = Forecaster(world, Experience(world), step_hours=hours)
+        self.c_init, self.floor, self.kappa, self.min_pos = c_init, floor, kappa, min_pos
+        self.thr = {k: c_init for k in ("dc", "wear", "exodus", "software")}
+        self.learn = fixed_thr is None          # fixed_thr — постоянные пороги по группам, без обучения
+        if fixed_thr:
+            self.thr.update(fixed_thr)
+        self.active = {}          # (тип, ctype, кластер) -> [до какого момента, узлы]
+        self.runs = {}            # группа -> открытый всплеск: [начало, пик, последнее превышение floor, узлы, тип]
+        self.pending = []         # закрытые всплески, ждущие разметки
+        self.labels = {k: [] for k in ("dc", "wear", "exodus")}      # (пик, был ли кризис)
+        self.thr_log = []
+        self.max_moves = max_moves  # переносов за один вызов (пропускная способность сети)
+        self.step = hours / 24.0    # шаг решений о тревогах, сутки: тревога держится не меньше шага
+        self.max_share = 0.25       # группу больше этой доли узлов в реестре агент не избегает (только тревога)
+        self.nomove = set()         # фрагменты, которым при текущих тревогах некуда переехать
+        self.name = ("Агент кризисов" if forecast else "Оракул без прогноза") + f", n={n}" + \
+            (", шаг тревог 1 ч" if fast and hours < 24 else "")
+
+    # ---- разметка своих всплесков (П3)
+    def _crisis_seen(self, lab, nodes, t0, t1):
+        fc = self.fc
+        d0, d1 = int(max(t0, 0)), int(min(t1, fc.T - 1))
+        if lab == "dc":
+            return bool(fc.mass[nodes, d0:d1 + 1].any())
+        c0, c1 = int(t0 * fc.cpd), int(min(t1, fc.T) * fc.cpd)
+        n_long = float(fc.longst[nodes, c0:c1].sum())
+        if lab == "wear":
+            return n_long >= 2
+        cut = max(int(t0) - 30, 1)
+        rate = (fc.cum["longst"][nodes, min(cut, fc.cum_day)].sum() + 0.5) / max(fc.cum["up"][nodes, min(cut, fc.cum_day)].sum() / fc.cpd, 1.0)
+        return n_long >= max(3.0, 3.0 * rate * len(nodes) * (t1 - t0))
+
+    def _learn(self, t):
+        keep = []
+        for r in self.pending:
+            start, peak, last, nodes, typ, lab = r
+            due = last + self.LABEL[typ]
+            if t < due:
+                keep.append(r)
+                continue
+            self.labels[lab].append((peak, self._crisis_seen(lab, nodes, start, due)))
+        self.pending = keep
+        for lab, L in self.labels.items():
+            if not self.learn or sum(y for _, y in L) < self.min_pos:
+                continue
+            pk = np.array([p for p, _ in L]); y = np.array([v for _, v in L], bool)
+            gain = [(y & (pk >= c)).sum() - self.kappa * (~y & (pk >= c)).sum() for c in self.GRID]
+            c = self.GRID[int(np.argmax(gain))]
+            if c != self.thr[lab]:
+                self.thr[lab] = c
+                self.thr_log.append((t, lab, c, len(L), int(y.sum())))
+
+    # ---- интерфейс политики
+    def _avoid(self, t):
+        nodes = [v[1] for v in self.active.values() if v[0] > t and v[2]]
+        return np.unique(np.concatenate(nodes)) if nodes else np.empty(0, int)
+
+    def _cand(self, t, view):
+        cand = view.candidates()
+        avoid = self._avoid(t)
+        if not len(avoid):
+            return cand
+        left = cand[~np.isin(cand, avoid)]
+        # без группы в тревоге узлов не хватает на разнесённое размещение — тревога не должна губить объекты
+        return left if len(left) >= 3 * self.n else cand
+
+    def alarm(self, t, view):
+        if not self.forecast:
+            return []
+        self.fc.update(t, view)
+        self._learn(t)
+        for typ, ct, cl, S, O, E, g in self.fc.scores():
+            lab = self.LEARN[typ] or "software"
+            gk = (lab, ct, str(cl))
+            run = self.runs.get(gk)
+            if S > self.floor:
+                if run is None:
+                    self.runs[gk] = [t, S, t, g, typ, lab]
+                else:
+                    run[1] = max(run[1], S); run[2] = t; run[4] = typ
+            elif run is not None and t - run[2] > self.HOLD[typ]:
+                if lab != "software":
+                    self.pending.append(tuple(run))
+                del self.runs[gk]
+            if S > self.thr[lab]:
+                n_reg = max(int((view.join_times() <= t).sum()), 1)
+                act = len(g) <= self.max_share * n_reg       # слишком большую группу не избегать
+                self.active[(typ, ct, cl)] = [t + max(self.HOLD[typ], self.step), g, act]
+        self.active = {k: v for k, v in self.active.items() if v[0] > t}
+        return [dict(type=k[0], ctype=k[1], cluster=k[2], prob=1.0, horizon=v[0] - t) for k, v in self.active.items()]
+
+    def migrate(self, t, view):
+        if not self.active:
+            self.nomove = set()
+            return []
+        cand = self._cand(t, view)
+        out = []
+        for node in self._avoid(t):
+            for obj, idx in view.on_node(int(node)):
+                if len(out) >= self.max_moves:
+                    return out
+                if (obj, idx) in self.nomove or idx in view.migrating(obj):
+                    continue
+                held = view.holders(obj) | {to for o, _, to in out if o == obj}
+                to = self._choose_spread(self._g, cand, 1, held=held - {int(node)})
+                if to:
+                    out.append((obj, idx, to[0]))
+                else:
+                    self.nomove.add((obj, idx))      # места нет (лимиты на кластеры) — до конца тревог не пробовать
+        return out
+
+
 class ReservePolicy(OraclePolicy):
     """Оракул с резервом информации (шаг 3, пункт 3.11): размещение как у оракула, восстановление — по порогу запаса.
 
