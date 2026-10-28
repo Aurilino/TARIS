@@ -166,9 +166,10 @@ class CrisisOraclePolicy(OraclePolicy):
     не кладёт новые фрагменты на узлы-цели, а до момента кризиса переносит с них фрагменты.
     О внезапных кризисах не знает, ложные тревоги отличает от кризисов. Верхняя граница для H8."""
 
-    def __init__(self, world, n: int = 15, gamma: float = 1.0):
+    def __init__(self, world, n: int = 15, gamma: float = 1.0, fast: bool = False):
         super().__init__(world, n, gamma)
-        self.name = f"Оракул кризисов, n={n}"
+        self.name = f"Оракул кризисов, n={n}" + (", тревоги каждый подшаг" if fast else "")
+        self.fast = fast              # тревоги и перенос с шагом alarm_step_hours (ledger, Ч2)
         cr = world.crises
         self.known = cr[cr["predictable"] & ~cr["false_alarm"]].reset_index(drop=True)
         self.targets = {e["id"]: e["targets"] for e in world.crisis.episodes}

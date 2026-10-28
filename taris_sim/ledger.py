@@ -14,6 +14,7 @@ Ledger исполняет решения политики в мире: разм�
 """
 from __future__ import annotations
 
+import hashlib
 import heapq
 import numpy as np
 import pandas as pd
@@ -38,7 +39,11 @@ class NetworkView:
         """Узлы, зарегистрированные к моменту t, не находящиеся в наблюдаемом простое и не заполненные."""
         L = self.L
         e = int(self.t)
-        ok = L.registered_by(self.t) & ~L.obs_down[:, min(e, L.T - 1)] & (L.used < L.capacity)
+        if self.t != e:                          # подшаг внутри эпохи: наблюдаемый простой — в момент t
+            down = ~np.isnan(self.down_since())
+        else:
+            down = L.obs_down[:, min(e, L.T - 1)]
+        ok = L.registered_by(self.t) & ~down & (L.used < L.capacity)
         return np.flatnonzero(ok)
 
     def needs_repair(self):
@@ -303,6 +308,7 @@ class Ledger:
         Перенос не удаётся (трафик всё равно потрачен), если к моменту завершения исходный фрагмент
         уничтожен или признан утраченным, объект потерян или получатель ушёл или заполнен."""
         e = min(int(t), self.T - 1)
+        frac = t != int(t)                       # подшаг внутри эпохи: доступность источника — в момент t
         for obj, idx, to in reqs:
             obj, idx, to = int(obj), int(idx), int(to)
             if self.obj_lost_t[obj] != np.inf or idx in self.mig_pending.get(obj, ()):
@@ -313,7 +319,8 @@ class Ledger:
             f = src[0]
             node = self.f_node[f]
             holders = {self.f_node[g] for g in self.obj_frags[obj]}
-            if (not self.f_exist[f] or self.true_down_at[node, e] or to in holders
+            down = (not self.is_up(node, t)) if frac else self.true_down_at[node, e]
+            if (not self.f_exist[f] or down or to in holders
                     or not self.registered_by(t)[to] or self.alive_to[to] <= t or self.used[to] >= self.capacity[to]):
                 continue
             traffic = self.size[obj] / self.cfg.k
@@ -348,11 +355,20 @@ class Ledger:
         created = self.data.objects["created_epoch"].to_numpy()
         n_created = 0
         prev_step = None
+        # политика с fast = True решает о тревогах и переносе чаще суток — с шагом alarm_step_hours (Ч2)
+        fast = bool(getattr(policy, "fast", False))
+        sub = self.cfg.alarm_step_hours / 24.0
+        last_obs = 0.0
         for t in range(T):
             step = self.ch.step()
             view.t, view.seed = float(t), bytes.fromhex(step["seed"])
-            # наблюдения, известные к моменту решения t, — эпохи t - 1 (вывод step() эпохи t описывает [t, t + 1))
-            view.step = prev_step
+            # наблюдения, известные к моменту решения t: у обычной политики — эпохи t - 1 (вывод step() эпохи t
+            # описывает [t, t + 1)); у быстрой — с момента её прошлого подшага
+            if fast and sub < 1.0:
+                view.step = self.ch.observe(last_obs, float(t)) if t > 0 else None
+                last_obs = float(t)
+            else:
+                view.step = prev_step
             prev_step = step
             for a in policy.alarm(float(t), view):
                 self.log_alarm.append((float(t), a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
@@ -374,6 +390,19 @@ class Ledger:
                     # меньше k фрагментов с самого начала: объект не сохранён — это потеря
                     self.obj_lost_t[obj] = float(t)
                     self.log_loss.append((int(obj), float(t)))
+            if fast and sub < 1.0:
+                # подшаги внутри эпохи (Ч2): только тревоги и перенос; восстановление и размещение — раз в сутки
+                for j in range(1, int(round(1.0 / sub))):
+                    tau = t + j * sub
+                    self._process(tau)
+                    view.t = tau
+                    view.seed = hashlib.sha256(bytes.fromhex(step["seed"]) + j.to_bytes(2, "big")).digest()
+                    view.step = self.ch.observe(last_obs, tau)
+                    last_obs = tau
+                    for a in policy.alarm(tau, view):
+                        self.log_alarm.append((tau, a["type"], a["ctype"], a["cluster"], float(a.get("prob", 1.0)),
+                                               float(a.get("horizon", 1.0))))
+                    self._migrate(tau, policy.migrate(tau, view))
             self._process(t + 1.0)
             n_created += int((created == t).sum())
             alive_objs = n_created - len(self.log_loss)
