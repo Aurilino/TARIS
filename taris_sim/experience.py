@@ -27,6 +27,8 @@ class Registry:
         self.N = len(nd)
         self.region = nd["region"].to_numpy().astype(int)
         self.provider = nd["provider"].to_numpy().astype(int)
+        self.wallet = pd.factorize(nd["wallet"], sort=True)[0].astype(int)
+        self.subnet = pd.factorize(nd["subnet"], sort=True)[0].astype(int)
         self.hw = nd["hw_claimed"].to_numpy().astype(int)
         self.dc = nd["dc"].to_numpy().astype(int)
         self.is_device = self.dc < 0                 # заявленный класс: устройство пользователя (пункт 3.10)

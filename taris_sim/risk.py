@@ -144,6 +144,22 @@ class RiskModel:
         # А3: тяжесть — phi по случаям с ясным исходом
         ev = exp.events(t, iv, drop)
         res = ev[np.isfinite(ev["total"])]
+        # Среднее превышение франшизы для частичных случаев. Индивидуальные средние
+        # стягиваются к сетевому среднему с той же кредибилити, что и частота.
+        partial = res[res["total"] == 0]
+        pn = partial["node"].to_numpy(dtype=int)
+        px = np.maximum(partial["dur"].to_numpy(dtype=float) - exp.d, 0.0)
+        pc = np.bincount(pn, minlength=exp.N).astype(float)
+        ps = np.bincount(pn, weights=px, minlength=exp.N).astype(float)
+        if len(px):
+            m0_partial = float(px.mean())
+            m_node = np.divide(ps, pc, out=np.full(exp.N, m0_partial), where=pc > 0)
+            self.m_partial = self.Z * m_node + (1.0 - self.Z) * m0_partial
+            self.m_partial_global = m0_partial
+        else:
+            # Без наблюдавшихся частичных исходов тариф этого компонента не определён.
+            self.m_partial = np.full(exp.N, np.nan)
+            self.m_partial_global = float("nan")
         nd = res["node"].to_numpy()
         age_ev = np.maximum(res["start"].to_numpy() - exp.join[nd], 0.0)
         Xp = self._phi_cols(r.region[nd], age_ev, r.hw[nd], r.is_device[nd].astype(int))
@@ -184,6 +200,43 @@ class RiskModel:
         tot = ep["total"].dropna()
         self.p_shock_total = float((tot.sum() + 0.1) / (len(tot) + 1.0))
         self.eta = {ct: self.nu[ct] * self.p_shock_total for ct in ctypes}
+        # Тарифная тяжесть шоков по отдельным публичным доменам. Частота использует
+        # тот же пуассоновский приор, что и pooled-оценка; доля гибели и длительность
+        # частичных исходов стягиваются к сетевым значениям при нехватке эпизодов.
+        self.shock_types = tuple(ctypes)
+        self.shock_nu, self.shock_phi, self.shock_m = {}, {}, {}
+        member = {"region": r.region, "provider": r.provider, "dc": r.dc}
+        shock_iv = iv.iloc[np.flatnonzero(drop)]
+        shock_node = shock_iv["node"].to_numpy(dtype=int)
+        shock_start = shock_iv["start"].to_numpy(dtype=float)
+        shock_dur = shock_iv["dur_seen"].to_numpy(dtype=float)
+        shock_end = shock_iv["end"].to_numpy(dtype=float)
+        prior_exposure = 0.5 / max(nu0, 1e-12)
+        for ct in ctypes:
+            ids = member[ct]
+            for cl in np.unique(ids[ids >= 0]):
+                key = (ct, int(cl))
+                cluster_ep = ep[(ep["ctype"] == ct) & (ep["cluster"] == cl)]
+                joins = exp.join[ids == cl]
+                joins = joins[np.isfinite(joins)]
+                exposure = max(float(t - max(float(joins.min()), 0.0)), 0.0) if len(joins) else 0.0
+                self.shock_nu[key] = (len(cluster_ep) + 0.5) / (exposure + prior_exposure)
+                resolved = cluster_ep["total"].dropna().to_numpy(dtype=float)
+                self.shock_phi[key] = float((resolved.sum() + self.p_shock_total) / (len(resolved) + 1.0))
+                partial_excess = []
+                cluster_nodes = ids[shock_node] == cl
+                for start in cluster_ep["start"].to_numpy(dtype=float):
+                    # Эпизод объединяет простои, начавшиеся в пределах десяти минут.
+                    in_episode = cluster_nodes & (shock_start >= start - 1e-9) & (shock_start <= start + 10.0 / 1440.0 + 1e-9)
+                    partial = in_episode & np.isfinite(shock_end) & (shock_dur <= exp.T_rep)
+                    if partial.any():
+                        partial_excess.extend(np.maximum(shock_dur[partial] - exp.d, 0.0).tolist())
+                if partial_excess and np.isfinite(self.m_partial_global):
+                    self.shock_m[key] = float((sum(partial_excess) + self.m_partial_global) / (len(partial_excess) + 1.0))
+                elif partial_excess:
+                    self.shock_m[key] = float(np.mean(partial_excess))
+                else:
+                    self.shock_m[key] = self.m_partial_global
         self.fitted = True
         return self
 
@@ -206,6 +259,15 @@ class RiskModel:
         age = np.maximum(t - self.exp.join[nodes], 0.0)
         X = self._phi_cols(r.region[nodes], age, r.hw[nodes], r.is_device[nodes].astype(int))[:, self.keep_phi]
         return 1.0 / (1.0 + np.exp(-(X @ self.gamma)))
+
+    def partial_excess(self, nodes) -> np.ndarray:
+        """Ожидаемое превышение франшизы для частичного страхового случая, в сутках.
+
+        Сетевое среднее стягивает узловые средние с весом кредибилити Z. Возвращает NaN,
+        если в истории ещё нет ни одного частичного случая: тарифный компонент тогда
+        нельзя честно оценить по данным.
+        """
+        return self.m_partial[np.asarray(nodes, int)]
 
     def refresh(self, t: float):
         """Признаки, меняющиеся каждую эпоху без переобучения: опыт микропрерываний."""

@@ -175,7 +175,8 @@ class Config:
     audit_noise: float = 0.005             # ложный провал аудита PDP
 
     # --- 3.4 / 3.6. Восстановление и учёт
-    repair_hours: float = 2.0              # длительность операции восстановления
+    repair_hours: float = 2.0              # фиксированная подготовка операции восстановления
+    transfer_rate_size_per_hour: float | None = None  # скорость передачи; None оставляет старую задержку
     track_objects: int = 300               # объектов для точного учёта недоступности
 
     @property

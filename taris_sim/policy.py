@@ -83,16 +83,39 @@ class OraclePolicy(UniformPolicy):
     Вес узла обратно пропорционален истинному риску; в одном дата-центре — не больше одного фрагмента объекта,
     у одного провайдера, в одном регионе и у одного владельца — не больше min(n-k, k-1)."""
 
-    def __init__(self, world, n: int = 15, gamma: float = 1.0):
+    def __init__(self, world, n: int = 15, gamma: float = 1.0, oracle: bool = True, claimed: bool = True):
         super().__init__(n)
-        self.name = f"Оракул, n={n}"
+        self.gamma = float(gamma)
         nd = world.nodes
-        phi = np.array([world.true_phi(i) for i in range(len(nd))])
-        q = nd["lam_avg"].to_numpy() * phi
-        # устройства пользователей (3.10) ещё и уходят чаще: добавляется избыточный уход старожилов (у узлов в ДЦ — 0)
-        q = q + (nd["m_churn"].to_numpy() - 1.0) * world.cfg.churn_base
-        self.w = (1.0 / np.maximum(q, 1e-9)) ** gamma
-        self.dc, self.prov, self.reg, self.own = (nd[c].to_numpy() for c in ("dc", "provider", "region", "owner"))
+        if oracle:
+            phi = np.array([world.true_phi(i) for i in range(len(nd))])
+            q = nd["lam_avg"].to_numpy() * phi
+            # Устройства чаще уходят: добавить повышенный риск ухода относительно серверов.
+            q = q + (nd["m_churn"].to_numpy() - 1.0) * world.cfg.churn_base
+            self.w = (1.0 / np.maximum(q, 1e-9)) ** gamma
+            self.own = nd["owner"].to_numpy()
+            self.subnet_domain = None
+            self.name = f"Оракул, n={n}"
+        else:
+            # Только сетевые признаки и, если разрешено, заявленный узлом DC.
+            # Владельца агент не знает; подсеть — доступный сети прокси-домен концентрации.
+            from .experience import Registry
+            reg = Registry(world)
+            self.w = np.ones(len(nd), dtype=float)     # до первой оценки — равномерный выбор
+            self.own = reg.wallet
+            self.subnet_domain = reg.subnet
+            self.name = f"Политика без оракула, n={n}"
+            self._agent_domains = reg
+            if claimed:
+                self.dc = reg.dc.copy()
+            else:
+                # Не использовать заявленный DC даже как ограничение spread.
+                self.dc = world.cfg.n_dc + np.arange(len(nd))
+        if oracle:
+            self._agent_domains = None
+            self.dc = nd["dc"].to_numpy()
+        self.n_subnet = int(self.subnet_domain.max()) + 1 if self.subnet_domain is not None else 0
+        self.prov, self.reg = (nd[c].to_numpy() for c in ("provider", "region"))
         # у устройства нет дата-центра: оно — свой отдельный домен отказа (номера после дата-центров)
         dev = self.dc < 0
         self.dc = np.where(dev, world.cfg.n_dc + np.arange(len(nd)), self.dc)
@@ -124,12 +147,17 @@ class OraclePolicy(UniformPolicy):
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
         cr = np.bincount(self.reg[held], minlength=self.n_reg)
         co = np.bincount(self.own[held], minlength=self.n_own)          # фрагменты объекта у каждого владельца
+        cs = (np.bincount(self.subnet_domain[held], minlength=self.n_subnet)
+              if self.subnet_domain is not None else None)
         cand = cand[~np.isin(cand, held)] if len(held) else cand
         w = self.w[cand].astype(float)
         dc_c, prov_c, reg_c, own_c = self.dc[cand], self.prov[cand], self.reg[cand], self.own[cand]
+        sub_c = self.subnet_domain[cand] if self.subnet_domain is not None else None
         out = []
         for _ in range(m):
             ok = (cd[dc_c] < dc_cap) & (cp[prov_c] < r_prov) & (cr[reg_c] < r_reg) & (co[own_c] < r_own)
+            if cs is not None:
+                ok &= cs[sub_c] < r_own
             ww = w * ok
             tot = ww.sum()
             if tot <= 0:
@@ -139,6 +167,8 @@ class OraclePolicy(UniformPolicy):
             c = int(cand[j]); out.append(c)
             cd[self.dc[c]] += 1; cp[self.prov[c]] += 1; cr[self.reg[c]] += 1
             co[self.own[c]] += 1
+            if cs is not None:
+                cs[self.subnet_domain[c]] += 1
             w[j] = 0.0
         return out
 
@@ -247,7 +277,7 @@ class AgentCrisisPolicy(OraclePolicy):
 
     def __init__(self, world, n: int = 13, gamma: float = 1.0, fast: bool = False, forecast: bool = True,
                  c_init: float = 10.0, floor: float = 2.0, kappa: float = 0.5, min_pos: int = 3,
-                 max_moves: int = 2000, fixed_thr: dict | None = None):
+                 max_moves: int = 2000, fixed_thr: dict | None = None, econ_W: float = 1e4):
         from .experience import Experience
         from .forecast import Forecaster
         super().__init__(world, n, gamma)
@@ -272,7 +302,7 @@ class AgentCrisisPolicy(OraclePolicy):
         if self.econ:
             from .reserve import Costs
             from .config import HOUR
-            self.costs = Costs()
+            self.costs = Costs(W=econ_W)
             self.w_loss = world.cfg.T_rep_hours * HOUR + world.cfg.repair_hours * HOUR   # окно до конца восстановления
             self.q_hit = {k: [0.0, 0.0] for k in self.labels}     # выбито узлов и всего узлов в верных эпизодах
             self.econ_log = []                                    # (t, группа, порог, kappa_экв, B, C)
@@ -451,7 +481,12 @@ class AgentCrisisPolicy(OraclePolicy):
 
 
 class ReservePolicy(OraclePolicy):
-    """Оракул с резервом информации (шаг 3, пункт 3.11): размещение как у оракула, восстановление — по порогу запаса.
+    """Политика резерва информации (шаг 3, пункт 3.11): восстановление — по порогу запаса.
+
+    placement="oracle" (default) выбирает узлы по истинному риску; placement="agent" требует rates="agent"
+    и ранжирует их по оценённой потере фрагмента плюс наблюдаемой частоте шоков доменов. До первой подгонки
+    риск-веса равны. Агент ограничивает концентрацию по региону, провайдеру, заявленному DC (если claimed=True)
+    и публичных кошелька выплат и подсети вместо скрытого поля владельца.
 
     Восстановление объекта (всех признанных утраченными фрагментов разом) запускается, когда запас
     не выше порога R_min. Три варианта для H7:
@@ -468,12 +503,28 @@ class ReservePolicy(OraclePolicy):
 
     def __init__(self, world, n: int = 15, mode: str = "thiele", eps: float = 1e-3, H: int = 365,
                  R_fixed: int | None = None, gamma: float = 1.0, block: int = 30, corr: bool = True,
-                 time_varying: bool = True, rates: str = "true", claimed: bool = True):
+                 time_varying: bool = True, rates: str = "true", claimed: bool = True,
+                 placement: str = "oracle", tariff_settings=None):
         from . import reserve as RS
-        super().__init__(world, n, gamma)
+        if placement not in ("oracle", "uniform", "agent", "tariff"):
+            raise ValueError("placement должен быть 'oracle', 'uniform', 'agent' или 'tariff'")
+        if placement in ("agent", "tariff") and rates != "agent":
+            raise ValueError(f"placement='{placement}' требует rates='agent'")
+        if placement == "tariff":
+            from .tariff import TariffSettings
+            if not isinstance(tariff_settings, TariffSettings):
+                raise ValueError("placement='tariff' требует явный tariff_settings типа TariffSettings")
+        elif tariff_settings is not None:
+            raise ValueError("tariff_settings задаётся только для placement='tariff'")
+        super().__init__(world, n, gamma, oracle=placement == "oracle", claimed=claimed)
+        self.world = world
         self.RS, self.mode, self.eps, self.H, self.block = RS, mode, eps, H, block
         self.corr, self.time_varying = corr and mode == "thiele", time_varying
         self.agent = rates == "agent"
+        self.placement = placement
+        self.tariff_settings = tariff_settings
+        self.tariff_snapshot = None
+        self.tariff_values = None
         if self.agent:
             # оценки агента (шаг 5, пункт 5.1): обучение раз в block эпох; до первого обучения — немедленное восстановление
             from .experience import Experience
@@ -496,6 +547,12 @@ class ReservePolicy(OraclePolicy):
             self.name += ", постоянные интенсивности"
         if self.agent:
             self.name += ", оценки агента" + ("" if claimed else " (только проверяемые признаки)")
+        if placement == "agent":
+            self.name += ", размещение по оценке агента"
+        elif placement == "tariff":
+            self.name += ", размещение по тарифу"
+        elif placement == "uniform":
+            self.name += ", равномерное размещение"
 
     def _threshold(self, obj, nodes, t, view):
         if self.mode == "fixed":
@@ -540,6 +597,49 @@ class ReservePolicy(OraclePolicy):
         self.thr[obj] = (key, R)
         return R
 
+    def _agent_placement_weights(self, t):
+        """Обратный ожидаемый риск фрагмента: индивидуальные потери плюс наблюдаемая частота шоков домена.
+
+        Общие шоки оцениваются только по Experience/RiskModel. Каждый узел получает частоту
+        тех оценённых шоков, в домен которых он входит; скрытый владелец сюда не попадает.
+        """
+        nodes = np.arange(self.model.exp.N)
+        hazard = self.rates.fragment_loss(nodes, t).astype(float, copy=True)
+        for _, _, eta, mask in self.rates.shock_clusters(nodes, t):
+            hazard[mask] += eta
+        self.w = (1.0 / np.maximum(hazard, 1e-9)) ** self.gamma
+
+    def _tariff_placement_weights(self, t, view):
+        """Ранжирование по стоимости хранения и чистой премии; тариф выше базы исключает новые данные."""
+        from .graph import LinkGraph
+        from .tariff import (cluster_volume_share, gross_premium, node_financial_terms,
+                             pure_premium)
+        if self.tariff_snapshot is None or int(t) % self.block == 0:
+            self.tariff_snapshot = LinkGraph(self.world, view.L.ch).snapshot(t)
+        volumes = view.stored_volume()
+        snapshot = self.tariff_snapshot
+        concentration = cluster_volume_share(volumes, (snapshot.clusters, snapshot.clusters_infra))
+        nodes = view.registered()
+        suspicion = snapshot.suspicion[nodes].copy()
+        # Узлы, зарегистрированные после последнего месячного снимка, ещё не имеют
+        # графовой оценки; до обновления графа их связь считается ненаблюдаемой.
+        suspicion[~np.isfinite(suspicion)] = 0.0
+        s = self.tariff_settings
+        pure = pure_premium(self.model, nodes, t, s.basis)
+        if not np.isfinite(pure["total_pure_premium"]).all():
+            raise ValueError("тарифное размещение пока не оценивает тяжесть: нет наблюдённых частичных случаев")
+        gross = gross_premium(pure["total_pure_premium"], concentration[nodes], suspicion,
+                              theta=s.theta, eta=s.eta, zeta=s.zeta)
+        terms = node_financial_terms(gross["gross_premium"], volumes[nodes], self.model.Z[nodes], s.basis,
+                                     reward0=s.reward0, psi=s.psi)
+        weights = np.zeros_like(self.w)
+        cost = s.reward0 + pure["total_pure_premium"]
+        weights[nodes] = np.where(terms["new_data_eligible"], 1.0 / np.maximum(cost, 1e-12), 0.0)
+        self.w = weights
+        self.tariff_values = {"t": float(t), "nodes": nodes.copy(), "pure": pure,
+                              "gross": gross, "financial": terms, "concentration": concentration[nodes],
+                              "suspicion": suspicion}
+
     def on_epoch(self, t, view):
         self._g = self._rng(view)
         if self.agent:
@@ -549,6 +649,16 @@ class ReservePolicy(OraclePolicy):
                 if self.model.fitted:
                     self.model.refresh(t)
                     self.fits.append((t, self.model.a_hat, self.model.pearson, self.model.churn_share))
+            if self.placement in ("agent", "tariff"):
+                if self.model.fitted:
+                    # Актуализируем микропрерывания по доступным наблюдениям; до обучения веса равны.
+                    self.model.refresh(t)
+                    if self.placement == "agent":
+                        self._agent_placement_weights(t)
+                    else:
+                        self._tariff_placement_weights(t, view)
+                else:
+                    self.w.fill(1.0)
         cand = self._cand(t, view)
         reqs = []
         need = view.needs_repair()

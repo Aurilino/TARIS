@@ -115,6 +115,16 @@ class NetworkView:
         """Число фрагментов на каждом узле по карте размещения."""
         return self.L.used.copy()
 
+    def stored_volume(self) -> np.ndarray:
+        """Объём размещённых фрагментов на узлах, в единицах размера объекта."""
+        L = self.L
+        volume = np.zeros(L.N, dtype=float)
+        live = np.flatnonzero(np.asarray(L.f_exist, dtype=bool))
+        if len(live):
+            amount = L.size[np.asarray(L.f_obj, dtype=int)[live]] / L.cfg.k
+            np.add.at(volume, np.asarray(L.f_node, dtype=int)[live], amount)
+        return volume
+
     def node_versions(self) -> np.ndarray:
         """Заявленная версия клиента каждого узла в момент t; -1 у ещё не зарегистрированных."""
         L = self.L
@@ -196,6 +206,15 @@ class Ledger:
 
     def _push(self, t, kind, payload):
         heapq.heappush(self.heap, (t, self.seq, kind, payload)); self.seq += 1
+
+    def _operation_delay(self, traffic):
+        """Задержка передачи: подготовка плюс объём / скорость; None сохраняет прежний режим."""
+        rate = self.cfg.transfer_rate_size_per_hour
+        if rate is None:
+            return self.cfg.repair_hours * HOUR
+        if not np.isfinite(rate) or rate <= 0:
+            raise ValueError("transfer_rate_size_per_hour должен быть конечным и > 0")
+        return (self.cfg.repair_hours + float(traffic) / rate) * HOUR
 
     def _world_events(self):
         c, w = self.cfg, self.w
@@ -300,7 +319,7 @@ class Ledger:
             traffic = (c.k + r) * self.size[obj] / c.k
             self.log_repair.append((obj, t, r, traffic))
             self.pending[obj].update(idx)
-            self._push(t + c.repair_hours * HOUR, "repair_done", (obj, idx, nodes))
+            self._push(t + self._operation_delay(traffic), "repair_done", (obj, idx, nodes))
 
     def _migrate(self, t, reqs):
         """Перенос фрагмента заранее (пункт 3.9): чтение одного фрагмента с доступного узла-источника,
@@ -326,7 +345,7 @@ class Ledger:
             traffic = self.size[obj] / self.cfg.k
             self.mig_pending.setdefault(obj, set()).add(idx)
             self.log_migr.append([obj, idx, node, to, t, traffic, np.nan, False])
-            self._push(t + self.cfg.repair_hours * HOUR, "migrate_done", (f, to, len(self.log_migr) - 1))
+            self._push(t + self._operation_delay(traffic), "migrate_done", (f, to, len(self.log_migr) - 1))
 
     def _migrate_done(self, t, f, to, rec):
         obj, idx = self.f_obj[f], self.f_idx[f]
