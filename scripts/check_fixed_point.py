@@ -39,11 +39,14 @@ def main():
     fl_terms = node_financial_terms(np.array([0.25]), np.array([vol]), np.array([trust]),
                                     PriceBasis(g=g, u=1.0), reward0=reward0, psi=psi)
     coll_err = abs(decode(f_terms[2]) - float(fl_terms["collateral"][0]))
+    tie_ineligible = not financial_terms_q(encode(0.3), 0, SCALE, 0, encode(0.3), 0)[1]
+    below_cutoff_eligible = financial_terms_q(encode(0.3), 0, SCALE, 0, encode(0.300000001), 0)[1]
     checks = [
         (max_error <= 1e-7, f"max абсолютная ошибка тарифа {max_error:.3g} <= 1e-7 (относительная до {max_rel_error:.3g} у малых тарифов)"),
         (ties == 0, f"совпадение допуска на случайной выборке: расхождений {ties}"),
         (f_terms[0] == encode(float(fl_terms["reward_per_volume"][0])), "совпадение вознаграждения"),
         (coll_err <= 5e-8, f"ошибка залога {coll_err:.3g} <= 5e-8"),
+        (tie_ineligible and below_cutoff_eligible, "порог допуска строго: тариф равный reward0 не допускается"),
         (encode("0.0000000005") == 1, "правило округления половины вверх"),
     ]
     for passed, label in checks:
