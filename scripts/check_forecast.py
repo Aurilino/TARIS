@@ -2,7 +2,7 @@
 
 Основной мир, сценарий S6, несколько зёрен; размещение — оракул (на счёт не влияет). Каждую эпоху агент считает
 счёт S по всем группам (taris_sim/forecast.py) только по данным сети. Истина мира берётся лишь для разметки:
-- «предвестник» — эпохи в последние сутки окна [w0, tau) предсказуемых кризисов и ложных тревог (сигнал в
+- «предвестник» — эпохи в последних сутках окна [w0, tau) предсказуемых кризисов и ложных тревог (сигнал в
   данных есть у обоих; для износа и ухода — последние 7 суток окна);
 - «внезапный» — последние сутки перед внезапным кризисом;
 - «фон» — эпохи группы вне любых окон и кризисов этой группы.
@@ -64,13 +64,16 @@ def one(seed, hours=24):
     sc = pd.DataFrame(p.rows, columns=["t", "type", "ctype", "cluster", "S", "O", "E"])
     # буря и каскад — одна группа (дата-центр), тип в счёте зависит от соседей; для разметки — общий
     sc["grp"] = np.where(sc["type"].isin(["storm", "cascade"]), "dc", sc["type"])
+    # Group once: scanning the full hourly table for every crisis is quadratic in its size.
+    sc_groups = {(str(k[0]), str(k[1])): g.reset_index(drop=True)
+                 for k, g in sc.groupby(["grp", "cluster"], sort=False)}
     cr = w.crises.copy()
     cr["grp"] = np.where(cr["type"].isin(["storm", "cascade", "fire"]), "dc", cr["type"])
     cr["ckey"] = cr["cluster"].astype(str)
     print(f"зерно {seed}: прогон {time.time() - t0:.0f} с, счётов {len(sc)}, кризисов {len(cr)}")
     out = []
     for r in cr.itertuples():
-        g = sc[(sc.grp == r.grp) & (sc.cluster == r.ckey)]
+        g = sc_groups.get((str(r.grp), str(r.ckey)), sc.iloc[:0])
         h = WINDOW.get(r.type, 1)
         last = g[(g.t >= r.tau - h) & (g.t < r.tau)]
         win = g[(g.t >= r.w0) & (g.t < r.tau)] if r.predictable else last
@@ -80,13 +83,29 @@ def one(seed, hours=24):
                         S_win=win.S.max() if len(win) else np.nan, W=r.tau - r.w0,
                         lead5=(r.tau - above.t.min()) * 24 if len(above) else np.nan))
     # фон: эпохи группы вне окон [w0 - 1, end + 2] любых эпизодов этой группы
-    bad = []
+    bad = {}
     for r in cr.itertuples():
-        bad.append((r.grp, r.ckey, np.floor(r.w0) - 1 - WINDOW.get(r.type, 1), np.ceil(r.end) + 2))
-    keep = np.ones(len(sc), bool)
-    for grp, ck, a, b in bad:
-        keep &= ~((sc.grp == grp).to_numpy() & (sc.cluster == ck).to_numpy() & (sc.t >= a).to_numpy() & (sc.t <= b).to_numpy())
-    bgd = sc[keep].assign(seed=seed)
+        key = (str(r.grp), str(r.ckey))
+        bad.setdefault(key, []).append((np.floor(r.w0) - 1 - WINDOW.get(r.type, 1), np.ceil(r.end) + 2))
+    bg_parts = []
+    for key, g in sc_groups.items():
+        keep = np.ones(len(g), bool)
+        tt = g.t.to_numpy()
+        spans = sorted(bad.get(key, ()))
+        merged = []
+        for a, b in spans:
+            if merged and a <= merged[-1][1] + 1:
+                merged[-1] = (merged[-1][0], max(merged[-1][1], b))
+            else:
+                merged.append((a, b))
+        for a, b in merged:
+            lo = np.searchsorted(tt, a, side="left")
+            hi = np.searchsorted(tt, b, side="right")
+            keep[lo:hi] = False
+        bg_parts.append(g.loc[keep, ["seed", "grp", "S"]] if "seed" in g else g.loc[keep, ["grp", "S"]].assign(seed=seed))
+    bgd = pd.concat(bg_parts, ignore_index=True) if bg_parts else pd.DataFrame(columns=["seed", "grp", "S"])
+    if "seed" not in bgd:
+        bgd["seed"] = seed
     return pd.DataFrame(out), bgd[["seed", "grp", "S"]]
 
 
