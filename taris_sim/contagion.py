@@ -164,3 +164,56 @@ class ContagionGraph:
         pairs = pd.DataFrame({"j": jj, "i": ii, "O": O[ii, jj], "E": E[ii, jj], "Z": Z[ii, jj],
                               "w": w[ii, jj], "same_dc": same[ii, jj]})
         return ContagionSnapshot(t, tau, pairs, W, rate, O, E, same)
+
+    def propagation_weights(self, snapshot: ContagionSnapshot, min_events: int = 3,
+                            min_credibility: float = 0.5, family_alpha: float = 0.05) -> np.ndarray:
+        """Рёбра для передачи риска после исключения общих видимых доменов.
+
+        Связь допускается только при достаточном числе парных событий и кредибилити,
+        и если узлы принадлежат разным ДЦ, провайдерам и регионам. Так сетевой сигнал
+        не копирует наблюдаемые общие причины отказа.
+        """
+        if (min_events < 1 or not 0.0 <= min_credibility <= 1.0
+                or not np.isfinite(family_alpha) or not 0.0 < family_alpha < 1.0):
+            raise ValueError("нужны min_events >= 1, min_credibility в [0, 1] и family_alpha в (0, 1)")
+        r = self.reg
+        same_provider = r.provider[:, None] == r.provider[None, :]
+        same_region = r.region[:, None] == r.region[None, :]
+        independent_domain = ~(snapshot.same_dc | same_provider | same_region)
+        Z = snapshot.E / (snapshot.E + self.K)
+        enough_evidence = (snapshot.O >= min_events) & (Z >= min_credibility)
+        candidate = independent_domain & enough_evidence
+        if not candidate.any():
+            return np.zeros_like(snapshot.W)
+        # В матрице N x N миллионы одновременных гипотез: точечные пороги O/E
+        # дают множество случайных рёбер. Bonferroni удерживает семейную вероятность
+        # хотя бы одного ложного ребра не выше family_alpha.
+        from scipy.stats import poisson
+        p = poisson.sf(snapshot.O - 1.0, np.maximum(snapshot.E, 1e-12))
+        cutoff = family_alpha / max(self.N * (self.N - 1), 1)
+        return np.where(candidate & (p <= cutoff), snapshot.W, 0.0)
+
+    def decayed_signal(self, weights: np.ndarray, t: float, half_life_days: float = 1.0,
+                       window_days: float = 7.0) -> np.ndarray:
+        """Наблюдаемый риск от недавно отказавших соседей, с затуханием по half-life.
+
+        Событие становится источником только в момент, когда сеть уже распознала его
+        как страховой случай; будущие наблюдения и время до распознавания не используются.
+        Суммарный сигнал насыщается в [0, 1].
+        """
+        if not np.isfinite(half_life_days) or half_life_days <= 0:
+            raise ValueError("half_life_days должен быть конечным и > 0")
+        if not np.isfinite(window_days) or window_days <= 0:
+            raise ValueError("window_days должен быть конечным и > 0")
+        weights = np.asarray(weights, dtype=float)
+        if weights.shape != (self.N, self.N) or not np.isfinite(weights).all() or np.any(weights < 0):
+            raise ValueError("weights должен быть конечной неотрицательной матрицей N x N")
+        node = np.asarray(self.ev_node, dtype=int)
+        seen = np.asarray(self.ev_seen, dtype=float)
+        age = float(t) - seen
+        keep = (age >= 0.0) & (age <= window_days)
+        if not keep.any():
+            return np.zeros(self.N, dtype=float)
+        decay = np.exp2(-age[keep] / half_life_days)
+        raw = weights[:, node[keep]] @ decay
+        return -np.expm1(-raw)

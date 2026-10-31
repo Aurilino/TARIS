@@ -136,12 +136,13 @@ class OraclePolicy(UniformPolicy):
                  + [(r0, r0 + n, dc) for dc in range(2, n + 1)]            # дата-центр
                  + [(r0 + rp, r0 + n, n) for rp in range(1, n + 1)])       # провайдер
         for r_prov, r_reg, dc_cap in steps:
-            out = self._choose_spread_r(rng, cand, m, held, r_prov, r_reg, r0, dc_cap)
+            out = self._choose_spread_r(rng, cand, m, held, r_prov, r_reg, r0, dc_cap,
+                                        greedy=getattr(self, "greedy_placement", False))
             if out:
                 return out
         return []
 
-    def _choose_spread_r(self, rng, cand, m, held, r_prov, r_reg, r_own, dc_cap=1):
+    def _choose_spread_r(self, rng, cand, m, held, r_prov, r_reg, r_own, dc_cap=1, greedy=False):
         held = np.fromiter(held, int) if len(held) else np.empty(0, int)
         cd = np.bincount(self.dc[held], minlength=self.n_dc)
         cp = np.bincount(self.prov[held], minlength=self.n_prov)
@@ -162,8 +163,11 @@ class OraclePolicy(UniformPolicy):
             tot = ww.sum()
             if tot <= 0:
                 return []
-            j = int(np.searchsorted(np.cumsum(ww), rng.random() * tot, side="right"))
-            j = min(j, len(cand) - 1)
+            if greedy:
+                j = int(np.argmax(ww))          # стабильный выбор узла с наименьшим оценённым риском
+            else:
+                j = int(np.searchsorted(np.cumsum(ww), rng.random() * tot, side="right"))
+                j = min(j, len(cand) - 1)
             c = int(cand[j]); out.append(c)
             cd[self.dc[c]] += 1; cp[self.prov[c]] += 1; cr[self.reg[c]] += 1
             co[self.own[c]] += 1
@@ -277,7 +281,8 @@ class AgentCrisisPolicy(OraclePolicy):
 
     def __init__(self, world, n: int = 13, gamma: float = 1.0, fast: bool = False, forecast: bool = True,
                  c_init: float = 10.0, floor: float = 2.0, kappa: float = 0.5, min_pos: int = 3,
-                 max_moves: int = 2000, fixed_thr: dict | None = None, econ_W: float = 1e4):
+                 max_moves: int = 2000, fixed_thr: dict | None = None, econ_W: float = 1e4,
+                 confidence_q: float = 0.10):
         from .experience import Experience
         from .forecast import Forecaster
         super().__init__(world, n, gamma)
@@ -285,6 +290,9 @@ class AgentCrisisPolicy(OraclePolicy):
         hours = world.cfg.alarm_step_hours if fast else 24
         self.fc = Forecaster(world, Experience(world), step_hours=hours)
         self.c_init, self.floor, self.kappa, self.min_pos = c_init, floor, kappa, min_pos
+        if not 0.0 < confidence_q < 0.5:
+            raise ValueError("confidence_q должен быть в интервале (0, 0.5)")
+        self.confidence_q = float(confidence_q)  # нижняя односторонняя граница posterior precision
         self.thr = {k: c_init for k in ("dc", "wear", "exodus", "software")}
         self.learn = fixed_thr is None          # fixed_thr — постоянные пороги по группам, без обучения
         if fixed_thr:
@@ -294,6 +302,8 @@ class AgentCrisisPolicy(OraclePolicy):
         self.pending = []         # закрытые всплески, ждущие разметки
         self.labels = {k: [] for k in ("dc", "wear", "exodus")}      # (пик, был ли кризис)
         self.thr_log = []
+        self.calibration_log = []  # момент, тип, порог, n, positives, posterior mean, lower bound, utility
+        self._cal_mark = {}
         self.max_moves = max_moves  # переносов за один вызов (пропускная способность сети)
         self.step = hours / 24.0    # шаг решений о тревогах, сутки: тревога держится не меньше шага
         self.max_share = 0.25       # группу больше этой доли узлов в реестре агент не избегает (только тревога)
@@ -306,7 +316,7 @@ class AgentCrisisPolicy(OraclePolicy):
             self.w_loss = world.cfg.T_rep_hours * HOUR + world.cfg.repair_hours * HOUR   # окно до конца восстановления
             self.q_hit = {k: [0.0, 0.0] for k in self.labels}     # выбито узлов и всего узлов в верных эпизодах
             self.econ_log = []                                    # (t, группа, порог, kappa_экв, B, C)
-            self._coef_memo, self._econ_mark = {}, {}
+            self._coef_memo = {}
         self.name = ("Агент кризисов" if forecast else "Оракул без прогноза") + f", n={n}" + \
             (", шаг тревог 1 ч" if fast and hours < 24 else "") + (", экономический порог" if self.econ else "")
 
@@ -395,25 +405,61 @@ class AgentCrisisPolicy(OraclePolicy):
         for lab, L in self.labels.items():
             if not self.learn or sum(v[1] for v in L) < self.min_pos:
                 continue
+            mark = (len(L), int(t) if self.econ else None)
+            if self._cal_mark.get(lab) == mark:
+                continue
+            self._cal_mark[lab] = mark
             pk = np.array([v[0] for v in L]); y = np.array([v[1] for v in L], bool)
+            from scipy.stats import beta as beta_dist
             if self.econ:
-                mark = (len(L), int(t))
-                if self._econ_mark.get(lab) == mark:     # пересчёт — при новых метках или раз в сутки (фон p)
-                    continue
-                self._econ_mark[lab] = mark
                 self._coef_memo = {}
                 BC = np.array([self._value(lab, v[2]) for v in L])
-                gv = y * BC[:, 0] - BC[:, 1]
                 grid = self.GRID + (np.inf,)
-                gain = np.array([gv[pk >= c].sum() for c in grid])
+                gain, posterior = [], []
+                for c0 in grid:
+                    selected = pk >= c0
+                    n_sel = int(selected.sum())
+                    if not n_sel:
+                        p_mean = p_low = 0.0
+                        utility = 0.0
+                    else:
+                        pos = int(y[selected].sum())
+                        a, b = pos + 0.5, n_sel - pos + 0.5  # Jeffreys Beta prior
+                        p_mean = a / (a + b)
+                        p_low = float(beta_dist.ppf(self.confidence_q, a, b))
+                        utility = p_low * float(BC[selected, 0].sum()) - float(BC[selected, 1].sum())
+                    gain.append(utility)
+                    posterior.append((n_sel, int(y[selected].sum()) if n_sel else 0, p_mean, p_low))
+                gain = np.asarray(gain)
                 c = grid[int(np.flatnonzero(gain >= gain.max() - 1e-12)[-1])]   # при равенстве — больший порог
                 Bm, Cm = float(BC[y, 0].mean()), float(BC[:, 1].mean())
                 kap = Cm / (Bm - Cm) if Bm > Cm else np.inf
+                n_sel, n_pos, p_mean, p_low = posterior[int(np.flatnonzero(gain >= gain.max() - 1e-12)[-1])]
                 if not self.econ_log or self.econ_log[-1][1:3] != (lab, c) or t - self.econ_log[-1][0] >= 30:
                     self.econ_log.append((t, lab, c, kap, Bm, Cm))
             else:
-                gain = [(y & (pk >= c)).sum() - self.kappa * (~y & (pk >= c)).sum() for c in self.GRID]
-                c = self.GRID[int(np.argmax(gain))]
+                grid = self.GRID + (np.inf,)
+                gain, posterior = [], []
+                for c0 in grid:
+                    selected = pk >= c0
+                    n_sel = int(selected.sum())
+                    if not n_sel:
+                        p_mean = p_low = utility = 0.0
+                        n_pos = 0
+                    else:
+                        n_pos = int(y[selected].sum())
+                        a, b = n_pos + 0.5, n_sel - n_pos + 0.5  # Jeffreys Beta prior
+                        p_mean = a / (a + b)
+                        p_low = float(beta_dist.ppf(self.confidence_q, a, b))
+                        utility = n_sel * (p_low - self.kappa * (1.0 - p_low))
+                    gain.append(utility)
+                    posterior.append((n_sel, n_pos, p_mean, p_low))
+                gain = np.asarray(gain)
+                best = int(np.flatnonzero(gain >= gain.max() - 1e-12)[-1])
+                c = grid[best]
+                n_sel, n_pos, p_mean, p_low = posterior[best]
+            self.calibration_log.append((float(t), lab, float(c), int(n_sel), int(n_pos),
+                                         float(p_mean), float(p_low), float(gain.max())))
             if c != self.thr[lab]:
                 self.thr[lab] = c
                 self.thr_log.append((t, lab, c, len(L), int(y.sum())))
@@ -504,11 +550,14 @@ class ReservePolicy(OraclePolicy):
     def __init__(self, world, n: int = 15, mode: str = "thiele", eps: float = 1e-3, H: int = 365,
                  R_fixed: int | None = None, gamma: float = 1.0, block: int = 30, corr: bool = True,
                  time_varying: bool = True, rates: str = "true", claimed: bool = True,
-                 placement: str = "oracle", tariff_settings=None):
+                 placement: str = "oracle", tariff_settings=None, contagion_strength: float = 0.0,
+                 contagion_half_life_days: float = 1.0, contagion_window_days: float = 7.0,
+                 contagion_min_events: int = 3, contagion_min_credibility: float = 0.5,
+                 contagion_family_alpha: float = 0.05):
         from . import reserve as RS
-        if placement not in ("oracle", "uniform", "agent", "tariff"):
-            raise ValueError("placement должен быть 'oracle', 'uniform', 'agent' или 'tariff'")
-        if placement in ("agent", "tariff") and rates != "agent":
+        if placement not in ("oracle", "uniform", "agent", "agent_greedy", "tariff"):
+            raise ValueError("placement должен быть 'oracle', 'uniform', 'agent', 'agent_greedy' или 'tariff'")
+        if placement in ("agent", "agent_greedy", "tariff") and rates != "agent":
             raise ValueError(f"placement='{placement}' требует rates='agent'")
         if placement == "tariff":
             from .tariff import TariffSettings
@@ -518,9 +567,33 @@ class ReservePolicy(OraclePolicy):
             raise ValueError("tariff_settings задаётся только для placement='tariff'")
         super().__init__(world, n, gamma, oracle=placement == "oracle", claimed=claimed)
         self.world = world
+        self.greedy_placement = placement == "agent_greedy"
         self.RS, self.mode, self.eps, self.H, self.block = RS, mode, eps, H, block
         self.corr, self.time_varying = corr and mode == "thiele", time_varying
         self.agent = rates == "agent"
+        contagion_params = np.asarray([contagion_strength, contagion_half_life_days,
+                                       contagion_window_days, contagion_min_credibility,
+                                       contagion_family_alpha], dtype=float)
+        if (not np.isfinite(contagion_params).all() or contagion_strength < 0
+                or contagion_half_life_days <= 0 or contagion_window_days <= 0
+                or not 0.0 <= contagion_min_credibility <= 1.0 or contagion_min_events < 1
+                or not 0.0 < contagion_family_alpha < 1.0):
+            raise ValueError("некорректные параметры передачи риска по графу")
+        if contagion_strength > 0 and not self.agent:
+            raise ValueError("передача риска по графу доступна только rates='agent'")
+        self.contagion_strength = float(contagion_strength)
+        self.contagion_half_life_days = float(contagion_half_life_days)
+        self.contagion_window_days = float(contagion_window_days)
+        self.contagion_min_events = int(contagion_min_events)
+        self.contagion_min_credibility = float(contagion_min_credibility)
+        self.contagion_family_alpha = float(contagion_family_alpha)
+        self.contagion_graph = None
+        self.contagion_W = None
+        self.contagion_signal = np.zeros(len(world.nodes), dtype=float)
+        self.contagion_edges = 0
+        if self.contagion_strength > 0:
+            from .contagion import ContagionGraph
+            self.contagion_graph = ContagionGraph(world, tau=1.0, K=1.0, block=block)
         self.placement = placement
         self.tariff_settings = tariff_settings
         self.tariff_snapshot = None
@@ -547,8 +620,10 @@ class ReservePolicy(OraclePolicy):
             self.name += ", постоянные интенсивности"
         if self.agent:
             self.name += ", оценки агента" + ("" if claimed else " (только проверяемые признаки)")
-        if placement == "agent":
+        if placement in ("agent", "agent_greedy"):
             self.name += ", размещение по оценке агента"
+            if self.greedy_placement:
+                self.name += " (жадное)"
         elif placement == "tariff":
             self.name += ", размещение по тарифу"
         elif placement == "uniform":
@@ -607,6 +682,8 @@ class ReservePolicy(OraclePolicy):
         hazard = self.rates.fragment_loss(nodes, t).astype(float, copy=True)
         for _, _, eta, mask in self.rates.shock_clusters(nodes, t):
             hazard[mask] += eta
+        if self.contagion_strength > 0:
+            hazard *= 1.0 + self.contagion_strength * self.contagion_signal[nodes]
         self.w = (1.0 / np.maximum(hazard, 1e-9)) ** self.gamma
 
     def _tariff_placement_weights(self, t, view):
@@ -628,32 +705,44 @@ class ReservePolicy(OraclePolicy):
         pure = pure_premium(self.model, nodes, t, s.basis)
         if not np.isfinite(pure["total_pure_premium"]).all():
             raise ValueError("тарифное размещение пока не оценивает тяжесть: нет наблюдённых частичных случаев")
-        gross = gross_premium(pure["total_pure_premium"], concentration[nodes], suspicion,
+        risk_adjusted = pure["total_pure_premium"] * (1.0 + self.contagion_strength * self.contagion_signal[nodes])
+        gross = gross_premium(risk_adjusted, concentration[nodes], suspicion,
                               theta=s.theta, eta=s.eta, zeta=s.zeta)
         terms = node_financial_terms(gross["gross_premium"], volumes[nodes], self.model.Z[nodes], s.basis,
                                      reward0=s.reward0, psi=s.psi)
         weights = np.zeros_like(self.w)
-        cost = s.reward0 + pure["total_pure_premium"]
+        cost = s.reward0 + risk_adjusted
         weights[nodes] = np.where(terms["new_data_eligible"], 1.0 / np.maximum(cost, 1e-12), 0.0)
         self.w = weights
         self.tariff_values = {"t": float(t), "nodes": nodes.copy(), "pure": pure,
+                              "risk_adjusted_pure": risk_adjusted,
                               "gross": gross, "financial": terms, "concentration": concentration[nodes],
-                              "suspicion": suspicion}
+                              "suspicion": suspicion, "contagion_signal": self.contagion_signal[nodes].copy()}
 
     def on_epoch(self, t, view):
         self._g = self._rng(view)
         if self.agent:
             self.exp.update(t, view)
+            if self.contagion_graph is not None:
+                self.contagion_graph.update(t, view)
+                if self.contagion_W is None or (t > 0 and int(t) % self.block == 0):
+                    snap = self.contagion_graph.snapshot(t)
+                    self.contagion_W = self.contagion_graph.propagation_weights(
+                        snap, self.contagion_min_events, self.contagion_min_credibility,
+                        self.contagion_family_alpha)
+                    self.contagion_edges = int(np.count_nonzero(self.contagion_W))
+                self.contagion_signal = self.contagion_graph.decayed_signal(
+                    self.contagion_W, t, self.contagion_half_life_days, self.contagion_window_days)
             if t > 0 and int(t) % self.block == 0:
                 self.model.fit(t)
                 if self.model.fitted:
                     self.model.refresh(t)
                     self.fits.append((t, self.model.a_hat, self.model.pearson, self.model.churn_share))
-            if self.placement in ("agent", "tariff"):
+            if self.placement in ("agent", "agent_greedy", "tariff"):
                 if self.model.fitted:
                     # Актуализируем микропрерывания по доступным наблюдениям; до обучения веса равны.
                     self.model.refresh(t)
-                    if self.placement == "agent":
+                    if self.placement in ("agent", "agent_greedy"):
                         self._agent_placement_weights(t)
                     else:
                         self._tariff_placement_weights(t, view)

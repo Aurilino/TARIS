@@ -1,8 +1,8 @@
 """Парное сравнение размещения по оценкам агента с оракулом (пилот 5.2).
 
     S0/S2, основной мир, порог восстановления R_min=2. Сравниваются истинные
-    веса оракула, равномерные веса и оценка агента; все используют публичные
-    кошелёк/подсеть. Миры генерируются одинаково по seed.
+    веса оракула, равномерные веса, случайное и детерминированное жадное ранжирование
+    агента; все используют публичные кошелёк/подсеть. Миры одинаковы по seed.
 
     python scripts/run_agent_placement.py [workers=4] [days=365] [seed-range=1-3] [--force]
 """
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     out_dir = os.path.join(OUT, f"agent_placement_{days}")
     os.makedirs(out_dir, exist_ok=True)
     jobs = [(s, seed, kind, days) for s in ("S0", "S2") for seed in range(s0, s1 + 1)
-            for kind in ("oracle", "uniform", "agent")]
+            for kind in ("oracle", "uniform", "agent", "agent_greedy")]
     if "--force" not in sys.argv:
         jobs = [j for j in jobs if not os.path.exists(os.path.join(out_dir, f"{j[0]}_{j[2]}_s{j[1]}.pkl"))]
     print(f"Прогонов к расчёту: {len(jobs)}, дней={days}, seeds={seed_range}, workers={workers}")

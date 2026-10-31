@@ -4,7 +4,7 @@
 и внезапных кризисах, потерянные объекты, трафик переносов (всего и по ложным тревогам). Полнота — по
 типам кризисов. Кривая обучения агента — полнота и точность по годам прогона. Пишет runs/h8/report.md.
 
-    python scripts/h8_report.py
+    python scripts/h8_report.py [--tag=calibrated]
 """
 import os, glob, pickle
 import numpy as np
@@ -12,7 +12,8 @@ import pandas as pd
 from scipy import stats
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-OUT = os.path.join(ROOT, "runs", "h8")
+TAG = next((x.split("=", 1)[1] for x in __import__("sys").argv[1:] if x.startswith("--tag=")), "")
+OUT = os.path.join(ROOT, f"runs/h8_{TAG}" if TAG else "runs/h8")
 NAMES = {"none": "без прогноза", "agent_d": "агент, раз в сутки", "agent_h": "агент, раз в час",
          "agent_h5": "агент, раз в час, порог 5", "oracle_h": "оракул кризисов, раз в час",
          "agent_d_econ": "агент, раз в сутки, эконом. порог", "agent_h_econ": "агент, раз в час, эконом. порог"}
@@ -93,6 +94,23 @@ if __name__ == "__main__":
                                           C=("C", "mean"), q=("q", "mean"), зёрен=("seed", "count")).round(3).reset_index()
         g["pol"] = g.pol.map(NAMES)
         text += ("\n\n### Экономический порог: к концу прогона (медиана порога и kappa_экв, средние B, C, q)\n\n" +
+                 md(g.rename(columns={"pol": "политика", "lab": "группа"})))
+    cal = []
+    for d in runs:
+        rows = d.get("calibration_log") or []
+        for lab in {r[1] for r in rows}:
+            r = next(r for r in reversed(rows) if r[1] == lab)
+            cal.append({"pol": d["job"][0], "seed": d["job"][1], "lab": lab,
+                        "threshold": r[2], "episodes": r[3], "positives": r[4],
+                        "precision_mean": r[5], "precision_lower": r[6], "utility": r[7]})
+    if cal:
+        C = pd.DataFrame(cal)
+        g = C.groupby(["pol", "lab"]).agg(порог=("threshold", "median"), размечено=("episodes", "median"),
+            кризисов=("positives", "median"), вероятность=("precision_mean", "mean"),
+            нижняя_граница=("precision_lower", "mean"), полезность=("utility", "mean"),
+            зёрен=("seed", "count")).round(3).reset_index()
+        g["pol"] = g.pol.map(NAMES).fillna(g.pol)
+        text += ("\n\n### Калибровка точности порога: posterior-среднее и нижняя 90%-я граница\n\n" +
                  md(g.rename(columns={"pol": "политика", "lab": "группа"})))
     print(text)
     open(os.path.join(OUT, "report.md"), "w", encoding="utf-8").write(text + "\n")

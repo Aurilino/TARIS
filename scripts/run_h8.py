@@ -11,14 +11,15 @@
 - agent_d_econ, agent_h_econ — агент раз в сутки и раз в час с экономическим порогом (kappa="econ", Э1–Э5).
 Результат — runs/h8/<политика>_s<зерно>.pkl (готовые пропускаются), ход — runs/h8/progress.log.
 
-    python scripts/run_h8.py [число потоков, по умолчанию 4] [зёрна, например 1-10] [политики через запятую]
+    python scripts/run_h8.py [число потоков] [зёрна] [политики через запятую] [--tag=calibrated]
 """
 import sys, os, time, pickle
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 sys.path.insert(0, ROOT)
-OUT = os.path.join(ROOT, "runs", "h8")
+TAG = next((x.split("=", 1)[1] for x in sys.argv[1:] if x.startswith("--tag=")), "")
+OUT = os.path.join(ROOT, "runs", f"h8_{TAG}" if TAG else "h8")
 N = 13
 POLICIES = ("none", "agent_d", "agent_h", "agent_h5", "oracle_h", "agent_d_econ", "agent_h_econ")
 HOURLY = ("agent_h", "agent_h5", "oracle_h", "agent_h_econ")
@@ -52,6 +53,7 @@ def run(job):
            "alarm_episodes": res.alarm_episodes(), "losses": res.losses,
            "migrations": len(res.migrations), "migration_traffic": float(res.migrations["traffic"].sum()) if len(res.migrations) else 0.0,
            "thr_log": getattr(pol, "thr_log", None), "econ_log": getattr(pol, "econ_log", None),
+           "calibration_log": getattr(pol, "calibration_log", None),
            "q_hit": getattr(pol, "q_hit", None), "thr": getattr(pol, "thr", None),
            "labels": {k: [(float(x[0]), bool(x[1])) for x in v] for k, v in getattr(pol, "labels", {}).items()},
            "seconds": round(time.time() - t0)}
@@ -72,7 +74,8 @@ if __name__ == "__main__":
     a, b = (sys.argv[2] if len(sys.argv) > 2 else "1-10").split("-")
     os.makedirs(OUT, exist_ok=True)
     # часовые (долгие) — первыми
-    pols = sys.argv[3].split(",") if len(sys.argv) > 3 else POLICIES
+    pol_arg = next((x for x in sys.argv[3:] if not x.startswith("--")), None)
+    pols = pol_arg.split(",") if pol_arg else POLICIES
     jobs = sorted([(p, s) for s in range(int(a), int(b) + 1) for p in pols], key=lambda j: -(j[0] in HOURLY))
     todo = [j for j in jobs if not os.path.exists(os.path.join(OUT, f"{j[0]}_s{j[1]}.pkl"))]
     log = open(os.path.join(OUT, "progress.log"), "a", encoding="utf-8")
