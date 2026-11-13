@@ -1,0 +1,264 @@
+{
+  "schema": "taris-queue-audit/1",
+  "source_hashes_verified": true,
+  "worlds_and_inputs_verified": true,
+  "audit_source_hash": "dc2fa0b96b10ee93dad499658024a135b9805a3e9887a682b50eb4909062f326",
+  "audit_helper_hash": "0964a4c39416130b01b5afe9762038e0c7755caa5bf68c5f8bc9238149f5bc73",
+  "objects_checked": 810,
+  "rows": [
+    {
+      "seed": 15,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 7,
+      "jobs": 11,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 8.999999999999488,
+        "write": 3.500000000000398,
+        "proof": 0.04499999999995907
+      }
+    },
+    {
+      "seed": 15,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 185,
+      "buffers": 5,
+      "jobs": 7,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 4.999999999999716,
+        "write": 2.500000000000284,
+        "proof": 0.03499999999996817
+      }
+    },
+    {
+      "seed": 15,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 7,
+      "jobs": 12,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 9.999999999999432,
+        "write": 3.500000000000398,
+        "proof": 0.05999999999994543
+      }
+    },
+    {
+      "seed": 15,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 15,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 12.393,
+        "proof": 0.045
+      }
+    },
+    {
+      "seed": 15,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 13,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 11.000000000000002,
+        "proof": 0.03500000000000057
+      }
+    },
+    {
+      "seed": 15,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 15,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 12.378,
+        "proof": 0.06
+      }
+    },
+    {
+      "seed": 16,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 7,
+      "jobs": 9,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.009999999999990905,
+        "read": 7.000000000000796,
+        "write": 3.499999999999204
+      }
+    },
+    {
+      "seed": 16,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 0,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {}
+    },
+    {
+      "seed": 16,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 191,
+      "buffers": 11,
+      "jobs": 13,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.01999999999998181,
+        "read": 11.00000000000125,
+        "write": 5.4999999999987494
+      }
+    },
+    {
+      "seed": 16,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 13,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.01000000000000071,
+        "read": 5.039999999999993
+      }
+    },
+    {
+      "seed": 16,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 0,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {}
+    },
+    {
+      "seed": 16,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 14,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.020000000000000143,
+        "read": 5.039999999999993
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 8,
+      "jobs": 11,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 7.999999999999716,
+        "write": 4.000000000000284,
+        "proof": 0.05499999999994998
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 189,
+      "buffers": 9,
+      "jobs": 13,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 9.999999999999666,
+        "write": 4.500000000000277,
+        "proof": 0.049999999999954525
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 188,
+      "buffers": 10,
+      "jobs": 15,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 11.999999999999318,
+        "write": 5.000000000000568,
+        "proof": 0.01999999999998181
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 179,
+      "buffers": 0,
+      "jobs": 21,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 11.468,
+        "proof": 0.049999999999998865
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 180,
+      "buffers": 0,
+      "jobs": 26,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 17.179,
+        "proof": 0.024999999999999432
+      }
+    },
+    {
+      "seed": 17,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 179,
+      "buffers": 0,
+      "jobs": 20,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read": 11.508999999999997,
+        "proof": 0.009999999999999433
+      }
+    }
+  ]
+}

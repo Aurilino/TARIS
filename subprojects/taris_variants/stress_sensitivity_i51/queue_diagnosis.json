@@ -1,0 +1,632 @@
+{
+  "schema": "taris-stress-queue-diagnosis/1",
+  "input_hashes": {
+    "s101_after_decision.json": "197f522e842ecd7935b52e45a3385783d1a86676b3fdb3cb9be3cb9c542c7500",
+    "s101_close.json": "f77599eefc8df73eb6ad688ae3449e5a3d1cf9dd13544b58c6c9abc85d9188f4",
+    "s101_control.json": "46c9ac959061d4b141c7408986a8d4992f45789d1b16a157d5075f728772caad",
+    "s101_far.json": "c735b0bb96f6fb35c68662d69b4bb683fc3635c7b6fb0809b3682b6e3fd1e211",
+    "s101_medium.json": "96ab0cc783460b1b99e78deff9c1dc0707b19620b51f16e1804cd7b8d1fa2615",
+    "s102_after_decision.json": "b4b70ae07a545d7487206dc557f2363c0572ac15b74cc9eb0b18859baace050b",
+    "s102_close.json": "e3289acf606274d5ec951b5e7c896e8d693c002d5f0a7dd9ebc2d7da40cbc66d",
+    "s102_control.json": "28137ae9ba07f53fc6ecd7e48ee266f95232d7bbe0d401b4b4f006b71fac687d",
+    "s102_far.json": "ec5e85708a5345bb31496353added18b8168f7c1d5560ec09b059549d094a99d",
+    "s102_medium.json": "dd8ad2c283c17d418e921f489e2a015f1190ad2263c57b5925557ec67129ac57",
+    "s103_after_decision.json": "7d1c14ee77b4a2535070e583df3da7ae3e932c8e7ac93e09b689b271e60d4a8e",
+    "s103_close.json": "bdb855be3e9b48ae9143662d4606fb49d78b212a991c603ea01347036c661cd2",
+    "s103_control.json": "0c5fb27d20fd52cbda86d0798839fdd27b8c6f6c8795178df1a696dcf6474a3d",
+    "s103_far.json": "3146b8639ec407abddb9c63dd707d8de6df1c60201b0060baadb79e385fcf496",
+    "s103_medium.json": "a5b30e125c9b990f3b219bf7fbcb0b549e9f5e26641c03a2eb48f4aba8141500",
+    "s104_after_decision.json": "2a89a8476c236f18e312dec31912184f4145b5afd019991260161546cb3fd82d",
+    "s104_close.json": "435c291ecdbc6142583df5229296e64f7556cb4e6c12bfbfc1f5cc8cb2797719",
+    "s104_control.json": "b6ea1495fc98d480e6432e402802bda2f13f89020386da7474865b88c88f782a",
+    "s104_far.json": "03c208030ae3725a7c145aad3f8b2197503981184263f684f7b6ea5e60903b24",
+    "s104_medium.json": "cfc59d6662bef18554c54e643d13a341823bbc10c48c0143bf71fa3c62691139",
+    "s105_after_decision.json": "be3a54c1b6eef5c6353243c4272658d208a08831bf26f796727e24c507fe2e43",
+    "s105_close.json": "d0771bbe6e796bd47f4c656beae49eb27a167f13f40059dd4d3a80f29b2f3b78",
+    "s105_control.json": "1ae2f02f741d3504a9e0de17ed88a970e3eb1aa889ad61ceab97450eaeb84ead",
+    "s105_far.json": "d48cb54bb1f79b3f4d10a6c511af83cc5ffa3e96d138b2290211ecd4b7291dae",
+    "s105_medium.json": "ecb2627e46b18f3b61b2fd1334d3570ff549673e8a9998c02ac0e4e42c178849"
+  },
+  "source_hash": "fec7c831f96a49f07fee9d6adb11d16f7cd704fc3668215f545f999203e97405",
+  "rows": [
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "ample",
+      "variant": "classic",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.402708333333354,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 43,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "ample",
+      "variant": "graph",
+      "job": 5,
+      "obj": 6,
+      "submitted": 16.0,
+      "started": 16.76145833333336,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "ample",
+      "variant": "hybrid",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.361041666666686,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 90,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 1,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.476041666666685,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 51,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 89,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "classic",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 90,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "graph",
+      "job": 6,
+      "obj": 6,
+      "submitted": 16.0,
+      "started": 16.742916666666744,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "hybrid",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 89,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 90,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 1,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.476041666666685,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 51,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 89,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "classic",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.402708333333354,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 43,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "graph",
+      "job": 12,
+      "obj": 11,
+      "submitted": 17.0,
+      "started": 17.441875000000046,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        19
+      ],
+      "proof_queue_full_rejections": 0,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "hybrid",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.361041666666686,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 2,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.999479166666703,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 90,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 1,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.476041666666685,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 51,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 2,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.999479166666703,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 89,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "ample",
+      "variant": "classic",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.402708333333354,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 43,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "ample",
+      "variant": "graph",
+      "job": 12,
+      "obj": 11,
+      "submitted": 17.0,
+      "started": 17.441875000000046,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "ample",
+      "variant": "hybrid",
+      "job": 4,
+      "obj": 3,
+      "submitted": 16.0,
+      "started": 16.361041666666686,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 42,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 90,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 1,
+      "obj": 1,
+      "submitted": 16.0,
+      "started": 21.476041666666685,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        8
+      ],
+      "proof_queue_full_rejections": 51,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 103,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 1,
+      "obj": 0,
+      "submitted": 16.0,
+      "started": 16.0,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [],
+      "proof_queue_full_rejections": 89,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.712500000000052,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 2,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 25.32968750000002,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 21,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "after_decision",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.368750000000052,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.712500000000052,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 2,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 26.371354166666706,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 23,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.261979166666716,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 29.37916666666675,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 16,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 2,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 25.32968750000002,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 21,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 26.22031250000003,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        10
+      ],
+      "proof_queue_full_rejections": 23,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "classic",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.712500000000052,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "graph",
+      "job": 2,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 25.32968750000002,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9
+      ],
+      "proof_queue_full_rejections": 21,
+      "possible_service_verification_block": true
+    },
+    {
+      "seed": 104,
+      "mode": "medium",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "job": 3,
+      "obj": 2,
+      "submitted": 16.0,
+      "started": 27.368750000000052,
+      "physical_distinct_at_end": 2,
+      "physically_available_distinct_at_end": 2,
+      "unfinished_proof_jobs": [
+        9,
+        10
+      ],
+      "proof_queue_full_rejections": 27,
+      "possible_service_verification_block": true
+    }
+  ],
+  "candidate_cases": 36,
+  "causal_fix_tested": false,
+  "not_agent_features": true
+}

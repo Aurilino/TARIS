@@ -135,6 +135,22 @@ class Config:
     # атака Сибиллы — вместе с модулем adversary
     cr_sybil_enabled: bool = False
 
+    # --- 3.5. Противник. По умолчанию выключен: старые потоки мира не меняются.
+    adversary_enabled: bool = False
+    adv_sybil_share: float = 0.05          # доля первичных личностей в таблице до перерегистраций
+    adv_pair_leak: float = 0.3             # независимый публичный сигнал финансирования для пары
+    adv_wave_days: float = 30.0
+    adv_wave_width_days: float = 0.25
+    adv_rate_multiplier: float = 0.3       # Сибилла накапливает доверие надёжным поведением
+    adv_bad_fraction: float = 0.0          # доля Сибилл с повышенными тихими потерями
+    adv_silent_multiplier: float = 20.0
+    adv_false_claim_fraction: float = 0.0
+    adv_whitewash_fraction: float = 0.0    # один возврат после первого собственного полного случая
+    adv_whitewash_gap_days: float = 1.0
+    adv_colluding_owners: int = 2          # дополнительные владельцы в коалиции; их физические потоки не меняются
+    adv_attack_day: float | None = None   # None: 70% горизонта; фиксированный до запуска политики
+    adv_key_compromise_day: float | None = None  # независимый сценарий утечки ключа доступа; None = утечки нет
+
     # --- 3.10. Устройства пользователей (слабые нестабильные узлы вне дата-центров)
     devices_enabled: bool = False
     dev_ratio: float = 2.0                 # устройств на один узел в дата-центре (и в начале, и среди новых)
@@ -199,12 +215,17 @@ class Config:
 
 
 def scenario(name: str, **overrides) -> Config:
-    """Готовые сценарии. S1, S3–S5 и S7 добавляются вместе с модулями validate и adversary."""
+    """Готовые сценарии. S1 и калибровочный S5 ожидают validate / реальные данные."""
     base = {
         "S0": dict(shocks_enabled=False),
         "S2": dict(shocks_enabled=True),
+        "S3": dict(shocks_enabled=True, adversary_enabled=True, cr_sybil_enabled=True),
+        "S4": dict(shocks_enabled=True, adversary_enabled=True, cr_sybil_enabled=True,
+                   adv_bad_fraction=0.5, adv_false_claim_fraction=0.5, adv_whitewash_fraction=0.5),
         # S2, где шоки дата-центров заменены библиотекой кризисов (пункт 3.9)
         "S6": dict(shocks_enabled=True, crises_enabled=True,
+                   shock_rate_per_year=(0.0,) + Config.shock_rate_per_year[1:]),
+        "S7": dict(shocks_enabled=True, crises_enabled=True, adversary_enabled=True, cr_sybil_enabled=True,
                    shock_rate_per_year=(0.0,) + Config.shock_rate_per_year[1:]),
         # S6 + устройства пользователей (пункт 3.10)
         "S8": dict(shocks_enabled=True, crises_enabled=True, devices_enabled=True,

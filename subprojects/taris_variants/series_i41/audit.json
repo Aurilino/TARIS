@@ -1,0 +1,91 @@
+{
+  "schema": "taris-physical-audit/1",
+  "source_hashes_verified": true,
+  "worlds_and_inputs_verified": true,
+  "audit_source_hash": "4a9e21c3d097b576855f8a0ef8cd203c2ecb309d0db10e53454419deb587e11d",
+  "rows": [
+    {
+      "seed": 12,
+      "variant": "classic",
+      "objects_checked": 45,
+      "copies_checked": 187,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4133.899187157014
+    },
+    {
+      "seed": 12,
+      "variant": "graph",
+      "objects_checked": 45,
+      "copies_checked": 182,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.00019642106192208075,
+      "physical_fragment_days": 4137.962513196261
+    },
+    {
+      "seed": 12,
+      "variant": "hybrid",
+      "objects_checked": 45,
+      "copies_checked": 183,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4135.913378824287
+    },
+    {
+      "seed": 13,
+      "variant": "classic",
+      "objects_checked": 45,
+      "copies_checked": 239,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4032.9523073095047
+    },
+    {
+      "seed": 13,
+      "variant": "graph",
+      "objects_checked": 45,
+      "copies_checked": 249,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4003.6068706507344
+    },
+    {
+      "seed": 13,
+      "variant": "hybrid",
+      "objects_checked": 45,
+      "copies_checked": 235,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4031.76017208651
+    },
+    {
+      "seed": 14,
+      "variant": "classic",
+      "objects_checked": 45,
+      "copies_checked": 190,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4134.354688229707
+    },
+    {
+      "seed": 14,
+      "variant": "graph",
+      "objects_checked": 45,
+      "copies_checked": 185,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4134.145843483033
+    },
+    {
+      "seed": 14,
+      "variant": "hybrid",
+      "objects_checked": 45,
+      "copies_checked": 184,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 4137.260391483292
+    }
+  ],
+  "objects_checked": 405,
+  "copies_checked": 1834
+}

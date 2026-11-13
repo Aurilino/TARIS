@@ -125,12 +125,14 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
     nd = w.nodes
     H = float(c.horizon_days)
     crisis = w.crisis is not None
+    adversary = getattr(w, "adversary", None)
+    leave_vocab = LEAVE_REASON + ["sybil", "whitewash"] if adversary is not None else LEAVE_REASON
     root = root or Path(__file__).resolve().parents[1]
     subnets = sorted(nd["subnet"].unique())
 
     # ---------------------------------------------------------------- сеть
     cancelled = nd["cancelled"].to_numpy() if "cancelled" in nd else np.zeros(len(nd), bool)
-    nodes = {"id": list(range(len(nd))), "dc": ints(nd["dc"]), "provider": ints(nd["provider"]),
+    nodes = {"id": list(range(len(nd))), "dc": ints(nd["dc_claimed"] if "dc_claimed" in nd else nd["dc"]), "provider": ints(nd["provider"]),
              "region": ints(nd["region"]), "subnet": code(nd["subnet"], subnets),
              "hw_claimed": ints(nd["hw_claimed"]), "wallet": ints(nd["wallet"]),
              # заявленный класс узла: 1 — устройство пользователя (пункт 3.10, dc = -1), 0 — узел в дата-центре
@@ -149,6 +151,9 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
         "versions": {"version": [], "t": []}, "updates": {"node": [], "version": [], "t": []},
     }
     net["audits"]["fails"] = net["audits"].pop("counts")
+    if adversary is not None:
+        net["funding_pairs"] = {"i": [i for i, j in adversary.public_funding_pairs],
+                                "j": [j for i, j in adversary.public_funding_pairs]}
     if crisis:
         net["versions"] = {"version": ints(w.versions["version"]), "t": minutes(w.versions["t"])}
         net["updates"] = {"node": ints(w.node_updates["node"]), "version": ints(w.node_updates["version"]),
@@ -205,7 +210,7 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
     truth = {
         "nodes": {"id": list(range(len(nd))), "owner": ints(nd["owner"]), "hw_true": ints(nd["hw_true"]),
                   "lam_year": rounded(nd["lam_avg"] * 365.0), "phi": rounded(phi, 5), "leave": minutes(nd["leave_t"]),
-                  "leave_reason": code(leave_reason, LEAVE_REASON), "cancelled": ints(cancelled)},
+                  "leave_reason": code(leave_reason, leave_vocab), "cancelled": ints(cancelled)},
         "outages": {"node": ints(to["node"]), "start": minutes(to["start"]), "end": minutes(to["end"].clip(upper=H)),
                     "kind": code(to["kind"], OUTAGE_KIND), "destroyed": ints(to["destroyed"].astype(bool))},
         "micro": binned(by_node(chain.micro, "start"), nd, agg_days),
@@ -219,6 +224,13 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
                         "t": minutes(res.disclosures["t"])},
         "crisis_report": {}, "alarm_check": {"correct": ints(ae["correct"].astype(bool))},
     }
+    if adversary is not None:
+        truth["adversary"] = res.adversary_report()
+        truth["adversary"]["parameters"] = {k: v for k, v in json.loads(c.to_json()).items()
+                                            if k.startswith("adv_") or k in ("adversary_enabled", "cr_sybil_enabled")}
+        truth["nodes"]["dc_true"] = ints(nd["dc"])
+        truth["nodes"]["sybil"] = ints(nd["sybil"])
+        truth["nodes"]["whitewash_parent"] = ints(nd["whitewash_parent"])
     if crisis:
         cr, k = w.crises, w.crisis
         pm = w.pre_events[w.pre_events["channel"] == "micro"]
@@ -256,11 +268,13 @@ def export_run(world, chain, res, path, scenario: str | None = None, agg_days: i
     log = {
         "schema": SCHEMA,
         "meta": {"scenario": scenario, "world_mode": c.world_mode, "seed": c.seed,
-                 "config": json.loads(c.to_json()), "config_hash": c.hash(), "code_commit": git_commit(root),
+                 "config": {k: v for k, v in json.loads(c.to_json()).items()
+                            if adversary is None or not (k.startswith("adv_") or k in ("adversary_enabled", "cr_sybil_enabled"))},
+                 "config_hash": c.hash(), "code_commit": git_commit(root),
                  "policy": res.policy_name, "horizon_days": c.horizon_days, "agg_days": agg_days,
                  "n_sample": len(sample), "metrics": metrics,
                  "interventions": [{k_: plain(v) for k_, v in it.items()} for it in w.interventions]},
-        "dict": {"outage_kind": OUTAGE_KIND, "outage_cls": OUTAGE_CLS, "frag_end": FRAG_END, "leave_reason": LEAVE_REASON,
+        "dict": {"outage_kind": OUTAGE_KIND, "outage_cls": OUTAGE_CLS, "frag_end": FRAG_END, "leave_reason": leave_vocab,
                  "crisis_type": CRISIS_TYPES, "ctype": CTYPES, "hw": list(c.hw_classes), "subnet": [str(s) for s in subnets]},
         "world": {"regions": {"id": list(range(c.n_regions))},
                   "providers": {"id": list(range(int(nd["provider"].max()) + 1)),        # с домашними провайдерами (3.10)

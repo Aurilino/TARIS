@@ -1,0 +1,330 @@
+{
+  "schema": "taris-cancel-i44a/1",
+  "provenance": {
+    "main": {
+      "adversary.py": "6ed3dd0af066153ac23e0c698efb4d44440d4d5660714bcb671b7a0fc5eb41c1",
+      "chain.py": "77f09aaf1cdae7cf7d27216ebe6a47ebc22ab1e17594e9d0344720200fb4d82f",
+      "config.py": "7f409ed51fc6e2e07d1252cb62166263c3dda491ae92db63a075546ce5d53399",
+      "contagion.py": "af4905c5f17cb172cffbdb1888024fc9faa891175eb4d03f2022a45e64d078fa",
+      "crisis.py": "452eb9dd0b866af47492393cb1b033061a685766c8d80ce67cb039f2681a8f53",
+      "data.py": "bc81bec1e0a041d9446d9e1fd464828b9c7e5cea68f3cb313f0c145492e8c91b",
+      "experience.py": "fb01206113efb2476c87cdd467a0902b40d5d909a57065a6abd814ede9b8809f",
+      "export.py": "a6d43bebd532945e6c3cab6d20872e2986b024ff8b314adb27b8309edee18cbc",
+      "fixedpoint.py": "12243163743751a47394ed550e32e158722cd040a6c3aeb8a943d9bff23feba7",
+      "forecast.py": "8757dace1ae38a43fef8929bdb51b8c29717e3bda9db499cbb142c291a3c9b3c",
+      "graph.py": "b795d313bc2a7a2262b4131b0270adc8b4fab48b3aacde08e1add371b5f2b425",
+      "ledger.py": "8f959f20904293747e511362fbc57b3ad77e3c94bad3912e0b80bc597d12890a",
+      "policy.py": "5b3c78eeec847a60bfe75c76f53724f6ba09e651677d7156d68728dbdd4402ab",
+      "protection.py": "adba281e84a6a78d506f73173a9f04c2ef9bbe307c1e9577c27202c9bf036023",
+      "reserve.py": "4e9349714023603e71c05598bd48de4525f38c47b121aad658dae31e6c5b9a70",
+      "risk.py": "92fb985ad57182a8b344d22fd4ad740943704dd5020ca71c776340c21f6aa4d9",
+      "rng.py": "70d0ba4a6b7ddbc1b54cdf9bc8167bb974f9f4d8f39a8eefc335b1da39443bef",
+      "scenario.py": "dece400fe2eff422c9add0bdcf560dcc107062306b80d14d687447aa36c79dc5",
+      "security.py": "0e76bb14200a5f359ce72479bbab933727f8bd5e3bd7bed5ad693aaa160fa99c",
+      "tariff.py": "0ce203415aa4c0ebb65cba08e942550c8261811ee5f2a1b4474d8459b8ef482b",
+      "world.py": "6b91e05b7e9cb4bfb13abfc35bee288e51071f09241f6892f57e71594047dff7",
+      "__init__.py": "4aac556f2a6456c14e6c7a6fb7085ae449b29533c28c4ac0b707a31d5aa82ca1"
+    },
+    "integration": {
+      "cancel_obsolete.py": "78e87e1b41133bb8ff9cdba2cda3a09fbe48d983cabf4c7c0336110d65e814e8",
+      "resumable.py": "7b83985687633b59e7d212bd6efce088176912afdce793c67c1ca9dc51241deb",
+      "queued.py": "541597b866ef7f47f6aa2b6885927002aa35a9641baf99b5b26be1c802478519",
+      "physical.py": "b52b20ce4c57679ccf81db61d58466f2fdd7ae4c93cea81d86e543d7665093a2",
+      "run_cancellation.py": "5bc6e669d33b017770dec38ab5b4aafd29362c6b7a92fbb0be0e2fbb2d56f8f4",
+      "run_compare.py": "d33cea1c589f1cb5a276f65ab225ec33483d9ae2ee59e719ee5eff8789b8ffc0",
+      "agents.py": "4051048c633f75ae4a04a5084efe25df795dda936177337ad07359b969271c35",
+      "risk_graph.py": "c4706777bca714a82c89fb49a55a51d70fe70a89365eaed910dda208754cb562"
+    }
+  },
+  "integrity_passed": true,
+  "cases": [
+    {
+      "seed": 24,
+      "world_hashes": {
+        "nodes": "a2a2d4c15524eb5be8c5dd7b564d7989a29b075d05b3eee314e29579df6c7030",
+        "outages": "1e292aa47704a638c0848573b18cccf4e755a422bd59292a2845e12b1a1adfeb",
+        "silent": "cd07f9729afb171a34ea340e83fa08278dd7003b85ff12ba1ae2c5569111527a"
+      }
+    },
+    {
+      "seed": 25,
+      "world_hashes": {
+        "nodes": "4d157c20ac598e031c4427c4f8d69746563c083ad3479f131811ed0e55e3b81f",
+        "outages": "91ebd9db3c3e6d972bc85668253c2576512da0d44ed6f494c0c023c699c28673",
+        "silent": "2637ba662336a6d7a6fab249626622e3f684afc1ca66e3b56534347d1b6714dc"
+      }
+    },
+    {
+      "seed": 26,
+      "world_hashes": {
+        "nodes": "ac4be135027c2522733712fc8d3bfb3aa7e42576b47a8afc29537f7bdd430e42",
+        "outages": "c84f5f33969b6f03911b63e2ab66fb8ab9a7e5bffb7bf26bf0c80dc55258305f",
+        "silent": "ab2f683552a53d3633643e1c3962240b8fead43be3abb597c994217fa9912241"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.0004982153944972367,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12395.138330084159,
+      "buffer_object_days": 0.38124999999953246,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 6.89251344049902,
+      "started_jobs": 38,
+      "pending_wait_days_sum": 0.0,
+      "decoded_prefix_size_days": 0.32519531250020983,
+      "receiver_prefix_size_days": 0.07324218749989508,
+      "block_attempts": 962,
+      "failed_blocks": 2,
+      "successful_close_checks": 30,
+      "full_buffers_created": 30,
+      "obsolete_targets_cancelled": 0,
+      "obsolete_jobs_cancelled": 0,
+      "serviced_volume": {
+        "read_block": 30.125,
+        "write_block": 15.0,
+        "close_proof": 0.3,
+        "proof": 0.09
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "write_completed": 30,
+        "proof_completed": 8
+      }
+    },
+    {
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.0012372680701986383,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12372.82378060441,
+      "buffer_object_days": 0.521041666665873,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 10.989535241528143,
+      "started_jobs": 48,
+      "pending_wait_days_sum": 0.0,
+      "decoded_prefix_size_days": 0.45678710937535527,
+      "receiver_prefix_size_days": 0.10009765624982236,
+      "block_attempts": 1315,
+      "failed_blocks": 3,
+      "successful_close_checks": 41,
+      "full_buffers_created": 41,
+      "obsolete_targets_cancelled": 0,
+      "obsolete_jobs_cancelled": 0,
+      "serviced_volume": {
+        "read_block": 41.1875,
+        "write_block": 20.5,
+        "close_proof": 0.41000000000000003,
+        "proof": 0.15000000000000002
+      },
+      "queue_rejections": {
+        "repair_queue_full": 6,
+        "proof_queue_full": 1
+      },
+      "job_statuses": {
+        "write_completed": 41,
+        "proof_completed": 7
+      }
+    },
+    {
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.00298979003079225,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12390.158362987837,
+      "buffer_object_days": 0.4489843749996787,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 8.351176634943469,
+      "started_jobs": 40,
+      "pending_wait_days_sum": 0.0,
+      "decoded_prefix_size_days": 0.38500976562514544,
+      "receiver_prefix_size_days": 0.08870442708326076,
+      "block_attempts": 1028,
+      "failed_blocks": 4,
+      "successful_close_checks": 32,
+      "full_buffers_created": 32,
+      "obsolete_targets_cancelled": 0,
+      "obsolete_jobs_cancelled": 0,
+      "serviced_volume": {
+        "read_block": 32.1875,
+        "write_block": 16.03125,
+        "close_proof": 0.31999999999999995,
+        "proof": 0.12
+      },
+      "queue_rejections": {
+        "repair_queue_full": 2,
+        "proof_queue_full": 1
+      },
+      "job_statuses": {
+        "write_completed": 32,
+        "proof_completed": 8
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.007787697785644809,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12386.264076959937,
+      "buffer_object_days": 21.977083333333166,
+      "unfinished_jobs": 10,
+      "queued_jobs": 7,
+      "open_buffers": 0,
+      "started_wait_days_sum": 223.89362371412412,
+      "started_jobs": 33,
+      "pending_wait_days_sum": 42.887777641742545,
+      "decoded_prefix_size_days": 28.76777343750006,
+      "receiver_prefix_size_days": 4.821614583333304,
+      "block_attempts": 740,
+      "failed_blocks": 127,
+      "successful_close_checks": 18,
+      "full_buffers_created": 18,
+      "obsolete_targets_cancelled": 4,
+      "obsolete_jobs_cancelled": 4,
+      "serviced_volume": {
+        "read_block": 27.340499999999984,
+        "write_block": 9.5,
+        "close_proof": 0.19,
+        "proof": 0.09
+      },
+      "queue_rejections": {
+        "repair_queue_full": 10,
+        "proof_queue_full": 10
+      },
+      "job_statuses": {
+        "write_completed": 17,
+        "proof_completed": 8,
+        "read_block": 3,
+        "obsolete_before_read": 4,
+        "queued": 7,
+        "closed_with_unfinished_targets": 1
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.013604378571180575,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12168.81903556604,
+      "buffer_object_days": 21.168229166666517,
+      "unfinished_jobs": 24,
+      "queued_jobs": 21,
+      "open_buffers": 2,
+      "started_wait_days_sum": 212.11813919320147,
+      "started_jobs": 23,
+      "pending_wait_days_sum": 175.70975828864144,
+      "decoded_prefix_size_days": 27.660644531250078,
+      "receiver_prefix_size_days": 4.769417317708305,
+      "block_attempts": 723,
+      "failed_blocks": 119,
+      "successful_close_checks": 17,
+      "full_buffers_created": 19,
+      "obsolete_targets_cancelled": 0,
+      "obsolete_jobs_cancelled": 0,
+      "serviced_volume": {
+        "read_block": 26.533749999999998,
+        "write_block": 9.373749999999976,
+        "close_proof": 0.16999999999999998,
+        "proof": 0.075
+      },
+      "queue_rejections": {
+        "repair_queue_full": 214,
+        "proof_queue_full": 19
+      },
+      "job_statuses": {
+        "write_completed": 17,
+        "write_block": 2,
+        "queued": 21,
+        "proof_completed": 2,
+        "proof_failed": 1,
+        "read_block": 1
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 135,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 3105.0,
+      "unavailable_object_days": 0.020249211347271867,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 12311.728702013537,
+      "buffer_object_days": 24.594270833333017,
+      "unfinished_jobs": 14,
+      "queued_jobs": 11,
+      "open_buffers": 1,
+      "started_wait_days_sum": 307.6540403807907,
+      "started_jobs": 33,
+      "pending_wait_days_sum": 61.70975828864143,
+      "decoded_prefix_size_days": 29.006184895833464,
+      "receiver_prefix_size_days": 5.436393229166598,
+      "block_attempts": 777,
+      "failed_blocks": 130,
+      "successful_close_checks": 19,
+      "full_buffers_created": 20,
+      "obsolete_targets_cancelled": 5,
+      "obsolete_jobs_cancelled": 5,
+      "serviced_volume": {
+        "read_block": 27.625000000000036,
+        "write_block": 10.525250000000005,
+        "close_proof": 0.2,
+        "proof": 0.09
+      },
+      "queue_rejections": {
+        "repair_queue_full": 43,
+        "proof_queue_full": 9
+      },
+      "job_statuses": {
+        "write_completed": 18,
+        "read_block": 2,
+        "queued": 11,
+        "proof_completed": 6,
+        "obsolete_before_read": 5,
+        "write_block": 1,
+        "closed_with_unfinished_targets": 1
+      }
+    }
+  ]
+}

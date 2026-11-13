@@ -36,7 +36,7 @@ FORMAT = "taris-scenario/1"
 # WORLDS: мир -> (правки параметров, интервал агрегации журнала в сутках)
 MAIN =dict(n_initial_nodes=1000, node_join_rate=0.12, blocks_per_epoch=4, n_dc=30, n_providers=6, n_regions=5)
 WORLDS = {"main": (MAIN, 1), "full": ({}, 7)}
-POLICIES = ("uniform15", "uniform13", "oracle13", "crisis_oracle13")
+POLICIES = ("uniform15", "uniform13", "crush13", "copysets13", "filecoin13", "sia13", "storj13", "dynamic_ec13", "aec13", "gbm13", "k1_pg13", "k2_laplace13", "k2_nuts13", "oracle13", "crisis_oracle13")
 
 
 def load(path) -> dict:
@@ -105,8 +105,23 @@ def validate(sc: dict) -> list[str]:
 
 
 def make_policy(name: str, world):
-    from .policy import UniformPolicy, OraclePolicy, CrisisOraclePolicy
+    from .policy import (UniformPolicy, CrushLikePolicy, CopysetsPolicy,
+                         FilecoinInspiredPolicy, SiaInspiredPolicy, StorjInspiredPolicy,
+                         DynamicECPolicy, AECInspiredPolicy, GradientBoostingPolicy,
+                         K1PoissonGammaPolicy, K2LaplacePolicy, K2NUTSPolicy,
+                         OraclePolicy, CrisisOraclePolicy)
     return {"uniform15": lambda: UniformPolicy(15), "uniform13": lambda: UniformPolicy(13),
+            "crush13": lambda: CrushLikePolicy(world, 13),
+            "copysets13": lambda: CopysetsPolicy(world, 13),
+            "filecoin13": lambda: FilecoinInspiredPolicy(world, 13),
+            "sia13": lambda: SiaInspiredPolicy(world, 13),
+            "storj13": lambda: StorjInspiredPolicy(world, 13),
+            "dynamic_ec13": lambda: DynamicECPolicy(world),
+            "aec13": lambda: AECInspiredPolicy(world, 13),
+            "gbm13": lambda: GradientBoostingPolicy(world, 13),
+            "k1_pg13": lambda: K1PoissonGammaPolicy(world, 13),
+            "k2_laplace13": lambda: K2LaplacePolicy(world, 13),
+            "k2_nuts13": lambda: K2NUTSPolicy(world, 13),
             "oracle13": lambda: OraclePolicy(world, 13), "crisis_oracle13": lambda: CrisisOraclePolicy(world, 13)}[name]()
 
 

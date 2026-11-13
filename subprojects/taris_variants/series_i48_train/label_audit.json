@@ -1,0 +1,212 @@
+{
+  "schema": "taris-observed-label-audit/1",
+  "input_hashes": {
+    "s31.json": "c6293ce359173901cdbe278a4abc5f25b142f6c63eee5795f31e961ee0f1496c",
+    "s32.json": "4a8c424665f427d8d30bd9a285c46a1b1c67fadcecf76156666204151709fb21",
+    "s33.json": "3626b62b4a2bda9d5a48c4b6b168bcb8dfc2ff044bbe7db6cde0b3d036994d75"
+  },
+  "audit_source_hash": "25f239985280cbc10942a7d88b982c57fd8ba7abb9419a6ac995cafd5e3ddfb1",
+  "rows": [
+    {
+      "seed": 31,
+      "profile": "ample",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 31,
+      "profile": "ample",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 31,
+      "profile": "ample",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 31,
+      "profile": "constrained",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 49,
+      "distinct_observed_jobs": 7,
+      "censored_rows": 24,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 46
+    },
+    {
+      "seed": 31,
+      "profile": "constrained",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 65,
+      "distinct_observed_jobs": 10,
+      "censored_rows": 36,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 63
+    },
+    {
+      "seed": 31,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 37,
+      "distinct_observed_jobs": 5,
+      "censored_rows": 12,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 33
+    },
+    {
+      "seed": 32,
+      "profile": "ample",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 32,
+      "profile": "ample",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 1,
+      "distinct_observed_jobs": 1,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 1
+    },
+    {
+      "seed": 32,
+      "profile": "ample",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 32,
+      "profile": "constrained",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 83,
+      "distinct_observed_jobs": 12,
+      "censored_rows": 46,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 80
+    },
+    {
+      "seed": 32,
+      "profile": "constrained",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 137,
+      "distinct_observed_jobs": 23,
+      "censored_rows": 76,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 127
+    },
+    {
+      "seed": 32,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 103,
+      "distinct_observed_jobs": 14,
+      "censored_rows": 70,
+      "censored_positive_work_rows": 12,
+      "observed_repair_rows": 100
+    },
+    {
+      "seed": 33,
+      "profile": "ample",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 33,
+      "profile": "ample",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 33,
+      "profile": "ample",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 33,
+      "profile": "constrained",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 95,
+      "distinct_observed_jobs": 18,
+      "censored_rows": 30,
+      "censored_positive_work_rows": 6,
+      "observed_repair_rows": 78
+    },
+    {
+      "seed": 33,
+      "profile": "constrained",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 82,
+      "distinct_observed_jobs": 15,
+      "censored_rows": 43,
+      "censored_positive_work_rows": 17,
+      "observed_repair_rows": 75
+    },
+    {
+      "seed": 33,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 214,
+      "distinct_observed_jobs": 13,
+      "censored_rows": 195,
+      "censored_positive_work_rows": 3,
+      "observed_repair_rows": 151
+    }
+  ],
+  "temporal_whitelist_verified": true,
+  "labels_independently_verified": true,
+  "unit_of_independence": "world_not_job_snapshot"
+}

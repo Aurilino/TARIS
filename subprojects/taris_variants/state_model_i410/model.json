@@ -1,0 +1,445 @@
+{
+  "schema": "taris-state-model/1",
+  "training_seeds": [
+    31,
+    32,
+    33
+  ],
+  "heldout_seeds": [
+    37,
+    38,
+    39
+  ],
+  "training_diagnosis_hash": "aaaba18b9409138f02fb6286f85c47503735b39de32b016a700de4b67e6f5ac5",
+  "models": {
+    "ample": {
+      "use_state_model": false,
+      "cv_baseline_mse": 9.419515669184912e-06,
+      "cv_candidate_mse": 9.419515669184912e-06,
+      "folds": [
+        {
+          "heldout_seed": 31,
+          "baseline_mse": 0.0,
+          "candidate_mse": 0.0,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "repair_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [
+                32
+              ],
+              "support_rows": 1
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            }
+          }
+        },
+        {
+          "heldout_seed": 32,
+          "baseline_mse": 2.8258547007554737e-05,
+          "candidate_mse": 2.8258547007554737e-05,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "repair_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            }
+          }
+        },
+        {
+          "heldout_seed": 33,
+          "baseline_mse": 0.0,
+          "candidate_mse": 0.0,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "repair_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [
+                32
+              ],
+              "support_rows": 1
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            }
+          }
+        }
+      ],
+      "models": {
+        "empty_repair_queue": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        },
+        "parked_full_buffer": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        },
+        "repair_transfer": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [
+            32
+          ],
+          "support_rows": 1
+        },
+        "proof_transfer": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        },
+        "waiting_or_setup": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        }
+      }
+    },
+    "constrained": {
+      "use_state_model": true,
+      "cv_baseline_mse": 1.2054894724002845,
+      "cv_candidate_mse": 0.5578613244613612,
+      "folds": [
+        {
+          "heldout_seed": 31,
+          "baseline_mse": 0.1757387841880342,
+          "candidate_mse": 0.19145285590277827,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [
+                32
+              ],
+              "support_rows": 1
+            },
+            "repair_transfer": {
+              "coefficient": 0.42,
+              "status": "fitted",
+              "training_world_mean_mse": 1.1103598396146541,
+              "edge_of_grid": false,
+              "training_seeds": [
+                32,
+                33
+              ],
+              "support_worlds": [
+                32,
+                33
+              ],
+              "support_rows": 77
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 0.08,
+              "status": "fitted",
+              "training_world_mean_mse": 0.6259716012500043,
+              "edge_of_grid": false,
+              "training_seeds": [
+                32,
+                33
+              ],
+              "support_worlds": [
+                32,
+                33
+              ],
+              "support_rows": 28
+            }
+          }
+        },
+        {
+          "heldout_seed": 32,
+          "baseline_mse": 0.8358362510683752,
+          "candidate_mse": 0.44124749466078994,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "repair_transfer": {
+              "coefficient": 0.59,
+              "status": "fitted",
+              "training_world_mean_mse": 0.7842476226660166,
+              "edge_of_grid": false,
+              "training_seeds": [
+                31,
+                33
+              ],
+              "support_worlds": [
+                31,
+                33
+              ],
+              "support_rows": 60
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 0.13,
+              "status": "fitted",
+              "training_world_mean_mse": 1.664945652403857,
+              "edge_of_grid": false,
+              "training_seeds": [
+                31,
+                33
+              ],
+              "support_worlds": [
+                31,
+                33
+              ],
+              "support_rows": 29
+            }
+          }
+        },
+        {
+          "heldout_seed": 33,
+          "baseline_mse": 2.6048933819444438,
+          "candidate_mse": 1.0408836228205154,
+          "models": {
+            "empty_repair_queue": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "parked_full_buffer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [
+                32
+              ],
+              "support_rows": 1
+            },
+            "repair_transfer": {
+              "coefficient": 0.44,
+              "status": "fitted",
+              "training_world_mean_mse": 0.7549340694273643,
+              "edge_of_grid": false,
+              "training_seeds": [
+                31,
+                32
+              ],
+              "support_worlds": [
+                31,
+                32
+              ],
+              "support_rows": 57
+            },
+            "proof_transfer": {
+              "coefficient": 1.0,
+              "status": "insufficient_support",
+              "edge_of_grid": false,
+              "support_worlds": [],
+              "support_rows": 0
+            },
+            "waiting_or_setup": {
+              "coefficient": 0.22,
+              "status": "fitted",
+              "training_world_mean_mse": 0.7957191437500054,
+              "edge_of_grid": false,
+              "training_seeds": [
+                31,
+                32
+              ],
+              "support_worlds": [
+                31,
+                32
+              ],
+              "support_rows": 5
+            }
+          }
+        }
+      ],
+      "models": {
+        "empty_repair_queue": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        },
+        "parked_full_buffer": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [
+            32
+          ],
+          "support_rows": 1
+        },
+        "repair_transfer": {
+          "coefficient": 0.5,
+          "status": "fitted",
+          "training_world_mean_mse": 0.9345336016645556,
+          "edge_of_grid": false,
+          "training_seeds": [
+            31,
+            32,
+            33
+          ],
+          "support_worlds": [
+            31,
+            32,
+            33
+          ],
+          "support_rows": 97
+        },
+        "proof_transfer": {
+          "coefficient": 1.0,
+          "status": "insufficient_support",
+          "edge_of_grid": false,
+          "support_worlds": [],
+          "support_rows": 0
+        },
+        "waiting_or_setup": {
+          "coefficient": 0.13,
+          "status": "fitted",
+          "training_world_mean_mse": 1.1348056733734047,
+          "edge_of_grid": false,
+          "training_seeds": [
+            31,
+            32,
+            33
+          ],
+          "support_worlds": [
+            31,
+            32,
+            33
+          ],
+          "support_rows": 31
+        }
+      }
+    }
+  },
+  "source_hashes": {
+    "train_state.py": "ab5b9d58c59551b1ef33c146ff54e371a5a28f9f816ee2d35c2eb676ac426881",
+    "state_forecast.py": "9cada75704e5faa884aecadbe981fceb99f3892d68b4e205713eb85b4dc43694",
+    "restricted_forecast.py": "04d682fc8223273dabf1665594c49a3db58c10be731b92d31081b5379337857b",
+    "diagnose_restricted.py": "bc1658e28a92d4b689897d0eddd0c431f7876d9129d7c854f35a8c58602c049f",
+    "EXPERIMENT_I410.md": "f54da6f0b7351cbd0172ae683469a1d6eaa0e8f5daf44cee639c694f0f162eb8"
+  },
+  "expected_loss_cost": null,
+  "full_actuarial_reserve": null
+}

@@ -1,0 +1,19 @@
+{
+  "source_report_hash": "d93ff40012e24799d2da9081ae27e7dba252d323d87408c48af2b3f092deeef3",
+  "plot_source_hash": "c0b4ab0d79585d3e20f76a38e834b16509c534e7056f91a6fdab04816ecb12f2",
+  "crossings": [
+    {
+      "cohort": "anchor_i44a",
+      "first": "classic",
+      "second": "hybrid",
+      "central_ratio": 4.400993105383648
+    },
+    {
+      "cohort": "paired_i44c",
+      "first": "classic",
+      "second": "graph",
+      "central_ratio": 5.136456729456233
+    }
+  ],
+  "scope": "observed_cost_only_not_policy_ranking"
+}

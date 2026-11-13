@@ -1,0 +1,6055 @@
+{
+  "status": "completed",
+  "job": {
+    "seed": 6,
+    "profile": "fixed3",
+    "days": 45,
+    "nodes": 24
+  },
+  "provenance": {
+    "main": {
+      "adversary.py": "6ed3dd0af066153ac23e0c698efb4d44440d4d5660714bcb671b7a0fc5eb41c1",
+      "chain.py": "77f09aaf1cdae7cf7d27216ebe6a47ebc22ab1e17594e9d0344720200fb4d82f",
+      "config.py": "7f409ed51fc6e2e07d1252cb62166263c3dda491ae92db63a075546ce5d53399",
+      "contagion.py": "af4905c5f17cb172cffbdb1888024fc9faa891175eb4d03f2022a45e64d078fa",
+      "crisis.py": "452eb9dd0b866af47492393cb1b033061a685766c8d80ce67cb039f2681a8f53",
+      "data.py": "bc81bec1e0a041d9446d9e1fd464828b9c7e5cea68f3cb313f0c145492e8c91b",
+      "experience.py": "fb01206113efb2476c87cdd467a0902b40d5d909a57065a6abd814ede9b8809f",
+      "export.py": "a6d43bebd532945e6c3cab6d20872e2986b024ff8b314adb27b8309edee18cbc",
+      "fixedpoint.py": "12243163743751a47394ed550e32e158722cd040a6c3aeb8a943d9bff23feba7",
+      "forecast.py": "8757dace1ae38a43fef8929bdb51b8c29717e3bda9db499cbb142c291a3c9b3c",
+      "graph.py": "b795d313bc2a7a2262b4131b0270adc8b4fab48b3aacde08e1add371b5f2b425",
+      "ledger.py": "8f959f20904293747e511362fbc57b3ad77e3c94bad3912e0b80bc597d12890a",
+      "policy.py": "5b3c78eeec847a60bfe75c76f53724f6ba09e651677d7156d68728dbdd4402ab",
+      "protection.py": "adba281e84a6a78d506f73173a9f04c2ef9bbe307c1e9577c27202c9bf036023",
+      "reserve.py": "4e9349714023603e71c05598bd48de4525f38c47b121aad658dae31e6c5b9a70",
+      "risk.py": "92fb985ad57182a8b344d22fd4ad740943704dd5020ca71c776340c21f6aa4d9",
+      "rng.py": "70d0ba4a6b7ddbc1b54cdf9bc8167bb974f9f4d8f39a8eefc335b1da39443bef",
+      "scenario.py": "dece400fe2eff422c9add0bdcf560dcc107062306b80d14d687447aa36c79dc5",
+      "security.py": "0e76bb14200a5f359ce72479bbab933727f8bd5e3bd7bed5ad693aaa160fa99c",
+      "tariff.py": "0ce203415aa4c0ebb65cba08e942550c8261811ee5f2a1b4474d8459b8ef482b",
+      "world.py": "6b91e05b7e9cb4bfb13abfc35bee288e51071f09241f6892f57e71594047dff7",
+      "__init__.py": "4aac556f2a6456c14e6c7a6fb7085ae449b29533c28c4ac0b707a31d5aa82ca1"
+    },
+    "integration": {
+      "adaptive.py": "d295685182a3690c4f0d2003a8147eb54be6498f8a5a25f253b296f329afe172",
+      "agents.py": "4051048c633f75ae4a04a5084efe25df795dda936177337ad07359b969271c35",
+      "risk_graph.py": "c4706777bca714a82c89fb49a55a51d70fe70a89365eaed910dda208754cb562",
+      "run_compare.py": "d33cea1c589f1cb5a276f65ab225ec33483d9ae2ee59e719ee5eff8789b8ffc0",
+      "run_adaptive.py": "9465fb7df8ecd26fb3dff751527b05ef501f862e8308e26cb2cdfac7fb7b8ed0"
+    }
+  },
+  "case": {
+    "seed": 6,
+    "profile": "fixed3",
+    "config": {
+      "A_inf_days": 30.0,
+      "A_wear_days": 1095.0,
+      "T_rep_hours": 24.0,
+      "adv_attack_day": null,
+      "adv_bad_fraction": 0.0,
+      "adv_colluding_owners": 2,
+      "adv_false_claim_fraction": 0.0,
+      "adv_key_compromise_day": null,
+      "adv_pair_leak": 0.3,
+      "adv_rate_multiplier": 0.3,
+      "adv_silent_multiplier": 20.0,
+      "adv_sybil_share": 0.05,
+      "adv_wave_days": 30.0,
+      "adv_wave_width_days": 0.25,
+      "adv_whitewash_fraction": 0.0,
+      "adv_whitewash_gap_days": 1.0,
+      "adversary_enabled": false,
+      "age_unit_days": 30.0,
+      "alarm_step_hours": 24,
+      "alpha_hw": [
+        0.3,
+        0.0,
+        -0.2
+      ],
+      "audit_interval_days": 1,
+      "audit_noise": 0.005,
+      "audits_per_epoch": 1,
+      "b_inf": 2.0,
+      "b_wear": 1.0,
+      "beta_hw": [
+        0.3,
+        0.0,
+        -0.2
+      ],
+      "beta_region_sd": 0.15,
+      "block_growth_per_year": 0.0,
+      "blocks_per_epoch": 1,
+      "capacity_mean_fragments": 1000.0,
+      "capacity_sd": 0.5,
+      "churn_A_days": 60.0,
+      "churn_base": 0.00045662100456621003,
+      "churn_extra_new": 0.008333333333333333,
+      "cr_cascade_delay_hours": 6.0,
+      "cr_cascade_p": 0.3,
+      "cr_cascade_rho": 5.0,
+      "cr_cascade_s": 0.6,
+      "cr_exodus_W_days": 21.0,
+      "cr_exodus_multiplier": 30.0,
+      "cr_exodus_period_days": 30.0,
+      "cr_exodus_pi": 0.8,
+      "cr_exodus_q": 0.5,
+      "cr_exodus_rate": 0.2,
+      "cr_exodus_rho": 5.0,
+      "cr_exodus_rho_join": 0.3,
+      "cr_exodus_s": 0.5,
+      "cr_fire_rate": 0.05,
+      "cr_software_L_mean_hours": 12.0,
+      "cr_software_W_days": 5.0,
+      "cr_software_pi": 0.5,
+      "cr_software_q": 0.5,
+      "cr_software_rate": 1.0,
+      "cr_software_rho": 5.0,
+      "cr_software_s": 0.8,
+      "cr_software_total_share": 0.05,
+      "cr_software_trigger_days": 3.0,
+      "cr_storm_W_days": 3.0,
+      "cr_storm_pi": 0.7,
+      "cr_storm_q": 0.5,
+      "cr_storm_rate": 0.5,
+      "cr_storm_rho": 5.0,
+      "cr_storm_s": 0.6,
+      "cr_sybil_enabled": false,
+      "cr_wear_W_days": 30.0,
+      "cr_wear_p_death": 0.3,
+      "cr_wear_period_days": 30.0,
+      "cr_wear_pi": 0.9,
+      "cr_wear_q": 0.5,
+      "cr_wear_rate": 0.1,
+      "cr_wear_rho": 10.0,
+      "cr_wear_s": 0.8,
+      "crises_enabled": false,
+      "dev_capacity_mean": 50.0,
+      "dev_home_providers": 4,
+      "dev_hw_probs": [
+        0.7,
+        0.0,
+        0.3
+      ],
+      "dev_m_churn": 10.0,
+      "dev_m_dur": 2.0,
+      "dev_m_micro": 3.0,
+      "dev_m_rate": 6.0,
+      "dev_m_silent": 3.0,
+      "dev_multi_share": 0.1,
+      "dev_ratio": 2.0,
+      "devices_enabled": false,
+      "franchise_d_hours": 0.25,
+      "graph_K_rho": 10.0,
+      "graph_b_join": 0.2,
+      "graph_b_subnet": 0.6,
+      "graph_b_wallet": 0.95,
+      "graph_cluster_cut": 0.5,
+      "graph_join_window_days": 1.0,
+      "graph_snapshot_days": 30,
+      "graph_store_min": 0.2,
+      "heterogeneity_a": 0.5,
+      "horizon_days": 45,
+      "hw_classes": [
+        "consumer_hdd",
+        "enterprise_hdd",
+        "ssd"
+      ],
+      "hw_probs": [
+        0.5,
+        0.3,
+        0.2
+      ],
+      "initial_age_mean_days": 365.0,
+      "k": 2,
+      "kappa_age": 0.8,
+      "lognorm_median_hours": 2.0,
+      "lognorm_sigma": 1.6,
+      "mean_event_rate": 0.03333333333333333,
+      "micro_info_b": 0.5,
+      "micro_mean_minutes": 3.0,
+      "micro_noise_sd": 0.5,
+      "micro_rate": 1.0,
+      "mism_q_factor": 2.0,
+      "mism_s_factor": 0.5,
+      "n_dc": 8,
+      "n_initial_nodes": 24,
+      "n_providers": 4,
+      "n_regions": 3,
+      "node_join_rate": 0.1,
+      "object_size": 1.0,
+      "operator_join_gap_days": 10.0,
+      "operator_same_dc_p": 0.7,
+      "operator_same_subnet_p": 0.5,
+      "operator_size_p": 0.6,
+      "ping_interval_minutes": 5.0,
+      "ping_noise": 0.001,
+      "pre_gamma": 2.0,
+      "pre_k_W": 4.0,
+      "pre_sigma_W": 1.0,
+      "pre_u0": 0.5,
+      "repair_hours": 2.0,
+      "seed": 6,
+      "severity_node_sd": 0.3,
+      "shock_rate_per_year": [
+        0.5,
+        0.3333333333333333,
+        0.1
+      ],
+      "shock_scale_hours": [
+        6.0,
+        4.0,
+        3.0
+      ],
+      "shock_shape": 0.8,
+      "shock_total_share": 0.1,
+      "shocks_enabled": true,
+      "silent_rate": 0.000547945205479452,
+      "storm_hours": 12.0,
+      "storm_multiplier": 40.0,
+      "sw_release_every_days": 60.0,
+      "sw_update_delay_days": 10.0,
+      "track_objects": 300,
+      "train_days": 22,
+      "transfer_rate_size_per_hour": null,
+      "weibull_scale_hours": 5.0,
+      "weibull_shape": 0.6,
+      "world_mode": "matched"
+    },
+    "settings": {
+      "n": 3,
+      "block_days": 7,
+      "reserve_horizon_days": 30,
+      "loss_limit": 0.001,
+      "availability_limit": 0.08,
+      "candidate_limit": 16,
+      "swap_rounds": 2,
+      "repair_mode": "thiele"
+    },
+    "requirements": {
+      "min_n": 3,
+      "max_n": 3,
+      "trials": 4,
+      "window_loss_limit": 4e-05,
+      "availability_limit": 0.08,
+      "min_observed_hours": 48,
+      "fallback": "best_effort"
+    },
+    "world_hashes": {
+      "nodes": "42e0cd948147516c992ca6e87d746a7df6d0d856feb9dd911726a49f7b7af1d3",
+      "outages": "cad70ca56a46f9fbbdc23e04699de20ada40b292f5bbee2a78d8c798e89e406b",
+      "silent": "2637ba662336a6d7a6fab249626622e3f684afc1ca66e3b56534347d1b6714dc"
+    },
+    "input_hashes": {
+      "observed": "12a26942c63104ce28dc4de2542aaf36c3837b89541ae4ea66caa6c1a2395146",
+      "audit": "86cacc28bf7127ff3af5e460aa88a89ac1e9f5a5bc2dff9bdd14d2cb5ce1451b",
+      "objects": "32af11206a61155ed7324360c171d8c34035995d897fbb9face93871ea1a894e",
+      "capacity": "ef5d137bfa54f2be767257d4e9ecbe3291e7148f5ca97947fabe452652d846cc"
+    },
+    "world_unchanged": true,
+    "common_random_numbers": true,
+    "variants": {
+      "classic": {
+        "objects_requested": 45,
+        "objects_admitted": 45,
+        "initial_rejected_objects": 0,
+        "lost_objects_ledger": 2,
+        "lost_admitted_objects": 2,
+        "size_counts": {
+          "3": 45
+        },
+        "mean_initial_n": 3.0,
+        "status_counts": {
+          "unscored_cold_start": 7,
+          "no_feasible_found_best_effort": 38
+        },
+        "placement_risk": {
+          "checked": 38,
+          "feasible": 0,
+          "violations": 38,
+          "unscored": 7
+        },
+        "requirements_passed_objects": 0,
+        "scored_objects": 38,
+        "repair_operations": 19,
+        "repair_traffic": 28.5,
+        "fragment_days": 3073.0,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 2,
+          "object_days": 1035.0,
+          "lost_object_days": 5.305573671224138,
+          "unavailable_object_days": 8.375253296976702,
+          "unavailability_share": 0.008092032170991982
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.7104200391586062,
+          "unavailability_share": 0.002573985649125385
+        },
+        "runtime_warnings": {
+          "overflow encountered in exp": 78
+        },
+        "seconds": 2.1550828999606892,
+        "placement_decisions": [
+          {
+            "obj": 0,
+            "time": 0.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              3,
+              14,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                3,
+                14,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 0,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 1,
+            "time": 1.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              20,
+              1,
+              16
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                20,
+                1,
+                16
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 24,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 2,
+            "time": 2.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              3,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                3,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 48,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 3,
+            "time": 3.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              15,
+              1,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                15,
+                1,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 72,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 4,
+            "time": 4.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              13,
+              27
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                13,
+                27
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 96,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 5,
+            "time": 5.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              8,
+              5,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                8,
+                5,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 120,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 6,
+            "time": 6.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              23,
+              4,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                23,
+                4,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 144,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 7,
+            "time": 7.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              19,
+              2,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                19,
+                2,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008018207400994448,
+              "actuarial_cost_proxy": 0.02823405704177655,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 168,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 8,
+            "time": 8.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              25,
+              13,
+              2
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                25,
+                13,
+                2
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0009845770160859762,
+              "actuarial_cost_proxy": 0.03730119082808469,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 192,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 9,
+            "time": 9.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              10,
+              19,
+              2
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                10,
+                19,
+                2
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0011580775911986102,
+              "estimated_window_loss": 0.0008020241639299091,
+              "actuarial_cost_proxy": 0.028243585246687217,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 216,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0011580775911986102
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 10,
+            "time": 10.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              18,
+              22
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                18,
+                22
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008354769443802704,
+              "actuarial_cost_proxy": 0.029899359035066433,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 240,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 11,
+            "time": 11.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              10,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                10,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0009799118079372856,
+              "estimated_window_loss": 0.0007977978133291338,
+              "actuarial_cost_proxy": 0.02803519256103652,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 264,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0009799118079372856
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 12,
+            "time": 12.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              20,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                20,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000801510738116838,
+              "actuarial_cost_proxy": 0.028219179443336757,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 288,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 13,
+            "time": 13.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              11,
+              24,
+              4
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                11,
+                24,
+                4
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0016539585374129224,
+              "actuarial_cost_proxy": 0.07133479712307658,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 312,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 14,
+            "time": 14.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              6,
+              1,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                6,
+                1,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 336,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 15,
+            "time": 15.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              1,
+              19
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                1,
+                19
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 360,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 16,
+            "time": 16.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              19,
+              3
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                19,
+                3
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 384,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 17,
+            "time": 17.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              12,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                12,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 408,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 18,
+            "time": 18.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              20,
+              23
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                20,
+                23
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 432,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 19,
+            "time": 19.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              20,
+              2,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                20,
+                2,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 456,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 20,
+            "time": 20.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              3,
+              14
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                3,
+                14
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003445282706917726,
+              "actuarial_cost_proxy": 0.01060006634232643,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 480,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 21,
+            "time": 21.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              23,
+              8,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                23,
+                8,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0018115942028985507,
+              "estimated_window_loss": 0.00024371511482581293,
+              "actuarial_cost_proxy": 0.01088398252919789,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 504,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0018115942028985507
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 22,
+            "time": 22.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              22,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                22,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0002222054682897458,
+              "actuarial_cost_proxy": 0.007400966546897483,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 528,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 23,
+            "time": 23.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              4,
+              3
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                4,
+                3
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0002277548756978911,
+              "actuarial_cost_proxy": 0.008528893129193575,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 552,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 24,
+            "time": 24.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              0,
+              14
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                0,
+                14
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00022117260298035648,
+              "actuarial_cost_proxy": 0.007111100594834551,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 576,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 25,
+            "time": 25.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              22,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                22,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00023623217255800552,
+              "actuarial_cost_proxy": 0.010545188129925125,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 600,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 3,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 26,
+            "time": 26.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              1,
+              17
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                1,
+                17
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00021734962381266887,
+              "actuarial_cost_proxy": 0.006315972564650852,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 624,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 27,
+            "time": 27.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              0,
+              22
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                0,
+                22
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0014367816091954023,
+              "estimated_window_loss": 0.00021740982152679565,
+              "actuarial_cost_proxy": 0.00632888513843996,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 648,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0014367816091954023
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 28,
+            "time": 28.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              15,
+              2
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                15,
+                2
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00015993008955839075,
+              "actuarial_cost_proxy": 0.004585122379494055,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 672,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 29,
+            "time": 29.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              14,
+              2,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                14,
+                2,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00016275546613043885,
+              "actuarial_cost_proxy": 0.00540567715540334,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 696,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 30,
+            "time": 30.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              23,
+              16,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                23,
+                16,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0026041666666666665,
+              "estimated_window_loss": 0.00015974556334854737,
+              "actuarial_cost_proxy": 0.00453008630699921,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0026041666666666665
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 31,
+            "time": 31.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              1,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                1,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017234681804432857,
+              "actuarial_cost_proxy": 0.008501142959712618,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 32,
+            "time": 32.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              3,
+              8,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                3,
+                8,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00018599395865803581,
+              "actuarial_cost_proxy": 0.0101476064077249,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 33,
+            "time": 33.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              14,
+              3,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                14,
+                3,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00016250787383286308,
+              "actuarial_cost_proxy": 0.005350050832366508,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 34,
+            "time": 34.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017284241076375676,
+              "actuarial_cost_proxy": 0.008661071747915805,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 35,
+            "time": 35.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              16,
+              23,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                16,
+                23,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012644265770842526,
+              "actuarial_cost_proxy": 0.003534609001023796,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 36,
+            "time": 36.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              0,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                0,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012641326322795457,
+              "actuarial_cost_proxy": 0.0035233689854684913,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 37,
+            "time": 37.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              22,
+              0,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                22,
+                0,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001264416602371585,
+              "actuarial_cost_proxy": 0.0035342144013392213,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 38,
+            "time": 38.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              16,
+              3,
+              20
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                16,
+                3,
+                20
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00013346541996084888,
+              "actuarial_cost_proxy": 0.00635405575925696,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 39,
+            "time": 39.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              20,
+              23
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                20,
+                23
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001331503330208993,
+              "actuarial_cost_proxy": 0.006227682960637688,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 40,
+            "time": 40.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              0,
+              17
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                0,
+                17
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012642761435929805,
+              "actuarial_cost_proxy": 0.003528858209472279,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 41,
+            "time": 41.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              15,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                15,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012654908309063994,
+              "actuarial_cost_proxy": 0.0035753274195099854,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 42,
+            "time": 42.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              24,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                24,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012569195485842335,
+              "actuarial_cost_proxy": 0.009618860435939547,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 43,
+            "time": 43.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              0,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                0,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012204078082403418,
+              "actuarial_cost_proxy": 0.007425877992820106,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 44,
+            "time": 44.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              15,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                15,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012368710585284486,
+              "actuarial_cost_proxy": 0.007905976101431032,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          }
+        ],
+        "repair_requests": [
+          {
+            "obj": 0,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              11
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              15
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 14,
+            "time": 26.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              24
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 4,
+            "time": 31.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 0,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 32,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 33,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 16,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              17
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 20,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 38,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 23,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 38,
+            "time": 41.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 7,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 8,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 41,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 19,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 24,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 28,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 29,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          }
+        ],
+        "repair_best_effort_requests": 20,
+        "final_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "graph": {
+        "objects_requested": 45,
+        "objects_admitted": 45,
+        "initial_rejected_objects": 0,
+        "lost_objects_ledger": 0,
+        "lost_admitted_objects": 0,
+        "size_counts": {
+          "3": 45
+        },
+        "mean_initial_n": 3.0,
+        "status_counts": {
+          "unscored_cold_start": 7,
+          "no_feasible_found_best_effort": 38
+        },
+        "placement_risk": {
+          "checked": 38,
+          "feasible": 0,
+          "violations": 38,
+          "unscored": 7
+        },
+        "requirements_passed_objects": 0,
+        "scored_objects": 38,
+        "repair_operations": 19,
+        "repair_traffic": 28.5,
+        "fragment_days": 3086.0,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 0,
+          "object_days": 1035.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.36983411264860955,
+          "unavailability_share": 0.00035732764507112033
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.005880530783286986,
+          "unavailability_share": 2.1306270953938355e-05
+        },
+        "runtime_warnings": {
+          "overflow encountered in exp": 71
+        },
+        "seconds": 4.0820943000144325,
+        "placement_decisions": [
+          {
+            "obj": 0,
+            "time": 0.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              4,
+              19,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                4,
+                19,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 0,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 1,
+            "time": 1.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              12,
+              4
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                12,
+                4
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 24,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 2,
+            "time": 2.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              4,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                4,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 48,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 3,
+            "time": 3.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              17,
+              2,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                17,
+                2,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 72,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 4,
+            "time": 4.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              20,
+              4,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                20,
+                4,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 96,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 5,
+            "time": 5.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              13,
+              19,
+              2
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                13,
+                19,
+                2
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 120,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 6,
+            "time": 6.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              17,
+              20,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                17,
+                20,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 144,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 7,
+            "time": 7.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              19,
+              3,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                19,
+                3,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0009675728160310185,
+              "actuarial_cost_proxy": 0.035306452569175625,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 168,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 8,
+            "time": 8.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              13,
+              20,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                13,
+                20,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0012113358714913526,
+              "actuarial_cost_proxy": 0.044612430643379164,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 192,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 9,
+            "time": 9.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              27,
+              17
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                27,
+                17
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0010149208231048181,
+              "actuarial_cost_proxy": 0.037149240316175086,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 216,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 10,
+            "time": 10.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              27,
+              25,
+              13
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                27,
+                25,
+                13
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0011973755796526962,
+              "actuarial_cost_proxy": 0.04430317438563076,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 240,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 11,
+            "time": 11.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              18,
+              3
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                18,
+                3
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0010099373693705433,
+              "actuarial_cost_proxy": 0.03697054379970041,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 264,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 12,
+            "time": 12.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              27,
+              28
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                27,
+                28
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0010273110541553945,
+              "actuarial_cost_proxy": 0.037636068871297654,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 288,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 13,
+            "time": 13.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              25,
+              17,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                25,
+                17,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0020462388122684844,
+              "actuarial_cost_proxy": 0.07868360928308404,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 312,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 14,
+            "time": 14.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              1,
+              20
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                1,
+                20
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 336,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 15,
+            "time": 15.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 360,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 16,
+            "time": 16.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              12,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                12,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 384,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 17,
+            "time": 17.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              12,
+              4
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                12,
+                4
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 408,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 18,
+            "time": 18.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              8,
+              12,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                8,
+                12,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 432,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 19,
+            "time": 19.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              21,
+              1,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                21,
+                1,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 456,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 20,
+            "time": 20.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              3,
+              13
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                3,
+                13
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0003691392361989036,
+              "actuarial_cost_proxy": 0.013382260300991034,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 480,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 21,
+            "time": 21.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              2,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                2,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000246770987432234,
+              "actuarial_cost_proxy": 0.011040766459279176,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 504,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 22,
+            "time": 22.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              2,
+              20
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                2,
+                20
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00023489764976960975,
+              "actuarial_cost_proxy": 0.009518042639544162,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 528,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 23,
+            "time": 23.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              15,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                15,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00024487266605689793,
+              "actuarial_cost_proxy": 0.011367646934517951,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 552,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 24,
+            "time": 24.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              3,
+              20
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                3,
+                20
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00023625514039377776,
+              "actuarial_cost_proxy": 0.009809593810537955,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 576,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 25,
+            "time": 25.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              25,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                25,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00027028390120238037,
+              "actuarial_cost_proxy": 0.014035089971516772,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 600,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 26,
+            "time": 26.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              25,
+              4,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                25,
+                4,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0002921962113059471,
+              "actuarial_cost_proxy": 0.015651450157510308,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 624,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 27,
+            "time": 27.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              26,
+              12,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                26,
+                12,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000288169188879014,
+              "actuarial_cost_proxy": 0.01571106091436819,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 648,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 28,
+            "time": 28.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017619256400264654,
+              "actuarial_cost_proxy": 0.008808099859715653,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 672,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 29,
+            "time": 29.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              22,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                22,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00018035205329268772,
+              "actuarial_cost_proxy": 0.009862831784220878,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 696,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 30,
+            "time": 30.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              22,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                22,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001700001110498932,
+              "actuarial_cost_proxy": 0.007210414534892879,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 31,
+            "time": 31.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              21,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                21,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00020916718029509335,
+              "actuarial_cost_proxy": 0.012941990106375905,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 32,
+            "time": 32.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              23,
+              14
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                23,
+                14
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001745808222253828,
+              "actuarial_cost_proxy": 0.007928737354775865,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 33,
+            "time": 33.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              16,
+              18,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                16,
+                18,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017029331732441763,
+              "actuarial_cost_proxy": 0.007287031235408672,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 34,
+            "time": 34.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              3,
+              17
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                3,
+                17
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001793272989207728,
+              "actuarial_cost_proxy": 0.0096020976896388,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 35,
+            "time": 35.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              16,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                16,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00013569245030023037,
+              "actuarial_cost_proxy": 0.006682865826579403,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 36,
+            "time": 36.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              3,
+              0,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                3,
+                0,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00014294160140635416,
+              "actuarial_cost_proxy": 0.008909246931597739,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 37,
+            "time": 37.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              23,
+              0,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                23,
+                0,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001422327883426915,
+              "actuarial_cost_proxy": 0.008676842493380094,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 38,
+            "time": 38.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              15,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                15,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001599545121148478,
+              "actuarial_cost_proxy": 0.014471442335524137,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 39,
+            "time": 39.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              23,
+              13
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                23,
+                13
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00014988645832327303,
+              "actuarial_cost_proxy": 0.011481877182063236,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 40,
+            "time": 40.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              22,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                22,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001282112151835202,
+              "actuarial_cost_proxy": 0.0041607313782969215,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 41,
+            "time": 41.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              17,
+              24
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                17,
+                24
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000145353004445958,
+              "actuarial_cost_proxy": 0.009964961128157075,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 42,
+            "time": 42.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              25,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                25,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001600966790148564,
+              "actuarial_cost_proxy": 0.01327176774712444,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 43,
+            "time": 43.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              23,
+              15,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                23,
+                15,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012845967329858592,
+              "actuarial_cost_proxy": 0.008686286955359248,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 44,
+            "time": 44.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              23,
+              17,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                23,
+                17,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012517247913964512,
+              "actuarial_cost_proxy": 0.007968697495233507,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          }
+        ],
+        "repair_requests": [
+          {
+            "obj": 0,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              9
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              9
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 12,
+            "time": 21.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              18
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 0,
+            "time": 28.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              12
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 28.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 9,
+            "time": 31.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 10,
+            "time": 31.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 12,
+            "time": 31.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 34,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              2
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 36,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 7,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 11,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 20,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 24,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              12
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 34,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              24
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 3,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 5,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 21,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 22,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          }
+        ],
+        "repair_best_effort_requests": 19,
+        "final_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "hybrid": {
+        "objects_requested": 45,
+        "objects_admitted": 45,
+        "initial_rejected_objects": 0,
+        "lost_objects_ledger": 0,
+        "lost_admitted_objects": 0,
+        "size_counts": {
+          "3": 45
+        },
+        "mean_initial_n": 3.0,
+        "status_counts": {
+          "unscored_cold_start": 7,
+          "no_feasible_found_best_effort": 38
+        },
+        "placement_risk": {
+          "checked": 38,
+          "feasible": 0,
+          "violations": 38,
+          "unscored": 7
+        },
+        "requirements_passed_objects": 0,
+        "scored_objects": 38,
+        "repair_operations": 20,
+        "repair_traffic": 30.0,
+        "fragment_days": 3084.0,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 0,
+          "object_days": 1035.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 1.0593123881455933,
+          "unavailability_share": 0.0010234902300923607
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.6985645132069962,
+          "unavailability_share": 0.0025310308449528847
+        },
+        "runtime_warnings": {
+          "overflow encountered in exp": 294
+        },
+        "seconds": 5.9589142999611795,
+        "placement_decisions": [
+          {
+            "obj": 0,
+            "time": 0.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              3,
+              14,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                3,
+                14,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 0,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 1,
+            "time": 1.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              4,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                4,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 24,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 2,
+            "time": 2.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              3,
+              11
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                3,
+                11
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 48,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 3,
+            "time": 3.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              15,
+              1,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                15,
+                1,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 72,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 4,
+            "time": 4.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              0,
+              13,
+              27
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                0,
+                13,
+                27
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 96,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 5,
+            "time": 5.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              18,
+              5,
+              3
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                18,
+                5,
+                3
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 120,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 6,
+            "time": 6.0,
+            "status": "unscored_cold_start",
+            "nodes": [
+              4,
+              12,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": false,
+            "selected": {
+              "nodes": [
+                4,
+                12,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": null,
+              "actuarial_cost_proxy": null,
+              "dropped_shock_mass": null,
+              "min_observed_hours": 144,
+              "scored": false,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 7,
+            "time": 7.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              19,
+              2,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                19,
+                2,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008936029127121629,
+              "actuarial_cost_proxy": 0.03234239544713246,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 168,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 8,
+            "time": 8.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              13,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                13,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0011035668776007688,
+              "actuarial_cost_proxy": 0.041401056461315984,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 192,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 9,
+            "time": 9.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              19,
+              2
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                19,
+                2
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008934953354778997,
+              "actuarial_cost_proxy": 0.032337841579823945,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 216,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 10,
+            "time": 10.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              18,
+              22
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                18,
+                22
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00093232987314404,
+              "actuarial_cost_proxy": 0.03400769744042251,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 240,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 11,
+            "time": 11.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              4,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                4,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008886652716403582,
+              "actuarial_cost_proxy": 0.03213062680529752,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 264,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 12,
+            "time": 12.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              4,
+              20,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                4,
+                20,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0008932475947975469,
+              "actuarial_cost_proxy": 0.03232751784869278,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 288,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 13,
+            "time": 13.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              4,
+              23
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                4,
+                23
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0009316683370536667,
+              "actuarial_cost_proxy": 0.0339791985364262,
+              "dropped_shock_mass": 4.887807413857747e-09,
+              "min_observed_hours": 312,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 14,
+            "time": 14.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              1,
+              4
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                1,
+                4
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 336,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 15,
+            "time": 15.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              11,
+              24
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                11,
+                24
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 360,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 16,
+            "time": 16.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              6,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                6,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 384,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 17,
+            "time": 17.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              9,
+              18,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                9,
+                18,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 408,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 18,
+            "time": 18.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              21,
+              1,
+              13
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                21,
+                1,
+                13
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 432,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 19,
+            "time": 19.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              6,
+              1,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                6,
+                1,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 456,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 20,
+            "time": 20.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              3,
+              14
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                3,
+                14
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00035971333337887974,
+              "actuarial_cost_proxy": 0.012393466629270374,
+              "dropped_shock_mass": 3.1027357608834923e-09,
+              "min_observed_hours": 480,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 21,
+            "time": 21.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              8,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                8,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0002508938171983937,
+              "actuarial_cost_proxy": 0.011733261711860591,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 504,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 22,
+            "time": 22.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              15,
+              22,
+              18
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                15,
+                22,
+                18
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00022717088399630097,
+              "actuarial_cost_proxy": 0.008258264923020153,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 528,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 23,
+            "time": 23.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              4,
+              3
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                4,
+                3
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00023346649303248503,
+              "actuarial_cost_proxy": 0.009386191505316286,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 552,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 24,
+            "time": 24.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              0,
+              14
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                0,
+                14
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00022594586084375817,
+              "actuarial_cost_proxy": 0.007968398970957186,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 576,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 25,
+            "time": 25.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              22,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                22,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00024327632176244262,
+              "actuarial_cost_proxy": 0.01140248650604777,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 600,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 3,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 26,
+            "time": 26.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              0,
+              4
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                0,
+                4
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00023199341414427977,
+              "actuarial_cost_proxy": 0.009076476800699673,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 624,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 27,
+            "time": 27.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              0,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                0,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00022159965704436022,
+              "actuarial_cost_proxy": 0.007174025375964205,
+              "dropped_shock_mass": 9.199525636118175e-10,
+              "min_observed_hours": 648,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 28,
+            "time": 28.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              0,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                0,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000161294599635388,
+              "actuarial_cost_proxy": 0.004975083842092682,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 672,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 3,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 29,
+            "time": 29.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              14,
+              2,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                14,
+                2,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001646472242151891,
+              "actuarial_cost_proxy": 0.005859792576406244,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 696,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 30,
+            "time": 30.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              16,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                16,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00016130781440982015,
+              "actuarial_cost_proxy": 0.0049785153582295,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 31,
+            "time": 31.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              24,
+              1,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                24,
+                1,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017532672608609024,
+              "actuarial_cost_proxy": 0.008955258380715557,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 32,
+            "time": 32.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              22,
+              12,
+              8
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                22,
+                12,
+                8
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00018964035811204363,
+              "actuarial_cost_proxy": 0.010610705902743772,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 33,
+            "time": 33.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              16,
+              18,
+              23
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                16,
+                18,
+                23
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00016781306500027185,
+              "actuarial_cost_proxy": 0.006815184319644861,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 34,
+            "time": 34.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              24,
+              12
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                24,
+                12
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00017587843924057214,
+              "actuarial_cost_proxy": 0.009115187168918638,
+              "dropped_shock_mass": 3.8823656865542274e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 35,
+            "time": 35.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              16,
+              3,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                16,
+                3,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012723353811971047,
+              "actuarial_cost_proxy": 0.0038281184440152848,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 36,
+            "time": 36.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              1,
+              0,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                1,
+                0,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.000127212513058196,
+              "actuarial_cost_proxy": 0.0038207258136623073,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 37,
+            "time": 37.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              22,
+              0,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                22,
+                0,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001272434172058003,
+              "actuarial_cost_proxy": 0.0038315712295331683,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 38,
+            "time": 38.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              3,
+              14,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                3,
+                14,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00013756630961410542,
+              "actuarial_cost_proxy": 0.0074493652023660635,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 39,
+            "time": 39.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              20,
+              23
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                20,
+                23
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00013457390042008048,
+              "actuarial_cost_proxy": 0.006525039788831424,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 40,
+            "time": 40.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              0,
+              15,
+              22
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                0,
+                15,
+                22
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001272400693460766,
+              "actuarial_cost_proxy": 0.0038304268204697837,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 41,
+            "time": 41.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              2,
+              15,
+              0
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                2,
+                15,
+                0
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012736034394959287,
+              "actuarial_cost_proxy": 0.0038726842477037502,
+              "dropped_shock_mass": 1.9881755660859623e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 3,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 42,
+            "time": 42.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              12,
+              24,
+              15
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                12,
+                24,
+                15
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012727107876237768,
+              "actuarial_cost_proxy": 0.009832104852813002,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 43,
+            "time": 43.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              17,
+              0,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                17,
+                0,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.00012325797632672134,
+              "actuarial_cost_proxy": 0.007639122409693502,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          },
+          {
+            "obj": 44,
+            "time": 44.0,
+            "status": "no_feasible_found_best_effort",
+            "nodes": [
+              18,
+              15,
+              1
+            ],
+            "n": 3,
+            "requirements_passed": false,
+            "scored": true,
+            "selected": {
+              "nodes": [
+                18,
+                15,
+                1
+              ],
+              "n": 3,
+              "estimated_unavailability": 0.0,
+              "estimated_window_loss": 0.0001249834796469519,
+              "actuarial_cost_proxy": 0.008119220518304566,
+              "dropped_shock_mass": 1.1507205854686054e-10,
+              "min_observed_hours": 720,
+              "scored": true,
+              "requirements_passed": false,
+              "graph_score": 0.0
+            },
+            "unique_proposals_checked": 4,
+            "window_days": 1.0833333333333333,
+            "window_loss_limit": 4e-05,
+            "availability_limit": 0.08,
+            "minimum_proven": false,
+            "scope": "initial_placement"
+          }
+        ],
+        "repair_requests": [
+          {
+            "obj": 0,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              11
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 5.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              4
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 16,
+            "time": 26.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              24
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 19,
+            "time": 26.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              24
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 17,
+            "time": 28.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              15
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 4,
+            "time": 31.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 0,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              24
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 2,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 35,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 5,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 38,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 20,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              22
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 23,
+            "time": 40.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 35,
+            "time": 41.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 7,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 41,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 9,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              2
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 11,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 24,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 26,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              0
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          },
+          {
+            "obj": 29,
+            "time": 43.0,
+            "n_obj": 3,
+            "indices": [
+              1
+            ],
+            "targets": [
+              23
+            ],
+            "requirements_passed": false,
+            "status": "repair_best_effort"
+          }
+        ],
+        "repair_best_effort_requests": 21,
+        "final_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "realized_shocks": 1,
+    "realized_destructive_shocks": 0
+  }
+}

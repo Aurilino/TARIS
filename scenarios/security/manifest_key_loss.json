@@ -1,0 +1,8 @@
+{
+  "schema": "taris-security-scenario/1",
+  "events": [
+    {"kind": "client_key_unavailable", "t": 1.0, "obj": 0, "until": 2.0},
+    {"kind": "manifest_unavailable", "t": 3.0, "obj": 0, "until": 4.0},
+    {"kind": "envelope_unavailable", "t": 5.0, "obj": 0, "until": 6.0}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "taris-state-verification/1",
+  "validation_windows": 702,
+  "cv_folds_verified": 6,
+  "profiles_verified": 2,
+  "model_hash": "79a295c096a1e386ff7c4c0bb9ef8a84ffc36cc7ed5addefe075bab72b72370a",
+  "results_hash": "2c36a25c65fb12d41727779a6be82b9ded82dada9bd2ae6b8dbbf3fd978a5b9b",
+  "checker_hash": "2ad36484929390dfdc5e54b07418c7fc4058e4c17e90e2419f66aa50e9cb8745"
+}

@@ -1,0 +1,7 @@
+{
+  "source_hash": "c470120649429050a6aa6f8b55b738ddbfaf22911973ad26748adccfe918e0fe",
+  "plotter_hash": "ba625068b7a169bb03af01967d6f7ccc7d79997af5c0de2db817a644ed30d433",
+  "comparison": "pressure_minus_legacy",
+  "worlds": 3,
+  "loss_and_queue_separate": true
+}

@@ -2,7 +2,8 @@
 
     S0/S2, основной мир, порог восстановления R_min=2. Сравниваются истинные
     веса оракула, равномерные веса, случайное и детерминированное жадное ранжирование
-    агента; все используют публичные кошелёк/подсеть. Миры одинаковы по seed.
+    агента, а также поиск с ограничением риска; все используют публичные кошелёк/подсеть.
+    Миры одинаковы по seed.
 
     python scripts/run_agent_placement.py [workers=4] [days=365] [seed-range=1-3] [--force]
 """
@@ -44,6 +45,7 @@ def run(job):
     rho = float(spearmanr(pol.w, truth).statistic) if np.std(pol.w) > 0 else float("nan")
     out = {"job": job, "metrics": res.metrics(), "losses": res.losses,
            "rho_to_oracle": rho, "fits": len(getattr(pol, "fits", [])),
+           "placement_risk": getattr(pol, "placement_risk", None),
            "placement": kind, "seconds": round(time.time() - started)}
     path = os.path.join(OUT, f"agent_placement_{days}", f"{scn}_{kind}_s{seed}.pkl")
     with open(path, "wb") as f:
@@ -67,7 +69,7 @@ if __name__ == "__main__":
     out_dir = os.path.join(OUT, f"agent_placement_{days}")
     os.makedirs(out_dir, exist_ok=True)
     jobs = [(s, seed, kind, days) for s in ("S0", "S2") for seed in range(s0, s1 + 1)
-            for kind in ("oracle", "uniform", "agent", "agent_greedy")]
+            for kind in ("oracle", "uniform", "agent", "agent_greedy", "agent_capped")]
     if "--force" not in sys.argv:
         jobs = [j for j in jobs if not os.path.exists(os.path.join(out_dir, f"{j[0]}_{j[2]}_s{j[1]}.pkl"))]
     print(f"Прогонов к расчёту: {len(jobs)}, дней={days}, seeds={seed_range}, workers={workers}")

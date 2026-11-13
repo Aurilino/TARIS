@@ -1,0 +1,2165 @@
+{
+  "schema": "taris-crisis-trials/1",
+  "training": {
+    "S0": "11/14",
+    "S1": "3/14"
+  },
+  "cases": {
+    "predictable_reactive": {
+      "end": "7",
+      "traffic_chunk_units": "1",
+      "lost": {
+        "O": "5/2"
+      },
+      "final_physical": [
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "9/2"
+      },
+      "service_unavailability_hours": {
+        "O": "9/2"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 0,
+          "target": "D",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "2",
+          "phase": "read",
+          "remaining": "1/2",
+          "status": "failed",
+          "finished": "5/2",
+          "reason": "получатель ушёл или объект потерян"
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "warning",
+          "node": null,
+          "obj": null,
+          "index": null,
+          "site": "S0"
+        },
+        {
+          "time": "2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "2",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "5/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "5/2",
+          "event": "failed",
+          "job": 0,
+          "reason": "получатель ушёл или объект потерян"
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "7/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "9/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "11/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "13/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        }
+      ]
+    },
+    "predictable_forecast": {
+      "end": "7",
+      "traffic_chunk_units": "6",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "D"
+        ],
+        [
+          "O",
+          1,
+          "E"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          0,
+          "D"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          1,
+          "E"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 0,
+          "target": "D",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "2",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O",
+          "index": 1,
+          "target": "E",
+          "sources": [
+            [
+              0,
+              "D"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "5/2",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "9/2",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "warning",
+          "node": null,
+          "obj": null,
+          "index": null,
+          "site": "S0"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "5/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "5/2",
+          "event": "reserved",
+          "job": 1,
+          "target": "E"
+        },
+        {
+          "time": "7/2",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "9/2",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "9/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "11/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "13/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "sudden_forecast_n3": {
+      "end": "7",
+      "traffic_chunk_units": "1",
+      "lost": {
+        "O": "5/2"
+      },
+      "final_physical": [
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "9/2"
+      },
+      "service_unavailability_hours": {
+        "O": "9/2"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 0,
+          "target": "D",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "2",
+          "phase": "read",
+          "remaining": "1/2",
+          "status": "failed",
+          "finished": "5/2",
+          "reason": "получатель ушёл или объект потерян"
+        }
+      ],
+      "log": [
+        {
+          "time": "2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "2",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "5/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "5/2",
+          "event": "failed",
+          "job": 0,
+          "reason": "получатель ушёл или объект потерян"
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "7/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "9/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "11/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "13/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        }
+      ]
+    },
+    "sudden_forecast_n4": {
+      "end": "7",
+      "traffic_chunk_units": "1",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          3,
+          "D"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          3,
+          "D"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 0,
+          "target": "E",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "2",
+          "phase": "read",
+          "remaining": "1/2",
+          "status": "queued",
+          "finished": null,
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "2",
+          "event": "reserved",
+          "job": 0,
+          "target": "E"
+        },
+        {
+          "time": "5/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 4,
+              "readable_unique": 4,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1/2",
+          "objects": {
+            "O": {
+              "durable_unique": 4,
+              "readable_unique": 4,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 4,
+              "readable_unique": 4,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 4,
+              "readable_unique": 4,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "9/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "11/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "13/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "frequent_false_warning_ignored": {
+      "end": "5",
+      "traffic_chunk_units": "0",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 0,
+        "E": 0
+      },
+      "jobs": [],
+      "log": [
+        {
+          "time": "0",
+          "event": "warning",
+          "node": null,
+          "obj": null,
+          "index": null,
+          "site": "S1"
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "credible_warning_but_no_crisis": {
+      "end": "5",
+      "traffic_chunk_units": "3",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          0,
+          "D"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          0,
+          "D"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 0,
+          "target": "D",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "2",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "warning",
+          "node": null,
+          "obj": null,
+          "index": null,
+          "site": "S0"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "write_confirmed",
+          "job": 0
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "unlimited_recovery_overload": {
+      "end": "9",
+      "traffic_chunk_units": "6",
+      "lost": {},
+      "final_physical": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O1": "2",
+        "O2": "2"
+      },
+      "service_unavailability_hours": {
+        "O1": "2",
+        "O2": "2"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 2,
+        "B": 2,
+        "C": 2,
+        "D": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O1",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "6",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O2",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "6",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "C"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 1,
+          "target": "C"
+        },
+        {
+          "time": "1",
+          "event": "overload",
+          "site": "source",
+          "flows": 4,
+          "until": "3"
+        },
+        {
+          "time": "3",
+          "event": "overload_recovered",
+          "site": "source"
+        },
+        {
+          "time": "4",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "4",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "6",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "6",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "8",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "9",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "throttled_recovery": {
+      "end": "9",
+      "traffic_chunk_units": "6",
+      "lost": {},
+      "final_physical": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "service_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 2,
+        "B": 2,
+        "C": 2,
+        "D": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O1",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "2",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O2",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "4",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "C"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 1,
+          "target": "C"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "3",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "4",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "8",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "9",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

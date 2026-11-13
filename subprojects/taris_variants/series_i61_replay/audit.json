@@ -1,0 +1,337 @@
+{
+  "schema": "taris-queue-drain-audit/1",
+  "worlds": 1,
+  "executions": 12,
+  "input_hashes": {
+    "s103_close_original.json": "e4ff948b6362333ff84855a25d5c3f748910c23ced051b7d68e4b652206831aa",
+    "s103_close_pressure.json": "d51829173b4507e168bc16fc743291b95b1e9d62977ad6a0edb8edc1255f4869"
+  },
+  "common_exogenous_inputs": true,
+  "baseline_history_identical": true,
+  "source_hash": "09b6613b4a3da6fa804cdd5e3743fed9f1e5dcf39dc49c25c9c0a11fe4d413fd",
+  "rows": [
+    {
+      "mode": "original",
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 217,
+      "buffers": 24,
+      "jobs": 28,
+      "block_attempts": 977,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 24.06249999999858,
+        "write_block": 18.500000000013188,
+        "close_proof": 0.23999999999978172,
+        "proof": 0.15499999999985903
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 16,
+        "distinct_observed_jobs": 10,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 16
+      }
+    },
+    {
+      "mode": "original",
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 211,
+      "buffers": 17,
+      "jobs": 23,
+      "block_attempts": 768,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 16.99999999998454,
+        "write_block": 15.500000000028194,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.03499999999996817
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 8,
+        "distinct_observed_jobs": 5,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 8
+      }
+    },
+    {
+      "mode": "original",
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 211,
+      "buffers": 17,
+      "jobs": 20,
+      "block_attempts": 769,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 17.062499999985846,
+        "write_block": 15.50000000002683,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.1049999999999045
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 16,
+        "distinct_observed_jobs": 10,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 16
+      }
+    },
+    {
+      "mode": "original",
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 189,
+      "buffers": 6,
+      "jobs": 15,
+      "block_attempts": 294,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.846883295466114,
+        "write_block": 4.781249999999977,
+        "close_proof": 0.06000000000000255,
+        "proof": 0.08500000000000114
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 199,
+        "distinct_observed_jobs": 13,
+        "censored_rows": 106,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 196
+      }
+    },
+    {
+      "mode": "original",
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 182,
+      "buffers": 1,
+      "jobs": 9,
+      "block_attempts": 55,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 1.4374999999999865,
+        "write_block": 1.000000000000018,
+        "close_proof": 0.009999999999999433
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 223,
+        "distinct_observed_jobs": 9,
+        "censored_rows": 218,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 195
+      }
+    },
+    {
+      "mode": "original",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 6,
+      "jobs": 14,
+      "block_attempts": 314,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.437500000000014,
+        "write_block": 5.621633295466059,
+        "close_proof": 0.05000000000000142,
+        "proof": 0.08500000000000114
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 199,
+        "distinct_observed_jobs": 13,
+        "censored_rows": 133,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 196
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 217,
+      "buffers": 24,
+      "jobs": 28,
+      "block_attempts": 977,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 24.06249999999858,
+        "write_block": 18.500000000013188,
+        "close_proof": 0.23999999999978172,
+        "proof": 0.15499999999985903
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 16,
+        "distinct_observed_jobs": 10,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 16
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 211,
+      "buffers": 17,
+      "jobs": 23,
+      "block_attempts": 768,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 16.99999999998454,
+        "write_block": 15.500000000028194,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.03499999999996817
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 8,
+        "distinct_observed_jobs": 5,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 8
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 211,
+      "buffers": 17,
+      "jobs": 20,
+      "block_attempts": 769,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 17.062499999985846,
+        "write_block": 15.50000000002683,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.1049999999999045
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 16,
+        "distinct_observed_jobs": 10,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 16
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 189,
+      "buffers": 6,
+      "jobs": 15,
+      "block_attempts": 294,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.846883295466114,
+        "write_block": 4.781249999999977,
+        "close_proof": 0.06000000000000255,
+        "proof": 0.08500000000000114
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 199,
+        "distinct_observed_jobs": 13,
+        "censored_rows": 106,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 196
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 189,
+      "buffers": 5,
+      "jobs": 15,
+      "block_attempts": 270,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.728883295466077,
+        "write_block": 4.5937499999999725,
+        "close_proof": 0.05000000000000228,
+        "proof": 0.019999999999998866
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 197,
+        "distinct_observed_jobs": 13,
+        "censored_rows": 113,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 191
+      }
+    },
+    {
+      "mode": "pressure",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 6,
+      "jobs": 14,
+      "block_attempts": 314,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.437500000000014,
+        "write_block": 5.621633295466059,
+        "close_proof": 0.05000000000000142,
+        "proof": 0.08500000000000114
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "labels": {
+        "snapshots": 45,
+        "job_snapshot_rows": 199,
+        "distinct_observed_jobs": 13,
+        "censored_rows": 133,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 196
+      }
+    }
+  ]
+}

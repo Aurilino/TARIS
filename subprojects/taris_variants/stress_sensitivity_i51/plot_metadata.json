@@ -1,0 +1,6 @@
+{
+  "source_hash": "77fc26a13e753e3307426cbed429873afe6a414439412f65f09beec9918921b0",
+  "plotter_hash": "4f852f9f33986b1bba9b3f005ff834dc78941d0fdcf6f410efa6ed5f1c90cbc2",
+  "worlds": 5,
+  "bands": "min_max_not_confidence_interval"
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "taris-physical-audit/1",
+  "source_hashes_verified": true,
+  "worlds_and_inputs_verified": true,
+  "audit_source_hash": "4a9e21c3d097b576855f8a0ef8cd203c2ecb309d0db10e53454419deb587e11d",
+  "rows": [
+    {
+      "seed": 43,
+      "variant": "classic",
+      "objects_checked": 12,
+      "copies_checked": 52,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.006073445379873199,
+      "physical_fragment_days": 308.8079922518773
+    },
+    {
+      "seed": 43,
+      "variant": "graph",
+      "objects_checked": 12,
+      "copies_checked": 50,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 313.59333315670995
+    },
+    {
+      "seed": 43,
+      "variant": "hybrid",
+      "objects_checked": 12,
+      "copies_checked": 50,
+      "losses_recomputed": 0,
+      "unavailable_object_days": 0.0,
+      "physical_fragment_days": 309.3408837823482
+    }
+  ],
+  "objects_checked": 36,
+  "copies_checked": 152
+}

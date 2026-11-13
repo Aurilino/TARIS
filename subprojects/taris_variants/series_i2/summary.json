@@ -1,0 +1,977 @@
+{
+  "schema": "taris-series-i2/1",
+  "k": 2,
+  "days": 45,
+  "seeds": [
+    3,
+    4,
+    5
+  ],
+  "budgets": [
+    3,
+    4
+  ],
+  "completed_cases": 24,
+  "distinct_worlds": 4,
+  "integrity_passed": true,
+  "provenance": {
+    "main": {
+      "adversary.py": "6ed3dd0af066153ac23e0c698efb4d44440d4d5660714bcb671b7a0fc5eb41c1",
+      "chain.py": "77f09aaf1cdae7cf7d27216ebe6a47ebc22ab1e17594e9d0344720200fb4d82f",
+      "config.py": "7f409ed51fc6e2e07d1252cb62166263c3dda491ae92db63a075546ce5d53399",
+      "contagion.py": "af4905c5f17cb172cffbdb1888024fc9faa891175eb4d03f2022a45e64d078fa",
+      "crisis.py": "452eb9dd0b866af47492393cb1b033061a685766c8d80ce67cb039f2681a8f53",
+      "data.py": "bc81bec1e0a041d9446d9e1fd464828b9c7e5cea68f3cb313f0c145492e8c91b",
+      "experience.py": "fb01206113efb2476c87cdd467a0902b40d5d909a57065a6abd814ede9b8809f",
+      "export.py": "a6d43bebd532945e6c3cab6d20872e2986b024ff8b314adb27b8309edee18cbc",
+      "fixedpoint.py": "12243163743751a47394ed550e32e158722cd040a6c3aeb8a943d9bff23feba7",
+      "forecast.py": "8757dace1ae38a43fef8929bdb51b8c29717e3bda9db499cbb142c291a3c9b3c",
+      "graph.py": "b795d313bc2a7a2262b4131b0270adc8b4fab48b3aacde08e1add371b5f2b425",
+      "ledger.py": "8f959f20904293747e511362fbc57b3ad77e3c94bad3912e0b80bc597d12890a",
+      "policy.py": "5b3c78eeec847a60bfe75c76f53724f6ba09e651677d7156d68728dbdd4402ab",
+      "protection.py": "adba281e84a6a78d506f73173a9f04c2ef9bbe307c1e9577c27202c9bf036023",
+      "reserve.py": "4e9349714023603e71c05598bd48de4525f38c47b121aad658dae31e6c5b9a70",
+      "risk.py": "92fb985ad57182a8b344d22fd4ad740943704dd5020ca71c776340c21f6aa4d9",
+      "rng.py": "70d0ba4a6b7ddbc1b54cdf9bc8167bb974f9f4d8f39a8eefc335b1da39443bef",
+      "scenario.py": "dece400fe2eff422c9add0bdcf560dcc107062306b80d14d687447aa36c79dc5",
+      "security.py": "0e76bb14200a5f359ce72479bbab933727f8bd5e3bd7bed5ad693aaa160fa99c",
+      "tariff.py": "0ce203415aa4c0ebb65cba08e942550c8261811ee5f2a1b4474d8459b8ef482b",
+      "world.py": "6b91e05b7e9cb4bfb13abfc35bee288e51071f09241f6892f57e71594047dff7",
+      "__init__.py": "4aac556f2a6456c14e6c7a6fb7085ae449b29533c28c4ac0b707a31d5aa82ca1"
+    },
+    "integration": {
+      "agents.py": "4051048c633f75ae4a04a5084efe25df795dda936177337ad07359b969271c35",
+      "risk_graph.py": "c4706777bca714a82c89fb49a55a51d70fe70a89365eaed910dda208754cb562",
+      "run_compare.py": "d33cea1c589f1cb5a276f65ab225ec33483d9ae2ee59e719ee5eff8789b8ffc0"
+    }
+  },
+  "failures": [],
+  "shock_counts": [
+    {
+      "scenario": "S0",
+      "seed": 3,
+      "shocks": 0,
+      "destructive": 0
+    },
+    {
+      "scenario": "S0",
+      "seed": 4,
+      "shocks": 0,
+      "destructive": 0
+    },
+    {
+      "scenario": "S0",
+      "seed": 5,
+      "shocks": 0,
+      "destructive": 0
+    },
+    {
+      "scenario": "S2",
+      "seed": 3,
+      "shocks": 0,
+      "destructive": 0
+    },
+    {
+      "scenario": "S2",
+      "seed": 4,
+      "shocks": 1,
+      "destructive": 0
+    },
+    {
+      "scenario": "S2",
+      "seed": 5,
+      "shocks": 0,
+      "destructive": 0
+    }
+  ],
+  "summary": [
+    {
+      "n": 3,
+      "repair_mode": "fixed",
+      "cases": 6,
+      "distinct_worlds": 4,
+      "variants": {
+        "classic": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 87.0,
+          "fragment_days": 18572.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.7856454611609953,
+          "unavailability_share": 0.0001265129567086949,
+          "post_warmup_unavailability_share": 6.56185639374174e-05,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.186541166670698,
+          "actuarial_checked": 200,
+          "actuarial_violations": 137,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 0,
+          "graph_availability_exceeded": 0
+        },
+        "graph": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 93.0,
+          "fragment_days": 18562.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 3.263678640928009,
+          "unavailability_share": 0.0005255521160914668,
+          "post_warmup_unavailability_share": 0.00017493068345542255,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.212107133353129,
+          "actuarial_checked": null,
+          "actuarial_violations": null,
+          "actuarial_unscored": null,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        },
+        "hybrid": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 87.0,
+          "fragment_days": 18572.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.8135417094236699,
+          "unavailability_share": 0.00013100510618738645,
+          "post_warmup_unavailability_share": 6.355644851801503e-05,
+          "runtime_warning_count": 0,
+          "mean_seconds": 4.500991900005222,
+          "actuarial_checked": 200,
+          "actuarial_violations": 130,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        }
+      },
+      "paired_vs_classic": {
+        "graph": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 1.0,
+            "median_delta": -1.5,
+            "min_delta": -7.5,
+            "max_delta": 12.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": -1.6666666666666667,
+            "median_delta": -2.0,
+            "min_delta": -8.0,
+            "max_delta": 5.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "unavailability_share": {
+            "mean_delta": 0.00039903915938277186,
+            "lower": 1,
+            "equal": 0,
+            "higher": 5
+          }
+        },
+        "hybrid": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 0.0,
+            "median_delta": 0.0,
+            "min_delta": -1.5,
+            "max_delta": 1.5,
+            "lower": 2,
+            "equal": 2,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": 0.0,
+            "median_delta": 0.0,
+            "min_delta": -1.0,
+            "max_delta": 1.0,
+            "lower": 2,
+            "equal": 2,
+            "higher": 2
+          },
+          "unavailability_share": {
+            "mean_delta": 4.4921494786915514e-06,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          }
+        }
+      }
+    },
+    {
+      "n": 3,
+      "repair_mode": "thiele",
+      "cases": 6,
+      "distinct_worlds": 4,
+      "variants": {
+        "classic": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 87.0,
+          "fragment_days": 18572.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.7856454611609953,
+          "unavailability_share": 0.0001265129567086949,
+          "post_warmup_unavailability_share": 6.56185639374174e-05,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.2272621166872948,
+          "actuarial_checked": 200,
+          "actuarial_violations": 137,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 0,
+          "graph_availability_exceeded": 0
+        },
+        "graph": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 93.0,
+          "fragment_days": 18562.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 3.263678640928009,
+          "unavailability_share": 0.0005255521160914668,
+          "post_warmup_unavailability_share": 0.00017493068345542255,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.2121350500092376,
+          "actuarial_checked": null,
+          "actuarial_violations": null,
+          "actuarial_unscored": null,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        },
+        "hybrid": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 87.0,
+          "fragment_days": 18572.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.8135417094236699,
+          "unavailability_share": 0.00013100510618738645,
+          "post_warmup_unavailability_share": 6.355644851801503e-05,
+          "runtime_warning_count": 0,
+          "mean_seconds": 4.50015050000123,
+          "actuarial_checked": 200,
+          "actuarial_violations": 130,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        }
+      },
+      "paired_vs_classic": {
+        "graph": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 1.0,
+            "median_delta": -1.5,
+            "min_delta": -7.5,
+            "max_delta": 12.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": -1.6666666666666667,
+            "median_delta": -2.0,
+            "min_delta": -8.0,
+            "max_delta": 5.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "unavailability_share": {
+            "mean_delta": 0.00039903915938277186,
+            "lower": 1,
+            "equal": 0,
+            "higher": 5
+          }
+        },
+        "hybrid": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 0.0,
+            "median_delta": 0.0,
+            "min_delta": -1.5,
+            "max_delta": 1.5,
+            "lower": 2,
+            "equal": 2,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": 0.0,
+            "median_delta": 0.0,
+            "min_delta": -1.0,
+            "max_delta": 1.0,
+            "lower": 2,
+            "equal": 2,
+            "higher": 2
+          },
+          "unavailability_share": {
+            "mean_delta": 4.4921494786915514e-06,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          }
+        }
+      }
+    },
+    {
+      "n": 4,
+      "repair_mode": "fixed",
+      "cases": 6,
+      "distinct_worlds": 4,
+      "variants": {
+        "classic": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 99.0,
+          "fragment_days": 24772.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.006047391162635307,
+          "unavailability_share": 9.73815002034671e-07,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.4372502666762255,
+          "actuarial_checked": 200,
+          "actuarial_violations": 1,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 0,
+          "graph_availability_exceeded": 0
+        },
+        "graph": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 117.0,
+          "fragment_days": 24760.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.0,
+          "unavailability_share": 0.0,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.420625966663162,
+          "actuarial_checked": null,
+          "actuarial_violations": null,
+          "actuarial_unscored": null,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        },
+        "hybrid": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 84.0,
+          "fragment_days": 24782.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.0,
+          "unavailability_share": 0.0,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 6.99292425000264,
+          "actuarial_checked": 200,
+          "actuarial_violations": 1,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        }
+      },
+      "paired_vs_classic": {
+        "graph": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 3.0,
+            "median_delta": -3.0,
+            "min_delta": -6.0,
+            "max_delta": 18.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": -2.0,
+            "median_delta": 2.0,
+            "min_delta": -12.0,
+            "max_delta": 4.0,
+            "lower": 2,
+            "equal": 0,
+            "higher": 4
+          },
+          "unavailability_share": {
+            "mean_delta": -9.73815002034671e-07,
+            "lower": 2,
+            "equal": 4,
+            "higher": 0
+          }
+        },
+        "hybrid": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": -2.5,
+            "median_delta": -3.0,
+            "min_delta": -3.0,
+            "max_delta": -1.5,
+            "lower": 6,
+            "equal": 0,
+            "higher": 0
+          },
+          "fragment_days": {
+            "mean_delta": 1.6666666666666667,
+            "median_delta": 2.0,
+            "min_delta": 1.0,
+            "max_delta": 2.0,
+            "lower": 0,
+            "equal": 0,
+            "higher": 6
+          },
+          "unavailability_share": {
+            "mean_delta": -9.73815002034671e-07,
+            "lower": 2,
+            "equal": 4,
+            "higher": 0
+          }
+        }
+      }
+    },
+    {
+      "n": 4,
+      "repair_mode": "thiele",
+      "cases": 6,
+      "distinct_worlds": 4,
+      "variants": {
+        "classic": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 99.0,
+          "fragment_days": 24772.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.006047391162635307,
+          "unavailability_share": 9.73815002034671e-07,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.4531178666705575,
+          "actuarial_checked": 200,
+          "actuarial_violations": 1,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 0,
+          "graph_availability_exceeded": 0
+        },
+        "graph": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 117.0,
+          "fragment_days": 24760.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.0,
+          "unavailability_share": 0.0,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 1.428147933339157,
+          "actuarial_checked": null,
+          "actuarial_violations": null,
+          "actuarial_unscored": null,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        },
+        "hybrid": {
+          "runs": 6,
+          "objects": 270,
+          "lost_objects": 0,
+          "repair_traffic": 84.0,
+          "fragment_days": 24782.0,
+          "object_days": 6210.0,
+          "unavailable_object_days": 0.0,
+          "unavailability_share": 0.0,
+          "post_warmup_unavailability_share": 0.0,
+          "runtime_warning_count": 0,
+          "mean_seconds": 7.026364883320639,
+          "actuarial_checked": 200,
+          "actuarial_violations": 1,
+          "actuarial_unscored": 70,
+          "short_placements": 0,
+          "graph_placement_checks": 270,
+          "graph_availability_exceeded": 0
+        }
+      },
+      "paired_vs_classic": {
+        "graph": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": 3.0,
+            "median_delta": -3.0,
+            "min_delta": -6.0,
+            "max_delta": 18.0,
+            "lower": 4,
+            "equal": 0,
+            "higher": 2
+          },
+          "fragment_days": {
+            "mean_delta": -2.0,
+            "median_delta": 2.0,
+            "min_delta": -12.0,
+            "max_delta": 4.0,
+            "lower": 2,
+            "equal": 0,
+            "higher": 4
+          },
+          "unavailability_share": {
+            "mean_delta": -9.73815002034671e-07,
+            "lower": 2,
+            "equal": 4,
+            "higher": 0
+          }
+        },
+        "hybrid": {
+          "lost_objects": {
+            "mean_delta": 0,
+            "median_delta": 0.0,
+            "min_delta": 0,
+            "max_delta": 0,
+            "lower": 0,
+            "equal": 6,
+            "higher": 0
+          },
+          "repair_traffic": {
+            "mean_delta": -2.5,
+            "median_delta": -3.0,
+            "min_delta": -3.0,
+            "max_delta": -1.5,
+            "lower": 6,
+            "equal": 0,
+            "higher": 0
+          },
+          "fragment_days": {
+            "mean_delta": 1.6666666666666667,
+            "median_delta": 2.0,
+            "min_delta": 1.0,
+            "max_delta": 2.0,
+            "lower": 0,
+            "equal": 0,
+            "higher": 6
+          },
+          "unavailability_share": {
+            "mean_delta": -9.73815002034671e-07,
+            "lower": 2,
+            "equal": 4,
+            "higher": 0
+          }
+        }
+      }
+    }
+  ],
+  "ablations": [
+    {
+      "scenario": "S0",
+      "seed": 3,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S0",
+      "seed": 3,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S0",
+      "seed": 4,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S0",
+      "seed": 4,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S0",
+      "seed": 5,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S0",
+      "seed": 5,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 3,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 3,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 4,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 4,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 5,
+      "n": 3,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    },
+    {
+      "scenario": "S2",
+      "seed": 5,
+      "n": 4,
+      "variants": {
+        "classic": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        },
+        "graph": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0,
+          "control_identical": true
+        },
+        "hybrid": {
+          "lost_objects_thiele_minus_fixed": 0,
+          "repair_traffic_thiele_minus_fixed": 0.0,
+          "fragment_days_thiele_minus_fixed": 0.0,
+          "unavailability_thiele_minus_fixed": 0.0
+        }
+      }
+    }
+  ],
+  "case_files": [
+    "S0_s3_n3_fixed.json",
+    "S0_s3_n3_thiele.json",
+    "S0_s3_n4_fixed.json",
+    "S0_s3_n4_thiele.json",
+    "S0_s4_n3_fixed.json",
+    "S0_s4_n3_thiele.json",
+    "S0_s4_n4_fixed.json",
+    "S0_s4_n4_thiele.json",
+    "S0_s5_n3_fixed.json",
+    "S0_s5_n3_thiele.json",
+    "S0_s5_n4_fixed.json",
+    "S0_s5_n4_thiele.json",
+    "S2_s3_n3_fixed.json",
+    "S2_s3_n3_thiele.json",
+    "S2_s3_n4_fixed.json",
+    "S2_s3_n4_thiele.json",
+    "S2_s4_n3_fixed.json",
+    "S2_s4_n3_thiele.json",
+    "S2_s4_n4_fixed.json",
+    "S2_s4_n4_thiele.json",
+    "S2_s5_n3_fixed.json",
+    "S2_s5_n3_thiele.json",
+    "S2_s5_n4_fixed.json",
+    "S2_s5_n4_thiele.json"
+  ]
+}

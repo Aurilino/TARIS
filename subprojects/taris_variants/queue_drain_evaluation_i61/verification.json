@@ -1,0 +1,8 @@
+{
+  "schema": "taris-queue-drain-verification/1",
+  "executions": 12,
+  "physical_rank_stock_verified": true,
+  "resource_units_verified": true,
+  "source_hash": "0249186744466a7fcb9e730b43ac7a7658fd8c150af20290e1af6c14d128800d",
+  "results_hash": "7ec50f81a112e9d86ab599cd79e3c2808ff3b1520d03be97728c30d796112bc4"
+}

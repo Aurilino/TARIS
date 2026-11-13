@@ -1,0 +1,1736 @@
+{
+  "schema": "taris-recovery-results/1",
+  "time_unit": "hour",
+  "chunk_size": 1,
+  "cases": {
+    "temporary_down_and_return": {
+      "end": "6",
+      "traffic_chunk_units": "3",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          2,
+          "D"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          2,
+          "D"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "2",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "down",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "4",
+          "event": "up",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "silent_loss_until_audit": {
+      "end": "6",
+      "traffic_chunk_units": "3",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "0"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 0,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "1",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "3",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "silent_loss",
+          "node": "C",
+          "obj": "O",
+          "index": 2,
+          "site": null
+        },
+        {
+          "time": "1",
+          "event": "audit",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "1",
+          "event": "reserved",
+          "job": 0,
+          "target": "C"
+        },
+        {
+          "time": "2",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "3",
+          "event": "write_confirmed",
+          "job": 0
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "shared_bandwidth_1": {
+      "end": "6",
+      "traffic_chunk_units": "6",
+      "lost": {},
+      "final_physical": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "D"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "D"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "service_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 2,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O1",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "4",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O2",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "4",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "C"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 1,
+          "target": "D"
+        },
+        {
+          "time": "2",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "4",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "4",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "shared_bandwidth_2": {
+      "end": "6",
+      "traffic_chunk_units": "6",
+      "lost": {},
+      "final_physical": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "D"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O1",
+          0,
+          "A"
+        ],
+        [
+          "O1",
+          1,
+          "B"
+        ],
+        [
+          "O1",
+          2,
+          "C"
+        ],
+        [
+          "O2",
+          0,
+          "A"
+        ],
+        [
+          "O2",
+          1,
+          "B"
+        ],
+        [
+          "O2",
+          2,
+          "D"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "service_unavailability_hours": {
+        "O1": "0",
+        "O2": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 2,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O1",
+          "index": 2,
+          "target": "C",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "3",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O2",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "3",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "C"
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 1,
+          "target": "D"
+        },
+        {
+          "time": "2",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "3",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "3",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O1": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O1": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            },
+            "O2": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "failed_source_and_retry": {
+      "end": "8",
+      "traffic_chunk_units": "4",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          3,
+          "A"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          3,
+          "A"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "7/2"
+      },
+      "service_unavailability_hours": {
+        "O": "7/2"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "read",
+          "remaining": "1/2",
+          "status": "failed",
+          "finished": "1/2",
+          "reason": "источник не прошёл проверку"
+        },
+        {
+          "id": 1,
+          "obj": "O",
+          "index": 3,
+          "target": "A",
+          "sources": [
+            [
+              1,
+              "B"
+            ],
+            [
+              2,
+              "C"
+            ]
+          ],
+          "created": "4",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "6",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "down",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1/2",
+          "event": "silent_loss",
+          "node": "A",
+          "obj": "O",
+          "index": 0,
+          "site": null
+        },
+        {
+          "time": "1/2",
+          "event": "failed",
+          "job": 0,
+          "reason": "источник не прошёл проверку"
+        },
+        {
+          "time": "4",
+          "event": "up",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "4",
+          "event": "reserved",
+          "job": 1,
+          "target": "A"
+        },
+        {
+          "time": "5",
+          "event": "read_confirmed",
+          "job": 1
+        },
+        {
+          "time": "6",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1/2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 1,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "8",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 3,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "buffer_preserves_reconstructed_object": {
+      "end": "8",
+      "traffic_chunk_units": "4",
+      "lost": {},
+      "final_physical": [
+        [
+          "O",
+          0,
+          "E"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          2,
+          "D"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          0,
+          "E"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ],
+        [
+          "O",
+          2,
+          "D"
+        ]
+      ],
+      "buffered": [
+        "O"
+      ],
+      "storage_unavailability_hours": {
+        "O": "3/2"
+      },
+      "service_unavailability_hours": {
+        "O": "0"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "2",
+          "reason": ""
+        },
+        {
+          "id": 1,
+          "obj": "O",
+          "index": 0,
+          "target": "E",
+          "sources": [
+            [
+              2,
+              "D"
+            ]
+          ],
+          "created": "2",
+          "phase": "write",
+          "remaining": "0",
+          "status": "done",
+          "finished": "3",
+          "reason": ""
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "down",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "3/2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "3/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "2",
+          "event": "write_confirmed",
+          "job": 0
+        },
+        {
+          "time": "2",
+          "event": "reserved",
+          "job": 1,
+          "target": "E"
+        },
+        {
+          "time": "3",
+          "event": "write_confirmed",
+          "job": 1
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 1,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "8",
+          "objects": {
+            "O": {
+              "durable_unique": 2,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        }
+      ]
+    },
+    "buffer_failure_after_source_loss": {
+      "end": "8",
+      "traffic_chunk_units": "5/2",
+      "lost": {
+        "O": "3/2"
+      },
+      "final_physical": [
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "final_catalog": [
+        [
+          "O",
+          0,
+          "A"
+        ],
+        [
+          "O",
+          1,
+          "B"
+        ],
+        [
+          "O",
+          2,
+          "C"
+        ]
+      ],
+      "buffered": [],
+      "storage_unavailability_hours": {
+        "O": "13/2"
+      },
+      "service_unavailability_hours": {
+        "O": "13/2"
+      },
+      "maximum_allocated_and_reserved": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 0
+      },
+      "jobs": [
+        {
+          "id": 0,
+          "obj": "O",
+          "index": 2,
+          "target": "D",
+          "sources": [
+            [
+              0,
+              "A"
+            ],
+            [
+              1,
+              "B"
+            ]
+          ],
+          "created": "0",
+          "phase": "write",
+          "remaining": "1/2",
+          "status": "failed",
+          "finished": "3/2",
+          "reason": "утрачен буфер восстановленного объекта"
+        }
+      ],
+      "log": [
+        {
+          "time": "0",
+          "event": "down",
+          "node": "C",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "0",
+          "event": "reserved",
+          "job": 0,
+          "target": "D"
+        },
+        {
+          "time": "1",
+          "event": "read_confirmed",
+          "job": 0
+        },
+        {
+          "time": "3/2",
+          "event": "destroy",
+          "node": "A",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "3/2",
+          "event": "destroy",
+          "node": "B",
+          "obj": null,
+          "index": null,
+          "site": null
+        },
+        {
+          "time": "3/2",
+          "event": "failed",
+          "job": 0,
+          "reason": "утрачен буфер восстановленного объекта"
+        },
+        {
+          "time": "3/2",
+          "event": "buffer_loss",
+          "node": null,
+          "obj": null,
+          "index": null,
+          "site": null
+        }
+      ],
+      "history": [
+        {
+          "time": "0",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": false,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "1",
+          "objects": {
+            "O": {
+              "durable_unique": 3,
+              "readable_unique": 2,
+              "buffered": true,
+              "lost": false
+            }
+          }
+        },
+        {
+          "time": "3/2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "2",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "3",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "4",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "5",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "6",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "7",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        },
+        {
+          "time": "8",
+          "objects": {
+            "O": {
+              "durable_unique": 1,
+              "readable_unique": 0,
+              "buffered": false,
+              "lost": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

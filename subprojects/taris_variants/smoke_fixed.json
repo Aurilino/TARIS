@@ -1,0 +1,1597 @@
+{
+  "schema": "taris-three-variants/1",
+  "stage": "fixed-budget integration pilot",
+  "main_sources_unchanged": true,
+  "cases": [
+    {
+      "scenario": "S0",
+      "seed": 1,
+      "config": {
+        "A_inf_days": 30.0,
+        "A_wear_days": 1095.0,
+        "T_rep_hours": 24.0,
+        "adv_attack_day": null,
+        "adv_bad_fraction": 0.0,
+        "adv_colluding_owners": 2,
+        "adv_false_claim_fraction": 0.0,
+        "adv_key_compromise_day": null,
+        "adv_pair_leak": 0.3,
+        "adv_rate_multiplier": 0.3,
+        "adv_silent_multiplier": 20.0,
+        "adv_sybil_share": 0.05,
+        "adv_wave_days": 30.0,
+        "adv_wave_width_days": 0.25,
+        "adv_whitewash_fraction": 0.0,
+        "adv_whitewash_gap_days": 1.0,
+        "adversary_enabled": false,
+        "age_unit_days": 30.0,
+        "alarm_step_hours": 24,
+        "alpha_hw": [
+          0.3,
+          0.0,
+          -0.2
+        ],
+        "audit_interval_days": 1,
+        "audit_noise": 0.005,
+        "audits_per_epoch": 1,
+        "b_inf": 2.0,
+        "b_wear": 1.0,
+        "beta_hw": [
+          0.3,
+          0.0,
+          -0.2
+        ],
+        "beta_region_sd": 0.15,
+        "block_growth_per_year": 0.0,
+        "blocks_per_epoch": 1,
+        "capacity_mean_fragments": 1000.0,
+        "capacity_sd": 0.5,
+        "churn_A_days": 60.0,
+        "churn_base": 0.00045662100456621003,
+        "churn_extra_new": 0.008333333333333333,
+        "cr_cascade_delay_hours": 6.0,
+        "cr_cascade_p": 0.3,
+        "cr_cascade_rho": 5.0,
+        "cr_cascade_s": 0.6,
+        "cr_exodus_W_days": 21.0,
+        "cr_exodus_multiplier": 30.0,
+        "cr_exodus_period_days": 30.0,
+        "cr_exodus_pi": 0.8,
+        "cr_exodus_q": 0.5,
+        "cr_exodus_rate": 0.2,
+        "cr_exodus_rho": 5.0,
+        "cr_exodus_rho_join": 0.3,
+        "cr_exodus_s": 0.5,
+        "cr_fire_rate": 0.05,
+        "cr_software_L_mean_hours": 12.0,
+        "cr_software_W_days": 5.0,
+        "cr_software_pi": 0.5,
+        "cr_software_q": 0.5,
+        "cr_software_rate": 1.0,
+        "cr_software_rho": 5.0,
+        "cr_software_s": 0.8,
+        "cr_software_total_share": 0.05,
+        "cr_software_trigger_days": 3.0,
+        "cr_storm_W_days": 3.0,
+        "cr_storm_pi": 0.7,
+        "cr_storm_q": 0.5,
+        "cr_storm_rate": 0.5,
+        "cr_storm_rho": 5.0,
+        "cr_storm_s": 0.6,
+        "cr_sybil_enabled": false,
+        "cr_wear_W_days": 30.0,
+        "cr_wear_p_death": 0.3,
+        "cr_wear_period_days": 30.0,
+        "cr_wear_pi": 0.9,
+        "cr_wear_q": 0.5,
+        "cr_wear_rate": 0.1,
+        "cr_wear_rho": 10.0,
+        "cr_wear_s": 0.8,
+        "crises_enabled": false,
+        "dev_capacity_mean": 50.0,
+        "dev_home_providers": 4,
+        "dev_hw_probs": [
+          0.7,
+          0.0,
+          0.3
+        ],
+        "dev_m_churn": 10.0,
+        "dev_m_dur": 2.0,
+        "dev_m_micro": 3.0,
+        "dev_m_rate": 6.0,
+        "dev_m_silent": 3.0,
+        "dev_multi_share": 0.1,
+        "dev_ratio": 2.0,
+        "devices_enabled": false,
+        "franchise_d_hours": 0.25,
+        "graph_K_rho": 10.0,
+        "graph_b_join": 0.2,
+        "graph_b_subnet": 0.6,
+        "graph_b_wallet": 0.95,
+        "graph_cluster_cut": 0.5,
+        "graph_join_window_days": 1.0,
+        "graph_snapshot_days": 30,
+        "graph_store_min": 0.2,
+        "heterogeneity_a": 0.5,
+        "horizon_days": 16,
+        "hw_classes": [
+          "consumer_hdd",
+          "enterprise_hdd",
+          "ssd"
+        ],
+        "hw_probs": [
+          0.5,
+          0.3,
+          0.2
+        ],
+        "initial_age_mean_days": 365.0,
+        "k": 2,
+        "kappa_age": 0.8,
+        "lognorm_median_hours": 2.0,
+        "lognorm_sigma": 1.6,
+        "mean_event_rate": 0.03333333333333333,
+        "micro_info_b": 0.5,
+        "micro_mean_minutes": 3.0,
+        "micro_noise_sd": 0.5,
+        "micro_rate": 1.0,
+        "mism_q_factor": 2.0,
+        "mism_s_factor": 0.5,
+        "n_dc": 8,
+        "n_initial_nodes": 24,
+        "n_providers": 4,
+        "n_regions": 3,
+        "node_join_rate": 0.1,
+        "object_size": 1.0,
+        "operator_join_gap_days": 10.0,
+        "operator_same_dc_p": 0.7,
+        "operator_same_subnet_p": 0.5,
+        "operator_size_p": 0.6,
+        "ping_interval_minutes": 5.0,
+        "ping_noise": 0.001,
+        "pre_gamma": 2.0,
+        "pre_k_W": 4.0,
+        "pre_sigma_W": 1.0,
+        "pre_u0": 0.5,
+        "repair_hours": 2.0,
+        "seed": 1,
+        "severity_node_sd": 0.3,
+        "shock_rate_per_year": [
+          0.5,
+          0.3333333333333333,
+          0.1
+        ],
+        "shock_scale_hours": [
+          6.0,
+          4.0,
+          3.0
+        ],
+        "shock_shape": 0.8,
+        "shock_total_share": 0.1,
+        "shocks_enabled": false,
+        "silent_rate": 0.000547945205479452,
+        "storm_hours": 12.0,
+        "storm_multiplier": 40.0,
+        "sw_release_every_days": 60.0,
+        "sw_update_delay_days": 10.0,
+        "track_objects": 300,
+        "train_days": 8,
+        "transfer_rate_size_per_hour": null,
+        "weibull_scale_hours": 5.0,
+        "weibull_shape": 0.6,
+        "world_mode": "matched"
+      },
+      "settings": {
+        "n": 4,
+        "block_days": 7,
+        "reserve_horizon_days": 30,
+        "loss_limit": 0.001,
+        "availability_limit": 0.08,
+        "candidate_limit": 16,
+        "swap_rounds": 2,
+        "repair_mode": "fixed"
+      },
+      "world_unchanged": true,
+      "common_random_numbers": true,
+      "world_hashes": {
+        "nodes": "5167bfb278198f7cc2e4e7adca016c5e7bbbbe651dd33764f966c02b77a3baab",
+        "outages": "2a4af2b31c4d6708710a3356e2096de685c5331a7c0cc3cf93b6851d90f8cdc4",
+        "silent": "2637ba662336a6d7a6fab249626622e3f684afc1ca66e3b56534347d1b6714dc"
+      },
+      "input_hashes": {
+        "observed": "9cd03d4717016db28d71b30094390eb229aa70ae4585ad612ec5f18c87f83264",
+        "audits": "a90c8964731e66e01c27ad7b8fa8f6ff18117017216258b74c245280999b8e8f",
+        "objects": "e6d8545ddf65b69455615e372ab4db2d67825058ce5f3b7113a5ace1e0c17caa",
+        "capacity": "19ac0921b322eeb483f1d397994ae9fd86ddbd644addb79b9475e6e54ae9cab8"
+      },
+      "variants": {
+        "classic": {
+          "name": "TARIS Classic",
+          "objects": 16,
+          "lost_objects": 0,
+          "repair_operations": 2,
+          "repair_traffic": 3.0,
+          "fragment_days": 542.0,
+          "final_fragments": 64,
+          "object_unavailability_mean_before_loss": 0.0,
+          "unavailability_objects_evaluated": 16,
+          "short_placements": 0,
+          "risk_fits": 2,
+          "graph_stats": null,
+          "placement_risk": {
+            "checked": 9,
+            "feasible": 5,
+            "violations": 4,
+            "unscored": 7,
+            "extra_fragments": 0,
+            "max_placed_n": 4,
+            "max_best_upper": 4.2815843086315966e-05,
+            "max_dropped": 1.5979776119861475e-08
+          },
+          "seconds": 0.46853999997256324,
+          "losses": [],
+          "numerical_finite": true,
+          "runtime_warnings": {
+            "overflow encountered in exp": 55
+          },
+          "graph_decisions": []
+        },
+        "graph": {
+          "name": "TARIS-G",
+          "objects": 16,
+          "lost_objects": 0,
+          "repair_operations": 1,
+          "repair_traffic": 1.5,
+          "fragment_days": 543.0,
+          "final_fragments": 64,
+          "object_unavailability_mean_before_loss": 0.0,
+          "unavailability_objects_evaluated": 16,
+          "short_placements": 0,
+          "risk_fits": 0,
+          "graph_stats": {
+            "calls": 17,
+            "accepted_swaps": 6,
+            "actuarial_rejections": 0,
+            "availability_rejections": 0,
+            "unavailability_exceeded": 0,
+            "cold_calls": 0
+          },
+          "placement_risk": null,
+          "seconds": 0.5478868000209332,
+          "losses": [],
+          "numerical_finite": true,
+          "runtime_warnings": {},
+          "graph_decisions": [
+            {
+              "time": 0.0,
+              "held": [],
+              "chosen": [
+                18,
+                17,
+                4,
+                6
+              ],
+              "graph_before": 0.019867549668874166,
+              "graph_after": 0.019867549668874166,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 1.0,
+              "held": [],
+              "chosen": [
+                16,
+                14,
+                3,
+                6
+              ],
+              "graph_before": 0.004415011037527594,
+              "graph_after": 0.004415011037527594,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 2.0,
+              "held": [],
+              "chosen": [
+                13,
+                8,
+                11,
+                16
+              ],
+              "graph_before": 0.0033112582781456954,
+              "graph_after": 0.0033112582781456954,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 3.0,
+              "held": [],
+              "chosen": [
+                15,
+                2,
+                6,
+                11
+              ],
+              "graph_before": 0.013245033112582781,
+              "graph_after": 0.007947019867549669,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 4.0,
+              "held": [],
+              "chosen": [
+                10,
+                4,
+                17,
+                11
+              ],
+              "graph_before": 0.002207505518763797,
+              "graph_after": 0.002207505518763797,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 5.0,
+              "held": [],
+              "chosen": [
+                20,
+                6,
+                12,
+                11
+              ],
+              "graph_before": 0.003784295175023652,
+              "graph_after": 0.003784295175023652,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 6.0,
+              "held": [],
+              "chosen": [
+                4,
+                12,
+                17,
+                6
+              ],
+              "graph_before": 0.0016556291390728477,
+              "graph_after": 0.0016556291390728477,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                14,
+                11,
+                4,
+                6
+              ],
+              "graph_before": 0.0014716703458425313,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                6,
+                3,
+                12,
+                19
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                3,
+                15,
+                21,
+                11
+              ],
+              "graph_before": 0.003612281757977122,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                2,
+                19,
+                6,
+                0
+              ],
+              "graph_before": 0.006783480500367918,
+              "graph_after": 0.0011037527593818985,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                2,
+                20,
+                6,
+                17
+              ],
+              "graph_before": 0.0010188487009679063,
+              "graph_after": 0.0010188487009679063,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 12.0,
+              "held": [
+                3,
+                11,
+                15
+              ],
+              "chosen": [
+                22
+              ],
+              "graph_before": 0.000946073793755913,
+              "graph_after": 0.000946073793755913,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                13,
+                18,
+                19,
+                11
+              ],
+              "graph_before": 0.001892147587511826,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                12,
+                0,
+                17,
+                11
+              ],
+              "graph_before": 0.0017660044150110375,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                1,
+                7,
+                16,
+                6
+              ],
+              "graph_before": 0.0008278145695364238,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                13,
+                1,
+                6,
+                11
+              ],
+              "graph_before": 0.0015582391897156214,
+              "graph_after": 0.0007791195948578107,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            }
+          ]
+        },
+        "hybrid": {
+          "name": "TARIS-Hybrid",
+          "objects": 16,
+          "lost_objects": 0,
+          "repair_operations": 2,
+          "repair_traffic": 3.0,
+          "fragment_days": 542.0,
+          "final_fragments": 64,
+          "object_unavailability_mean_before_loss": 0.0,
+          "unavailability_objects_evaluated": 16,
+          "short_placements": 0,
+          "risk_fits": 2,
+          "graph_stats": {
+            "calls": 63,
+            "accepted_swaps": 47,
+            "actuarial_rejections": 61,
+            "availability_rejections": 0,
+            "unavailability_exceeded": 0,
+            "cold_calls": 0
+          },
+          "placement_risk": {
+            "checked": 9,
+            "feasible": 7,
+            "violations": 2,
+            "unscored": 7,
+            "extra_fragments": 0,
+            "max_placed_n": 4,
+            "max_best_upper": 4.281584308484563e-05,
+            "max_dropped": 2.305803207712501e-08
+          },
+          "seconds": 2.6696703000343405,
+          "losses": [],
+          "numerical_finite": true,
+          "runtime_warnings": {
+            "overflow encountered in exp": 194
+          },
+          "graph_decisions": [
+            {
+              "time": 0.0,
+              "held": [],
+              "chosen": [
+                17,
+                18,
+                4,
+                6
+              ],
+              "graph_before": 0.019867549668874166,
+              "graph_after": 0.019867549668874166,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 1.0,
+              "held": [],
+              "chosen": [
+                17,
+                13,
+                1,
+                11
+              ],
+              "graph_before": 0.013245033112582781,
+              "graph_after": 0.004415011037527594,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 2.0,
+              "held": [],
+              "chosen": [
+                13,
+                7,
+                11,
+                16
+              ],
+              "graph_before": 0.0033112582781456954,
+              "graph_after": 0.0033112582781456954,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 3.0,
+              "held": [],
+              "chosen": [
+                2,
+                12,
+                6,
+                11
+              ],
+              "graph_before": 0.013245033112582781,
+              "graph_after": 0.007947019867549669,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 4.0,
+              "held": [],
+              "chosen": [
+                10,
+                4,
+                19,
+                17
+              ],
+              "graph_before": 0.002207505518763797,
+              "graph_after": 0.002207505518763797,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 5.0,
+              "held": [],
+              "chosen": [
+                20,
+                6,
+                12,
+                11
+              ],
+              "graph_before": 0.003784295175023652,
+              "graph_after": 0.003784295175023652,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 6.0,
+              "held": [],
+              "chosen": [
+                1,
+                12,
+                19,
+                6
+              ],
+              "graph_before": 0.008519591611479029,
+              "graph_after": 0.0016556291390728477,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": false,
+              "actuarial_reference_loss": null
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                0,
+                13,
+                16,
+                6
+              ],
+              "graph_before": 0.008830022075055188,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.705474982877101e-05
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                18,
+                0,
+                6,
+                11
+              ],
+              "graph_before": 0.0029433406916850625,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.705474982947291e-05
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                9,
+                17,
+                6,
+                4
+              ],
+              "graph_before": 0.0014716703458425313,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.0441615534841034e-05
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                20,
+                1,
+                17,
+                11
+              ],
+              "graph_before": 0.0014716703458425313,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553392493e-05
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                1,
+                12,
+                11,
+                16
+              ],
+              "graph_before": 0.004415011037527594,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308622802e-05
+            },
+            {
+              "time": 7.0,
+              "held": [],
+              "chosen": [
+                8,
+                12,
+                17,
+                11
+              ],
+              "graph_before": 0.0014716703458425313,
+              "graph_after": 0.0014716703458425313,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308435696e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                6,
+                4,
+                11,
+                18
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553419787e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                3,
+                6,
+                5,
+                16
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553696928e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                3,
+                6,
+                4,
+                16
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553614946e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                14,
+                17,
+                13,
+                11
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308484563e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                9,
+                0,
+                17,
+                6
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553416369e-05
+            },
+            {
+              "time": 8.0,
+              "held": [],
+              "chosen": [
+                19,
+                0,
+                3,
+                6
+              ],
+              "graph_before": 0.012113686534216336,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 0.0006265247083628223
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                3,
+                21,
+                12,
+                11
+              ],
+              "graph_before": 0.003612281757977122,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.2815843086569364e-05
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                18,
+                12,
+                6,
+                21
+              ],
+              "graph_before": 0.003612281757977122,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.2815843085653884e-05
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                0,
+                21,
+                13,
+                11
+              ],
+              "graph_before": 0.0012040939193257074,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.4918326790341546e-05
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                11,
+                3,
+                0,
+                17
+              ],
+              "graph_before": 0.008428657435279952,
+              "graph_after": 0.003612281757977122,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553629259e-05
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                0,
+                11,
+                9,
+                19
+              ],
+              "graph_before": 0.01221653622315874,
+              "graph_after": 0.003612281757977122,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.7054749829882565e-05
+            },
+            {
+              "time": 9.0,
+              "held": [],
+              "chosen": [
+                14,
+                4,
+                17,
+                21
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 0.0006185415931652552
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                2,
+                20,
+                11,
+                21
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.4918326790149594e-05
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                10,
+                2,
+                6,
+                21
+              ],
+              "graph_before": 0.002207505518763797,
+              "graph_after": 0.0011037527593818985,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.4541929471747046e-05
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                6,
+                13,
+                1,
+                21
+              ],
+              "graph_before": 0.0033112582781456954,
+              "graph_after": 0.0011037527593818985,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.491832679016331e-05
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                2,
+                19,
+                18,
+                16
+              ],
+              "graph_before": 0.004575974981604121,
+              "graph_after": 0.0011037527593818985,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308665173e-05
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                7,
+                17,
+                0,
+                11
+              ],
+              "graph_before": 0.0011037527593818985,
+              "graph_after": 0.0011037527593818985,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553284162e-05
+            },
+            {
+              "time": 10.0,
+              "held": [],
+              "chosen": [
+                16,
+                21,
+                20,
+                2
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.491832679110681e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                3,
+                22,
+                0,
+                19
+              ],
+              "graph_before": 0.0010188487009679063,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.218056691787514e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                2,
+                17,
+                9,
+                19
+              ],
+              "graph_before": 0.0020376974019358125,
+              "graph_after": 0.0010188487009679063,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.705474983205407e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                19,
+                6,
+                0,
+                13
+              ],
+              "graph_before": 0.004223976906096111,
+              "graph_after": 0.0010188487009679063,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308667165e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                11,
+                20,
+                6,
+                1
+              ],
+              "graph_before": 0.0010188487009679063,
+              "graph_after": 0.0010188487009679063,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553374961e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                1,
+                0,
+                6,
+                19
+              ],
+              "graph_before": 0.0010188487009679063,
+              "graph_after": 0.0010188487009679063,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.044161553489664e-05
+            },
+            {
+              "time": 11.0,
+              "held": [],
+              "chosen": [
+                0,
+                19,
+                22,
+                1
+              ],
+              "graph_before": 0.004075394803871625,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 0.0006178866525722485
+            },
+            {
+              "time": 12.0,
+              "held": [
+                0,
+                11,
+                13
+              ],
+              "chosen": [
+                22
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 2.4207559751837397e-05
+            },
+            {
+              "time": 12.0,
+              "held": [
+                2,
+                11,
+                20
+              ],
+              "chosen": [
+                22
+              ],
+              "graph_before": 0.000946073793755913,
+              "graph_after": 0.000946073793755913,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 2.4207559751946912e-05
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                1,
+                17,
+                0,
+                22
+              ],
+              "graph_before": 0.006760485651214128,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 0.0006178866525716369
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                19,
+                1,
+                16,
+                15
+              ],
+              "graph_before": 0.001892147587511826,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.2815843086315966e-05
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                0,
+                3,
+                17,
+                6
+              ],
+              "graph_before": 0.003784295175023652,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.705474983160933e-05
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                0,
+                16,
+                1,
+                19
+              ],
+              "graph_before": 0.003784295175023652,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.7054749832754095e-05
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                16,
+                0,
+                2,
+                19
+              ],
+              "graph_before": 0.005814411857458215,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.281584308718554e-05
+            },
+            {
+              "time": 12.0,
+              "held": [],
+              "chosen": [
+                11,
+                10,
+                14,
+                17
+              ],
+              "graph_before": 0.001892147587511826,
+              "graph_after": 0.001892147587511826,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.2815843086347476e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                13,
+                14,
+                6,
+                17
+              ],
+              "graph_before": 0.0036607799852832966,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.28158430849594e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                0,
+                17,
+                1,
+                11
+              ],
+              "graph_before": 0.0017660044150110375,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.70547498321391e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                2,
+                22,
+                4,
+                6
+              ],
+              "graph_before": 0.004543782192788816,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.383257842214838e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                5,
+                1,
+                6,
+                16
+              ],
+              "graph_before": 0.0017660044150110375,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.7054749833114456e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                3,
+                0,
+                6,
+                22
+              ],
+              "graph_before": 0.004543782192788816,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 4.218056691753051e-05
+            },
+            {
+              "time": 13.0,
+              "held": [],
+              "chosen": [
+                9,
+                0,
+                19,
+                11
+              ],
+              "graph_before": 0.0008830022075055188,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 5.705474982985359e-05
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                1,
+                4,
+                17,
+                6
+              ],
+              "graph_before": 0.004966887417218543,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 9.573866517274136e-06
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                9,
+                2,
+                6,
+                19
+              ],
+              "graph_before": 0.0026041666666666665,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 8.490055680570968e-06
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                1,
+                19,
+                8,
+                17
+              ],
+              "graph_before": 0.0,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 9.573866517274136e-06
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                1,
+                4,
+                17,
+                11
+              ],
+              "graph_before": 0.0008278145695364238,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 8.490055680570968e-06
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                2,
+                8,
+                11,
+                6
+              ],
+              "graph_before": 0.0016556291390728477,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 7.197575591045919e-06
+            },
+            {
+              "time": 14.0,
+              "held": [],
+              "chosen": [
+                4,
+                19,
+                17,
+                3
+              ],
+              "graph_before": 0.0008278145695364238,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 9.573866517274136e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                14,
+                2,
+                6,
+                22
+              ],
+              "graph_before": 0.0007791195948578107,
+              "graph_after": 0.0007791195948578107,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.954228794603303e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                4,
+                10,
+                17,
+                22
+              ],
+              "graph_before": 0.0015582391897156214,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.954228794603303e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                2,
+                14,
+                22,
+                11
+              ],
+              "graph_before": 0.0007791195948578107,
+              "graph_after": 0.0007791195948578107,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.954228794603303e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                10,
+                0,
+                17,
+                22
+              ],
+              "graph_before": 0.0024509803921568627,
+              "graph_after": 0.0,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 3.954228794603303e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                1,
+                11,
+                10,
+                6
+              ],
+              "graph_before": 0.004788339176730294,
+              "graph_after": 0.0007791195948578107,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 7.197575591045919e-06
+            },
+            {
+              "time": 15.0,
+              "held": [],
+              "chosen": [
+                2,
+                8,
+                6,
+                11
+              ],
+              "graph_before": 0.005567458771588105,
+              "graph_after": 0.0007791195948578107,
+              "estimated_unavailability": 0.0,
+              "availability_target_exceeded": false,
+              "actuarial_guard_active": true,
+              "actuarial_reference_loss": 9.573866517274136e-06
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Все потери определяются действующим Ledger, включая признание после T_rep",
+    "Граф описывает доступность, а не обученную физическую потерю",
+    "Все варианты имеют одинаковый начальный бюджет n=4, k=2",
+    "Очереди и прогноз из автономного прототипа в этот Ledger не переносились"
+  ]
+}

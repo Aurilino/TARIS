@@ -201,6 +201,7 @@ class Ledger:
         self.log_loss, self.log_repair, self.log_disc, self.log_migr, self.log_alarm = [], [], [], [], []
         self.log_silent = []                  # признанные по аудиту тихие потери: (t, узел) — это видит сеть
         self.log_short = []                   # объекты, размещённые не полностью: (объект, t, размещено, нужно)
+        self.log_release = []                  # добровольно высвобождённые лишние фрагменты
         self.stalled = 0                      # объекто-эпохи, когда объект ждал восстановления, а политика его не запросила
         self.heap, self.seq = [], 0
 
@@ -363,6 +364,25 @@ class Ledger:
         self.node_frags[node].discard(f); self.obj_frags[obj].discard(f); self.used[node] -= 1
         self.log_migr[rec][7] = True
 
+    def _release(self, t, reqs):
+        """Удаляет избыточный фрагмент без объявления потери и без запроса ремонта."""
+        for obj, idx in reqs:
+            obj, idx = int(obj), int(idx)
+            if (self.obj_lost_t[obj] != np.inf or self.obj_n[obj] <= self.cfg.k
+                    or self.missing[obj] or self.pending[obj] or idx in self.mig_pending.get(obj, ())):
+                continue
+            match = [f for f in self.obj_frags[obj] if self.f_idx[f] == idx and self.f_exist[f]
+                     and self.f_to[f] == np.inf]
+            if not match:
+                continue
+            f = match[0]
+            node = self.f_node[f]
+            self.f_exist[f] = False; self.f_dead[f] = t; self.f_to[f] = t
+            self.f_end[f] = "высвобождение"
+            self.obj_exist[obj] -= 1; self.obj_n[obj] -= 1
+            self.node_frags[node].discard(f); self.obj_frags[obj].discard(f); self.used[node] -= 1
+            self.log_release.append((obj, idx, node, t, self.size[obj] / self.cfg.k))
+
     # ------------------------------------------------------------ прогон
     def run(self, policy, epochs: int | None = None, progress: bool = False):
         self._reset_state()
@@ -397,8 +417,10 @@ class Ledger:
             self.stalled += sum(1 for o in view.needs_repair() if o not in asked and view.missing(o))
             self._repair(float(t), reqs)
             self._migrate(float(t), policy.migrate(float(t), view))
-            want = getattr(policy, "n", None)
+            self._release(float(t), policy.release(float(t), view))
             for obj in self.data.new_objects(t):
+                target_n = getattr(policy, "target_fragments", None)
+                want = target_n(int(obj), float(t), view) if callable(target_n) else getattr(policy, "n", None)
                 nodes = policy.place(int(obj), float(t), view)
                 self.obj_n[obj] = len(nodes)
                 for i, n in enumerate(nodes):
@@ -442,6 +464,7 @@ class RunResult:
         self.repairs = pd.DataFrame(L.log_repair, columns=["obj", "t", "r", "traffic"])
         self.disclosures = pd.DataFrame(L.log_disc, columns=["obj", "owner", "t"])
         self.migrations = pd.DataFrame(L.log_migr, columns=["obj", "idx", "from", "to", "t", "traffic", "t_done", "ok"])
+        self.releases = pd.DataFrame(L.log_release, columns=["obj", "idx", "node", "t", "size"])
         self.alarms = pd.DataFrame(L.log_alarm, columns=["t", "type", "ctype", "cluster", "prob", "horizon"])
         self.short_placements = pd.DataFrame(L.log_short, columns=["obj", "t", "placed", "wanted"])
         self.stalled = L.stalled
@@ -470,6 +493,8 @@ class RunResult:
             "Средняя избыточность n/k": float(d["fragments"].iloc[-1] / max(1, d["objects_alive"].iloc[-1]) / c.k),
             "Трафик восстановления в год": float(self.repairs["traffic"].sum() / (T / 365)),
             "Операций восстановления": len(self.repairs),
+            "Высвобождено фрагментов": len(self.releases),
+            "Высвобождено фрагменто-дней": float((T - self.releases["t"]).clip(lower=0).sum()) if len(self.releases) else 0.0,
             "Раскрытий": len(self.disclosures),
             "Размещено не полностью": len(self.short_placements),
             "Не сохранено (меньше k фрагментов)": int((self.short_placements["placed"] < c.k).sum()),
@@ -477,6 +502,20 @@ class RunResult:
             "Переносов (удачных)": int(self.migrations["ok"].sum()),
             "Трафик переносов в год": float(self.migrations["traffic"].sum() / (T / 365)),
         }
+
+    def security_report(self, scenario, queries):
+        """Опциональный анализ защищённого чтения; прежние metrics/disclosures не меняет.
+
+        queries — пары (obj, t) внутри фактически выполненного горизонта.
+        Это оценивание по истине после прогона, а не данные для политики.
+        """
+        from .security import SecurityReplay
+        return SecurityReplay(self, scenario).report(queries)
+
+    def adversary_report(self):
+        """Коалиция противника и накопление шифротекста, отдельно от старого disclosures."""
+        adversary = getattr(self._L.w, "adversary", None)
+        return adversary.report(self) if adversary is not None else None
 
     # ------------------------------------------------- кризисы (пункт 3.9)
     def alarm_episodes(self) -> pd.DataFrame:

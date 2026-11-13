@@ -1,0 +1,78 @@
+{
+  "schema": "taris-observed-label-audit/1",
+  "input_hashes": {
+    "s30.json": "91c2ae5d8176ce48a8118a2d19aa654ca883382fc68688b492363044a6442d6b"
+  },
+  "audit_source_hash": "25f239985280cbc10942a7d88b982c57fd8ba7abb9419a6ac995cafd5e3ddfb1",
+  "rows": [
+    {
+      "seed": 30,
+      "profile": "ample",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 30,
+      "profile": "ample",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 30,
+      "profile": "ample",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 0,
+      "distinct_observed_jobs": 0,
+      "censored_rows": 0,
+      "censored_positive_work_rows": 0,
+      "observed_repair_rows": 0
+    },
+    {
+      "seed": 30,
+      "profile": "constrained",
+      "variant": "classic",
+      "snapshots": 45,
+      "job_snapshot_rows": 110,
+      "distinct_observed_jobs": 14,
+      "censored_rows": 81,
+      "censored_positive_work_rows": 14,
+      "observed_repair_rows": 101
+    },
+    {
+      "seed": 30,
+      "profile": "constrained",
+      "variant": "graph",
+      "snapshots": 45,
+      "job_snapshot_rows": 131,
+      "distinct_observed_jobs": 14,
+      "censored_rows": 85,
+      "censored_positive_work_rows": 14,
+      "observed_repair_rows": 125
+    },
+    {
+      "seed": 30,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "snapshots": 45,
+      "job_snapshot_rows": 114,
+      "distinct_observed_jobs": 12,
+      "censored_rows": 89,
+      "censored_positive_work_rows": 14,
+      "observed_repair_rows": 107
+    }
+  ],
+  "temporal_whitelist_verified": true,
+  "labels_independently_verified": true,
+  "unit_of_independence": "world_not_job_snapshot"
+}

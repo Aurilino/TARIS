@@ -1,0 +1,616 @@
+{
+  "schema": "taris-shared-channel-audit/1",
+  "source_hashes_verified": true,
+  "worlds_and_inputs_verified": true,
+  "audit_source_hash": "2b69dd5564000ac73aa4eefa01252bf1eb212bba8edc4e31dbda7f0b446aff71",
+  "audit_helper_hash": "0964a4c39416130b01b5afe9762038e0c7755caa5bf68c5f8bc9238149f5bc73",
+  "cancellation_helper_hash": "cab58092f3230accc27e87602f7baf0c9c82660a4b1bc5c8a5e2349838d47686",
+  "objects_checked": 1620,
+  "rows": [
+    {
+      "seed": 21,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 197,
+      "buffers": 17,
+      "jobs": 22,
+      "block_attempts": 544,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 16.999999999985903,
+        "write_block": 8.500000000014097,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.06499999999994088
+      }
+    },
+    {
+      "seed": 21,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 10,
+      "jobs": 11,
+      "block_attempts": 320,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 9.999999999990905,
+        "write_block": 5.000000000009095,
+        "close_proof": 0.09999999999990905,
+        "proof": 0.014999999999986358
+      }
+    },
+    {
+      "seed": 21,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 193,
+      "buffers": 13,
+      "jobs": 17,
+      "block_attempts": 416,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 12.99999999998954,
+        "write_block": 6.500000000010459,
+        "close_proof": 0.12999999999988177,
+        "proof": 0.03999999999996362
+      }
+    },
+    {
+      "seed": 21,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 185,
+      "buffers": 5,
+      "jobs": 14,
+      "block_attempts": 179,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 5.937499999999955,
+        "write_block": 2.6250000000000346,
+        "close_proof": 0.05999999999999745,
+        "proof": 0.0049999999999997165
+      }
+    },
+    {
+      "seed": 21,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 186,
+      "buffers": 7,
+      "jobs": 13,
+      "block_attempts": 259,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 9.000000000000018,
+        "write_block": 3.6119999999999743,
+        "close_proof": 0.08000000000000226
+      }
+    },
+    {
+      "seed": 21,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 188,
+      "buffers": 8,
+      "jobs": 17,
+      "block_attempts": 297,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 10.049750000000031,
+        "write_block": 4.281249999999972,
+        "close_proof": 0.09000000000000255,
+        "proof": 0.035000000000001426
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 196,
+      "buffers": 16,
+      "jobs": 16,
+      "block_attempts": 512,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 16.000000000007958,
+        "write_block": 7.999999999992042,
+        "close_proof": 0.15999999999985448
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 193,
+      "buffers": 13,
+      "jobs": 14,
+      "block_attempts": 416,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 13.000000000002501,
+        "write_block": 6.499999999997499,
+        "close_proof": 0.12999999999988177,
+        "proof": 0.0049999999999954525
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 195,
+      "buffers": 15,
+      "jobs": 15,
+      "block_attempts": 480,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 15.000000000015689,
+        "write_block": 7.499999999984311,
+        "close_proof": 0.14999999999986358
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 188,
+      "buffers": 8,
+      "jobs": 16,
+      "block_attempts": 294,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 10.077500000000068,
+        "write_block": 4.156249999999955,
+        "close_proof": 0.08000000000000228
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 10,
+      "jobs": 15,
+      "block_attempts": 366,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 12.45125000000007,
+        "write_block": 5.218749999999975,
+        "close_proof": 0.10000000000000113,
+        "proof": 0.0049999999999997165
+      }
+    },
+    {
+      "seed": 22,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 7,
+      "jobs": 14,
+      "block_attempts": 249,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.44524999999998,
+        "write_block": 3.5625000000000036,
+        "close_proof": 0.06999999999999944
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 191,
+      "buffers": 12,
+      "jobs": 16,
+      "block_attempts": 385,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 12.062499999991758,
+        "write_block": 6.0000000000081855,
+        "close_proof": 0.11999999999989086,
+        "proof": 0.13499999999987722
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 3,
+      "jobs": 7,
+      "block_attempts": 96,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 3.0,
+        "write_block": 1.5,
+        "close_proof": 0.029999999999972715,
+        "proof": 0.05999999999994543
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 191,
+      "buffers": 12,
+      "jobs": 16,
+      "block_attempts": 385,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 12.062499999991758,
+        "write_block": 6.0000000000081855,
+        "close_proof": 0.11999999999989086,
+        "proof": 0.13499999999987722
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 4,
+      "jobs": 14,
+      "block_attempts": 157,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 4.624999999999995,
+        "write_block": 2.59375000000001,
+        "proof": 0.12499999999999886,
+        "close_proof": 0.04000000000000114
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 181,
+      "buffers": 2,
+      "jobs": 17,
+      "block_attempts": 94,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 3.377499999999974,
+        "write_block": 1.2500000000000233,
+        "proof": 0.11999999999999827,
+        "close_proof": 0.0299999999999983
+      }
+    },
+    {
+      "seed": 23,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 185,
+      "buffers": 6,
+      "jobs": 21,
+      "block_attempts": 223,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.6250000000000195,
+        "write_block": 3.1562499999999423,
+        "proof": 0.1577500000000151,
+        "close_proof": 0.08000000000000226
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 184,
+      "buffers": 4,
+      "jobs": 5,
+      "block_attempts": 129,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 4.062499999999034,
+        "write_block": 2.0000000000009095,
+        "close_proof": 0.03999999999996362,
+        "proof": 0.009999999999990905
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 186,
+      "buffers": 6,
+      "jobs": 7,
+      "block_attempts": 193,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 6.062499999994486,
+        "write_block": 3.000000000005457,
+        "close_proof": 0.05999999999994543,
+        "proof": 0.03499999999996817
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 186,
+      "buffers": 6,
+      "jobs": 7,
+      "block_attempts": 193,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 6.062499999994486,
+        "write_block": 3.000000000005457,
+        "close_proof": 0.05999999999994543,
+        "proof": 0.01999999999998181
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 3,
+      "jobs": 5,
+      "block_attempts": 146,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 5.947499999999995,
+        "write_block": 1.59374999999999,
+        "close_proof": 0.030000000000001706,
+        "proof": 0.010000000000001136
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 184,
+      "buffers": 5,
+      "jobs": 13,
+      "block_attempts": 194,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.625000000000039,
+        "write_block": 2.2549999999999626,
+        "close_proof": 0.04000000000000114,
+        "proof": 0.034999999999998865
+      }
+    },
+    {
+      "seed": 24,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 185,
+      "buffers": 5,
+      "jobs": 12,
+      "block_attempts": 202,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.296500000000046,
+        "write_block": 2.6874999999999365,
+        "close_proof": 0.05000000000000397,
+        "proof": 0.019999999999998866
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 191,
+      "buffers": 11,
+      "jobs": 15,
+      "block_attempts": 352,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 11.000000000006025,
+        "write_block": 5.499999999993975,
+        "close_proof": 0.10999999999989996,
+        "proof": 0.05499999999994998
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 197,
+      "buffers": 17,
+      "jobs": 23,
+      "block_attempts": 545,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.11499999999998067,
+        "read_block": 17.06250000001458,
+        "write_block": 8.499999999985448,
+        "close_proof": 0.16999999999984539
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 192,
+      "buffers": 13,
+      "jobs": 17,
+      "block_attempts": 418,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 13.062500000006281,
+        "write_block": 6.531249999993761,
+        "close_proof": 0.12999999999988177,
+        "proof": 0.07500000000001705
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 181,
+      "buffers": 3,
+      "jobs": 15,
+      "block_attempts": 110,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 3.8125000000000293,
+        "write_block": 1.5312499999999736,
+        "proof": 0.12500000000000014,
+        "close_proof": 0.03000000000000128
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 184,
+      "buffers": 6,
+      "jobs": 32,
+      "block_attempts": 213,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.34000000000000025,
+        "read_block": 8.662000000000027,
+        "write_block": 2.3437499999999427,
+        "close_proof": 0.07000000000000368
+      }
+    },
+    {
+      "seed": 25,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 182,
+      "buffers": 5,
+      "jobs": 18,
+      "block_attempts": 153,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 6.187500000000007,
+        "write_block": 1.6874999999999876,
+        "proof": 0.155000000000001,
+        "close_proof": 0.05000000000000014
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 195,
+      "buffers": 15,
+      "jobs": 18,
+      "block_attempts": 481,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.024999999999977263,
+        "read_block": 15.062500000016485,
+        "write_block": 7.499999999983629,
+        "close_proof": 0.14999999999986358
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 198,
+      "buffers": 18,
+      "jobs": 18,
+      "block_attempts": 577,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 18.0625000000274,
+        "write_block": 8.999999999972715,
+        "close_proof": 0.1799999999998363
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 193,
+      "buffers": 13,
+      "jobs": 16,
+      "block_attempts": 417,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.024999999999977263,
+        "read_block": 13.06250000001421,
+        "write_block": 6.499999999985903,
+        "close_proof": 0.12999999999988177
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 4,
+      "jobs": 17,
+      "block_attempts": 168,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.02499999999999986,
+        "read_block": 7.002750000000019,
+        "write_block": 1.7499999999999893,
+        "close_proof": 0.040000000000000285
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 185,
+      "buffers": 6,
+      "jobs": 13,
+      "block_attempts": 219,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.5000000000000275,
+        "write_block": 3.1114999999999733,
+        "close_proof": 0.049999999999999725
+      }
+    },
+    {
+      "seed": 26,
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 182,
+      "buffers": 4,
+      "jobs": 16,
+      "block_attempts": 135,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "proof": 0.02499999999999986,
+        "read_block": 5.06250000000004,
+        "write_block": 1.7164999999999635,
+        "close_proof": 0.030000000000000856
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "schema": "taris-exact-example/1",
+  "cases": [
+    {
+      "name": "synchronous_schedule",
+      "description": "Три машины выключены одновременно треть суток",
+      "nodes": ["A", "B", "C"],
+      "availability": [
+        {"probability": "1/3", "affected": ["A", "B", "C"]},
+        {"probability": "2/3", "affected": []}
+      ],
+      "loss": [{"probability": "1", "affected": []}],
+      "request": {"k": 2, "availability_limit": "0", "loss_limit": "0"}
+    },
+    {
+      "name": "staggered_schedule",
+      "description": "По очереди недоступна одна машина; для сборки нужны две",
+      "nodes": ["A", "B", "C"],
+      "availability": [
+        {"probability": "1/3", "affected": ["A"]},
+        {"probability": "1/3", "affected": ["B"]},
+        {"probability": "1/3", "affected": ["C"]}
+      ],
+      "loss": [{"probability": "1", "affected": []}],
+      "request": {"k": 2, "availability_limit": "0", "loss_limit": "0"}
+    },
+    {
+      "name": "same_graph_X",
+      "description": "Парный граф совпадает с Y, но риск объекта выше",
+      "nodes": ["A", "B", "C"],
+      "availability": [
+        {"probability": "1/4", "affected": []},
+        {"probability": "1/4", "affected": ["A", "B"]},
+        {"probability": "1/4", "affected": ["A", "C"]},
+        {"probability": "1/4", "affected": ["B", "C"]}
+      ],
+      "loss": [{"probability": "1", "affected": []}],
+      "request": {"k": 2, "min_n": 3, "max_n": 3, "availability_limit": "1/2", "loss_limit": "0"}
+    },
+    {
+      "name": "same_graph_Y",
+      "description": "Тот же парный граф, меньший риск объекта",
+      "nodes": ["A", "B", "C"],
+      "availability": [
+        {"probability": "1/4", "affected": ["A", "B", "C"]},
+        {"probability": "1/4", "affected": ["A"]},
+        {"probability": "1/4", "affected": ["B"]},
+        {"probability": "1/4", "affected": ["C"]}
+      ],
+      "loss": [{"probability": "1", "affected": []}],
+      "request": {"k": 2, "min_n": 3, "max_n": 3, "availability_limit": "1/2", "loss_limit": "0"}
+    },
+    {
+      "name": "shared_site_and_independent_node",
+      "description": "S и A теряются вместе с вероятностью 2%; B независимо с вероятностью 4%",
+      "nodes": ["S", "A", "B"],
+      "availability": [{"probability": "1", "affected": []}],
+      "loss": [
+        {"probability": "0.9408", "affected": []},
+        {"probability": "0.0192", "affected": ["S", "A"]},
+        {"probability": "0.0392", "affected": ["B"]},
+        {"probability": "0.0008", "affected": ["S", "A", "B"]}
+      ],
+      "request": {"k": 1, "availability_limit": "0", "loss_limit": "0.001"}
+    }
+  ]
+}

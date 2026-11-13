@@ -7,6 +7,7 @@ import numpy as np
 
 # Номера потоков мира
 NODES, OPERATORS, OUTAGE, DURATION, CHURN, SHOCK, SILENT, MICRO, STORM, PING, AUDIT, NOISE, DATA, CRISIS, DEVICES = range(1, 16)
+ADVERSARY = 16
 
 
 def stream(seed: int, *labels: int) -> np.random.Generator:

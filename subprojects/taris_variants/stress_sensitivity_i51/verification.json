@@ -1,0 +1,10 @@
+{
+  "schema": "taris-stress-sensitivity-verification/1",
+  "executions": 150,
+  "worlds": 5,
+  "summary_rows": 30,
+  "conditional_crossings": 15,
+  "unknowns_preserved": true,
+  "source_hash": "98b766ec75a0da5b392a2054b95e5bc4bab991996e16779eb76732a54d605014",
+  "results_hash": "77fc26a13e753e3307426cbed429873afe6a414439412f65f09beec9918921b0"
+}

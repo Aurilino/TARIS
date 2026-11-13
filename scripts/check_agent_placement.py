@@ -32,7 +32,7 @@ def check(cond, msg):
 
 cfg = scenario("S0", seed=1, horizon_days=90, **MAIN)
 w = World(cfg)
-pol = ReservePolicy(w, 13, mode="fixed", R_fixed=0, rates="agent", placement="agent")
+pol = ReservePolicy(w, 13, mode="fixed", R_fixed=0, rates="agent", placement="agent_capped")
 check(np.all(pol.w == 1.0), "до обучения вес узлов одинаковый, оракул не используется")
 check(np.array_equal(pol.own, pol.exp.reg.wallet), "домен оператора берётся из публичного кошелька выплат")
 check(np.array_equal(pol.subnet_domain, pol.exp.reg.subnet), "дополнительный домен берётся из публичной подсети")
@@ -60,4 +60,12 @@ for _, _, eta, mask in pol.rates.shock_clusters(nodes, 89.0):
 expected = (1.0 / np.maximum(hazard, 1e-9)) ** pol.gamma
 check(np.allclose(pol.w, expected), "веса размещения совпадают с обратной оценкой потери фрагмента")
 check(len(res.short_placements) == 0, "в прогоне не было неполных размещений")
+check(pol.placement_risk["checked"] > 0, "после обучения cap проверяет новые наборы узлов")
+check(pol.placement_risk["feasible"] + pol.placement_risk["violations"] == pol.placement_risk["checked"],
+      "каждый проверенный набор либо проходит cap, либо учитывается как нарушение")
+check(pol.placement_risk["violations"] == 0, "на контрольном S0 cap достигается после роста избыточности")
+check(pol.placement_risk["max_placed_n"] > pol.n, "для части объектов cap требует дополнительных фрагментов")
+check(int(res.objects["n"].max()) <= pol.placement_max_n, "число фрагментов не превышает placement_max_n")
+check(np.isfinite(pol.placement_risk["max_best_upper"]), "верхняя оценка риска размещения конечна")
 print(f"ИТОГ: потерь объектов={len(res.losses)}, ремонтов={len(res.repairs)}, обучений={len(pol.fits)}")
+print(f"CAP: {pol.placement_risk}")

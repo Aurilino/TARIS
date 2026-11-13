@@ -16,7 +16,7 @@ import pandas as pd
 from .config import HOUR
 
 VISIBLE = ("region", "provider", "subnet")          # проверяемые сетью (по IP)
-CLAIMED = ("hw_claimed", "dc")                      # заявленные узлом (подделываются в S5)
+CLAIMED = ("hw_claimed", "dc_claimed")              # заявленные узлом (подделываются в S4)
 
 
 class Registry:
@@ -30,7 +30,7 @@ class Registry:
         self.wallet = pd.factorize(nd["wallet"], sort=True)[0].astype(int)
         self.subnet = pd.factorize(nd["subnet"], sort=True)[0].astype(int)
         self.hw = nd["hw_claimed"].to_numpy().astype(int)
-        self.dc = nd["dc"].to_numpy().astype(int)
+        self.dc = nd["dc_claimed" if "dc_claimed" in nd else "dc"].to_numpy().astype(int)
         self.is_device = self.dc < 0                 # заявленный класс: устройство пользователя (пункт 3.10)
         self.n_region = int(self.region.max()) + 1
         self.n_hw = len(world.cfg.hw_classes)

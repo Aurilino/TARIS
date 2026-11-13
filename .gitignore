@@ -2,6 +2,8 @@
 __pycache__/
 runs/
 *.pkl
+data/real/*.bz2
+data/real/*.zip
 # Obsidian: раскладка окон и кэш — личные, настройки хранилища — в репозитории
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json

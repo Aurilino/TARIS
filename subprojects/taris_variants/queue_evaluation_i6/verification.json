@@ -1,0 +1,8 @@
+{
+  "schema": "taris-queue-control-verification/1",
+  "executions": 24,
+  "physical_rank_stock_verified": true,
+  "resource_units_verified": true,
+  "source_hash": "1727f3af5885d931bc2428f9cdca17bac28507bfc7eda9b481dc38281c250239",
+  "results_hash": "e027c9b6a0cfe53d76fc4a8fd4c7d638805a391b4fc923ffd65f971430159eb1"
+}

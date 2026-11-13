@@ -1,0 +1,218 @@
+{
+  "schema": "taris-queue-i42/1",
+  "provenance": {
+    "main": {
+      "adversary.py": "6ed3dd0af066153ac23e0c698efb4d44440d4d5660714bcb671b7a0fc5eb41c1",
+      "chain.py": "77f09aaf1cdae7cf7d27216ebe6a47ebc22ab1e17594e9d0344720200fb4d82f",
+      "config.py": "7f409ed51fc6e2e07d1252cb62166263c3dda491ae92db63a075546ce5d53399",
+      "contagion.py": "af4905c5f17cb172cffbdb1888024fc9faa891175eb4d03f2022a45e64d078fa",
+      "crisis.py": "452eb9dd0b866af47492393cb1b033061a685766c8d80ce67cb039f2681a8f53",
+      "data.py": "bc81bec1e0a041d9446d9e1fd464828b9c7e5cea68f3cb313f0c145492e8c91b",
+      "experience.py": "fb01206113efb2476c87cdd467a0902b40d5d909a57065a6abd814ede9b8809f",
+      "export.py": "a6d43bebd532945e6c3cab6d20872e2986b024ff8b314adb27b8309edee18cbc",
+      "fixedpoint.py": "12243163743751a47394ed550e32e158722cd040a6c3aeb8a943d9bff23feba7",
+      "forecast.py": "8757dace1ae38a43fef8929bdb51b8c29717e3bda9db499cbb142c291a3c9b3c",
+      "graph.py": "b795d313bc2a7a2262b4131b0270adc8b4fab48b3aacde08e1add371b5f2b425",
+      "ledger.py": "8f959f20904293747e511362fbc57b3ad77e3c94bad3912e0b80bc597d12890a",
+      "policy.py": "5b3c78eeec847a60bfe75c76f53724f6ba09e651677d7156d68728dbdd4402ab",
+      "protection.py": "adba281e84a6a78d506f73173a9f04c2ef9bbe307c1e9577c27202c9bf036023",
+      "reserve.py": "4e9349714023603e71c05598bd48de4525f38c47b121aad658dae31e6c5b9a70",
+      "risk.py": "92fb985ad57182a8b344d22fd4ad740943704dd5020ca71c776340c21f6aa4d9",
+      "rng.py": "70d0ba4a6b7ddbc1b54cdf9bc8167bb974f9f4d8f39a8eefc335b1da39443bef",
+      "scenario.py": "dece400fe2eff422c9add0bdcf560dcc107062306b80d14d687447aa36c79dc5",
+      "security.py": "0e76bb14200a5f359ce72479bbab933727f8bd5e3bd7bed5ad693aaa160fa99c",
+      "tariff.py": "0ce203415aa4c0ebb65cba08e942550c8261811ee5f2a1b4474d8459b8ef482b",
+      "world.py": "6b91e05b7e9cb4bfb13abfc35bee288e51071f09241f6892f57e71594047dff7",
+      "__init__.py": "4aac556f2a6456c14e6c7a6fb7085ae449b29533c28c4ac0b707a31d5aa82ca1"
+    },
+    "integration": {
+      "queued.py": "6639faa9642207af5b91a286d89ea781f480ce530117229b067f46adc0165f47",
+      "physical.py": "b52b20ce4c57679ccf81db61d58466f2fdd7ae4c93cea81d86e543d7665093a2",
+      "run_queued.py": "f259826bf222f2c78c0144a0628f036b950664fa20e29737ce2bace32fd3b513",
+      "run_compare.py": "d33cea1c589f1cb5a276f65ab225ec33483d9ae2ee59e719ee5eff8789b8ffc0",
+      "agents.py": "4051048c633f75ae4a04a5084efe25df795dda936177337ad07359b969271c35",
+      "risk_graph.py": "c4706777bca714a82c89fb49a55a51d70fe70a89365eaed910dda208754cb562"
+    }
+  },
+  "integrity_passed": true,
+  "cases": [
+    {
+      "seed": 44,
+      "world_hashes": {
+        "nodes": "a527af78cc4032b6b2aba8272d37185e94c0c98813839864af39e268d982896c",
+        "outages": "abbb111bc6ff3d91525451ecafe47bb627e716c2770881ef60c540eb61fb2d0e",
+        "silent": "2637ba662336a6d7a6fab249626622e3f684afc1ca66e3b56534347d1b6714dc"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 310.8854166666667,
+      "buffer_object_days": 0.010416666666666519,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 1,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 1.0,
+        "write": 0.5
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "write_completed": 1
+      }
+    },
+    {
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 310.8854166666667,
+      "buffer_object_days": 0.010416666666666519,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 1,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 1.0,
+        "write": 0.5
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "write_completed": 1
+      }
+    },
+    {
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 310.8854166666667,
+      "buffer_object_days": 0.010416666666666519,
+      "unfinished_jobs": 0,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 1,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 1.0,
+        "write": 0.5
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "write_completed": 1
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 301.0,
+      "buffer_object_days": 0,
+      "unfinished_jobs": 1,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 4,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 3.4399999999999995
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "read_failed": 3,
+        "read": 1
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 301.0,
+      "buffer_object_days": 0,
+      "unfinished_jobs": 1,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 4,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 3.4399999999999995
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "read_failed": 3,
+        "read": 1
+      }
+    },
+    {
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 12,
+      "irrecoverable_objects": 0,
+      "initial_incomplete_objects": 0,
+      "lost_admitted_objects": 0,
+      "object_days": 78.0,
+      "unavailable_object_days": 0.0,
+      "disk_deficit_object_days": 0.0,
+      "buffer_only_object_days": 0.0,
+      "physical_fragment_days": 301.0,
+      "buffer_object_days": 0,
+      "unfinished_jobs": 1,
+      "queued_jobs": 0,
+      "open_buffers": 0,
+      "started_wait_days_sum": 0.0,
+      "started_jobs": 4,
+      "pending_wait_days_sum": 0.0,
+      "serviced_volume": {
+        "read": 3.4399999999999995
+      },
+      "queue_rejections": {},
+      "job_statuses": {
+        "read_failed": 3,
+        "read": 1
+      }
+    }
+  ]
+}

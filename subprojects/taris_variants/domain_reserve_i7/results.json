@@ -1,0 +1,420 @@
+{
+  "schema": "taris-domain-reserve-example/1",
+  "random_worlds": 0,
+  "independent_node_subset_check": true,
+  "rows": [
+    {
+      "inputs": {
+        "capacities": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 2,
+        "failed_domains": 2
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 2,
+        "capacities": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 4,
+        "minimum_n": 4,
+        "layout": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 5,
+        "lower_bound_n": 4,
+        "worst_surviving": 2
+      },
+      "independent_minimum_n": 4,
+      "capacity_free_lower_bound": 4
+    },
+    {
+      "inputs": {
+        "capacities": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 2,
+        "failed_domains": 3
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 3,
+        "capacities": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 5,
+        "minimum_n": 5,
+        "layout": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 6,
+        "lower_bound_n": 5,
+        "worst_surviving": 2
+      },
+      "independent_minimum_n": 5,
+      "capacity_free_lower_bound": 5
+    },
+    {
+      "inputs": {
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "k": 2,
+        "failed_domains": 3
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 3,
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 4,
+        "minimum_n": 8,
+        "layout": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 5,
+        "lower_bound_n": 8,
+        "worst_surviving": 2
+      },
+      "independent_minimum_n": 8,
+      "capacity_free_lower_bound": 8
+    },
+    {
+      "inputs": {
+        "capacities": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "k": 5,
+        "failed_domains": 2
+      },
+      "result": {
+        "k": 5,
+        "failed_domains": 2,
+        "capacities": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 5,
+        "minimum_n": 9,
+        "layout": [
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 6,
+        "lower_bound_n": 9,
+        "worst_surviving": 5
+      },
+      "independent_minimum_n": 9,
+      "capacity_free_lower_bound": 9
+    },
+    {
+      "inputs": {
+        "capacities": [
+          1,
+          1,
+          3,
+          3,
+          3
+        ],
+        "k": 5,
+        "failed_domains": 2
+      },
+      "result": {
+        "k": 5,
+        "failed_domains": 2,
+        "capacities": [
+          1,
+          1,
+          3,
+          3,
+          3
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 5,
+        "minimum_n": 11,
+        "layout": [
+          1,
+          1,
+          3,
+          3,
+          3
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 67,
+        "lower_bound_n": 11,
+        "worst_surviving": 5
+      },
+      "independent_minimum_n": 11,
+      "capacity_free_lower_bound": 9
+    },
+    {
+      "inputs": {
+        "capacities": [
+          2,
+          2,
+          2,
+          1
+        ],
+        "k": 2,
+        "failed_domains": 3
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 3,
+        "capacities": [
+          2,
+          2,
+          2,
+          1
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 4,
+        "minimum_n": null,
+        "layout": null,
+        "certified_minimum": false,
+        "certified_infeasible": true,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "infeasible_capacity",
+        "feasible": false,
+        "states": 0,
+        "lower_bound_n": 8
+      },
+      "independent_minimum_n": null,
+      "capacity_free_lower_bound": 8
+    },
+    {
+      "inputs": {
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "k": 2,
+        "failed_domains": 3,
+        "max_n": 7
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 3,
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "max_n": 7,
+        "max_states": 1000000,
+        "available_domains": 4,
+        "minimum_n": null,
+        "layout": null,
+        "certified_minimum": false,
+        "certified_infeasible": true,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "infeasible_budget",
+        "feasible": false,
+        "states": 0,
+        "lower_bound_n": 8
+      },
+      "independent_minimum_n": 8,
+      "capacity_free_lower_bound": 8
+    },
+    {
+      "inputs": {
+        "capacities": [
+          5,
+          5
+        ],
+        "k": 2,
+        "failed_domains": 2
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 2,
+        "capacities": [
+          5,
+          5
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 2,
+        "minimum_n": null,
+        "layout": null,
+        "certified_minimum": false,
+        "certified_infeasible": true,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "infeasible_domains",
+        "feasible": false,
+        "states": 0,
+        "lower_bound_n": null
+      },
+      "independent_minimum_n": null,
+      "capacity_free_lower_bound": null
+    },
+    {
+      "inputs": {
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "k": 2,
+        "failed_domains": 2,
+        "max_states": 1
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 2,
+        "capacities": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "max_n": null,
+        "max_states": 1,
+        "available_domains": 4,
+        "minimum_n": null,
+        "layout": null,
+        "certified_minimum": false,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "search_limit",
+        "feasible": null,
+        "states": 1,
+        "lower_bound_n": 4
+      },
+      "independent_minimum_n": 4,
+      "capacity_free_lower_bound": 4
+    },
+    {
+      "inputs": {
+        "capacities": [
+          1,
+          1
+        ],
+        "k": 2,
+        "failed_domains": 0
+      },
+      "result": {
+        "k": 2,
+        "failed_domains": 0,
+        "capacities": [
+          1,
+          1
+        ],
+        "max_n": null,
+        "max_states": 1000000,
+        "available_domains": 2,
+        "minimum_n": 2,
+        "layout": [
+          1,
+          1
+        ],
+        "certified_minimum": true,
+        "certified_infeasible": false,
+        "risk_probability": null,
+        "real_world_guarantee": false,
+        "status": "optimal",
+        "feasible": true,
+        "states": 3,
+        "lower_bound_n": 2,
+        "worst_surviving": 2
+      },
+      "independent_minimum_n": 2,
+      "capacity_free_lower_bound": 2
+    }
+  ],
+  "source_hashes": {
+    "domain_reserve.py": "e4d42829592773adc93fea2b25d3dab1b30afe2698a431e23eb08875237286d0",
+    "report_domain_reserve.py": "78dd7ddd7aeeec9de5ed5a2d636872a96d35f53f9f41a0dfb622f26dd875b5f9",
+    "EXPERIMENT_I7_DOMAIN.md": "c69174d5bcd781fa70c230ffa42082c881ddf517356dd42da5337dcfcce067c2"
+  },
+  "real_world_risk_probability": null
+}

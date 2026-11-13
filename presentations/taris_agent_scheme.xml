@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17" type="device">
+  <diagram id="taris-agent" name="Метод работы TARIS">
+    <mxGraphModel dx="1500" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Метод работы ИИ-агента TARIS" style="text;html=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="20" width="1400" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="network" value="Наблюдения сети&#10;Пинги, аудиты, реестр узлов, версии клиента" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="experience" value="Таблица опыта&#10;История доступности, простоев и обнаруженных потерь" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="140" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="risk" value="Модель риска&#10;GLM, кредибилити, тихие потери и шоки групп&#10;Обновление раз в 30 суток" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="940" y="140" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="reserve" value="Резерв информации&#10;Модель Тиле, задержка ремонта, поправки IBNR / RBNS" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="940" y="370" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff" value="Тарифный расчёт&#10;Премия за риск и концентрацию&#10;Денежный допуск узлов" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="370" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="forecast" value="Прогноз кризисов&#10;Аномалии по группам и порог тревоги&#10;В быстром режиме — раз в час" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="370" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="placement" value="Размещение данных&#10;Альтернативные режимы: вероятностный, жадный, cap, тарифный&#10;Ограничения разнесения" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="600" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="repair" value="Восстановление&#10;Контроль доступного запаса и запуск ремонта по порогу" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="610" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="migration" value="Упреждающий перенос&#10;После тревоги — выбор получателя и перенос фрагментов" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="610" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="execution" value="Исполнение в Python-симуляторе&#10;Размещение, восстановление, переносы и фактические потери" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="850" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="evaluation" value="Проверка эффективности&#10;Парные прогоны на общих мирах&#10;Потери, хранение и весь трафик" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="850" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" value="Граница информации&#10;Агент видит только данные сети.&#10;Истинные причины и будущие события доступны симулятору и оракулу." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#536878;fontColor=#172d43;fontSize=18;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="850" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="Режимы размещения и прогноз применяются в зависимости от конфигурации политики.&#10;Расчётный cap не гарантирует отсутствие потерь. Визуализация проигрывает журнал симулятора." style="text;html=0;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1060" width="1280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="network" target="experience">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="experience" target="risk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="risk" target="reserve">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Оценки риска" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="risk" target="tariff">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1370" y="310" />
+              <mxPoint x="670" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="network" target="forecast">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="В тарифном режиме" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="tariff" target="placement">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="Порог ремонта" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="reserve" target="repair">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="Параметры резерва" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="reserve" target="placement">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="550" />
+              <mxPoint x="700" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Тревога" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="forecast" target="migration">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="placement" target="execution">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="Ремонт" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="repair" target="execution">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1150" y="800" />
+              <mxPoint x="800" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" value="Перенос" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="migration" target="execution">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="800" />
+              <mxPoint x="600" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="execution" target="evaluation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="feedback" value="Новые сетевые наблюдения" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="execution" target="network">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="1010" />
+              <mxPoint x="50" y="1010" />
+              <mxPoint x="50" y="195" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="risk-placement" value="Оценки кандидатов" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#536878;strokeWidth=2;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="risk" target="placement">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1430" y="205" />
+              <mxPoint x="1430" y="565" />
+              <mxPoint x="850" y="565" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="encrypted-manifest" name="Защита: зашифрованный манифест">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1600" pageHeight="1200">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Зашифрованный манифест TARIS&#10;Локальный прототип и сверка снимков реализованы" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#fff2cc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="100" y="30" width="1360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="write" value="Клиент: запись&#10;Шифрование объекта отдельным ключом, затем избыточное кодирование" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="100" y="170" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="store" value="Агент: размещение&#10;Разнесение фрагментов по риску и связанным владельцам" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="600" y="170" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="manifest" value="Клиент: создание манифеста&#10;Идентификаторы и индексы фрагментов, код, параметры проверки, защищённый ключ объекта" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="170" width="360" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="mstore" value="Резервированное хранение&#10;Зашифрованный манифест&#10;Известный пользователю идентификатор" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="430" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="open" value="Клиент: доступ по ключу&#10;Получение, расшифрование и проверка версии манифеста" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="600" y="430" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="fetch" value="Агент: загрузка&#10;Получает только сведения для запроса фрагментов&#10;Ключи остаются у клиента" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="100" y="430" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="decode" value="Клиент: сборка&#10;Проверка фрагментов и декодирование зашифрованного объекта" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="100" y="700" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="decrypt" value="Клиент: расшифрование&#10;Проверка подлинности объекта&#10;Выдача открытых данных пользователю" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="600" y="700" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="threat" value="Злоумышленник&#10;Достаточное число фрагментов даёт шифротекст, а не открытые данные без ключа" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#f8cecc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="700" width="360" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" value="Границы: потеря и компрометация ключей, отзыв доступа, подмена старой версии и утечки шаблонов доступа требуют отдельных правил.&#10;Прежний пороговый режим симулятора сохраняется отдельно. Основание: docs/56_encrypted_manifest.md" style="rounded=1;whiteSpace=wrap;html=0;fontSize=19;spacing=15;fillColor=#f5f5f5;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="100" y="990" width="1360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="e0" value="Зашифрованные фрагменты" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="write" target="store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="Идентификаторы" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="store" target="manifest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="Шифрование манифеста" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="manifest" target="mstore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="Чтение" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="mstore" target="open">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Минимальные сведения" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="open" target="fetch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Достаточное число фрагментов" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="fetch" target="decode">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="Восстановленный шифротекст" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=0;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="decode" target="decrypt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="security-replay" name="TARIS: проверка защищённого чтения">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="1000">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Проверка защищённого чтения по журналу TARIS&#10;Реализованный слой анализа после прогона" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#fff2cc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="90" y="30" width="1320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="run" value="RunResult TARIS&#10;История индексов, держателей, потерь, переносов и простоев" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="90" y="180" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="scenario" value="Сценарий угроз&#10;Компрометация узлов / ключей, отказы и подмена ответов" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#f8cecc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="90" y="430" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="replay" value="SecurityReplay&#10;Накопление копий противником&#10;Доступность клиентского чтения" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#dae8fc;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="570" y="180" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="bytes" value="Проверка на байтах&#10;AES-GCM и Reed–Solomon&#10;Ключи только у клиента / тестового оценщика" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="570" y="430" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="report" value="Раздельные исходы&#10;Сбор шифротекста&#10;Раскрытие открытого текста&#10;Недоступность ключа / манифеста" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#e1d5e7;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="180" width="360" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="check" value="Сверка модели с байтами&#10;Совпадение исходов&#10;Проверка неизменности таблиц и метрик исходного прогона" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#d5e8d4;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="450" width="360" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" value="Границы: одна версия шифрования на объект, локальная байтовая демонстрация.&#10;Нет передачи истины политике. Это не полный adversary и не доказательство H5/H6.&#10;Спецификация: docs/61_security_integration.md" style="rounded=1;whiteSpace=wrap;html=0;fontSize=20;spacing=15;fillColor=#f5f5f5;strokeColor=#536878;" vertex="1" parent="1">
+          <mxGeometry x="90" y="760" width="1320" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="История" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="run" target="replay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="Явные вмешательства" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="scenario" target="replay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="Оценка" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="replay" target="report">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="Индексы и доступность" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="replay" target="bytes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="Фактическое чтение" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="bytes" target="check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="Расчётный исход" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="report" target="check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

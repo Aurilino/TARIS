@@ -61,6 +61,9 @@ class LinkGraph:
         # реестр (наблюдаемо): регистрация, кошелёк, подсеть
         self.join = np.where(cancelled, np.inf, nd["join_t"].to_numpy())
         self.wallet = nd["wallet"].to_numpy()
+        # Публичные парные сигналы финансирования, а не истинное владение.
+        adv = getattr(world, "adversary", None)
+        self.funding_pairs = adv.public_funding_pairs if adv is not None else []
         self.subnet = pd.factorize(nd["subnet"])[0]
         # страховые случаи по эпохам и эпохи наблюдения: узел зарегистрирован и не простаивает всю эпоху
         ob = chain.observed[chain.observed["dur"] > c.d]
@@ -105,6 +108,8 @@ class LinkGraph:
         j = np.where(reg, self.join, np.nan)
         f_join = np.abs(j[:, None] - j[None, :]) < c.graph_join_window_days
         o = 1.0 - (1.0 - c.graph_b_wallet * f_wallet) * (1.0 - c.graph_b_subnet * f_subnet) * (1.0 - c.graph_b_join * f_join)
+        for i, j in self.funding_pairs:
+            o[i, j] = o[j, i] = 1.0 - (1.0 - o[i, j]) * (1.0 - c.graph_b_wallet)
         o = o * (reg[:, None] & reg[None, :])
         np.fill_diagonal(o, 0.0)
         return o

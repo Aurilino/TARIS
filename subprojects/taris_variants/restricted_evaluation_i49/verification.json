@@ -1,0 +1,22 @@
+{
+  "schema": "taris-restricted-verification/1",
+  "training_rows": 702,
+  "validation_rows": 702,
+  "worlds": 6,
+  "grid_fits_verified": 2,
+  "per_world_rows_verified": 18,
+  "summary_rows_verified": 6,
+  "source_hash": "44cbe36b111c1fe18e03ac6c041d61bbd46adfbd36aff4cb61691febf627cf23",
+  "inputs": {
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\restricted_model_i49\\model.json": "92c6838a67baf1f1ccdb61d05943da671930e1acfe9d29c7ad1a17b7a32768b8",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\restricted_evaluation_i49\\results.json": "4dcbc0b60ef78d4c7b9639e113cc453dd8cf20be9f1b0c6170c158c92f76e4ec",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_train\\s31.json": "c6293ce359173901cdbe278a4abc5f25b142f6c63eee5795f31e961ee0f1496c",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_train\\s32.json": "4a8c424665f427d8d30bd9a285c46a1b1c67fadcecf76156666204151709fb21",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_train\\s33.json": "3626b62b4a2bda9d5a48c4b6b168bcb8dfc2ff044bbe7db6cde0b3d036994d75",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_validation\\s34.json": "b93dd0fc2837dded95d5d365eacdafd879d2e8a174dcd82f2d3982dbfd1977b3",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_validation\\s35.json": "66b8cb72b007ff40d9ceefad5a35e5a6c1a632dc96e4f43623a5503e0e7c81d0",
+    "C:\\Users\\Auril\\taris\\subprojects\\taris_variants\\series_i48_validation\\s36.json": "4f0557b583c2d6b1cf824c8bf59f64adb800e91bbaf71cd0aaaf68d5b14d0825"
+  },
+  "unknowns_preserved": true,
+  "independent_window_integration": true
+}

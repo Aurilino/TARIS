@@ -1,0 +1,6639 @@
+{
+  "status": "completed",
+  "job": {
+    "scenario": "S0",
+    "seed": 5,
+    "days": 45,
+    "nodes": 24,
+    "n": 3,
+    "k": 2,
+    "repair_mode": "fixed"
+  },
+  "provenance": {
+    "main": {
+      "adversary.py": "6ed3dd0af066153ac23e0c698efb4d44440d4d5660714bcb671b7a0fc5eb41c1",
+      "chain.py": "77f09aaf1cdae7cf7d27216ebe6a47ebc22ab1e17594e9d0344720200fb4d82f",
+      "config.py": "7f409ed51fc6e2e07d1252cb62166263c3dda491ae92db63a075546ce5d53399",
+      "contagion.py": "af4905c5f17cb172cffbdb1888024fc9faa891175eb4d03f2022a45e64d078fa",
+      "crisis.py": "452eb9dd0b866af47492393cb1b033061a685766c8d80ce67cb039f2681a8f53",
+      "data.py": "bc81bec1e0a041d9446d9e1fd464828b9c7e5cea68f3cb313f0c145492e8c91b",
+      "experience.py": "fb01206113efb2476c87cdd467a0902b40d5d909a57065a6abd814ede9b8809f",
+      "export.py": "a6d43bebd532945e6c3cab6d20872e2986b024ff8b314adb27b8309edee18cbc",
+      "fixedpoint.py": "12243163743751a47394ed550e32e158722cd040a6c3aeb8a943d9bff23feba7",
+      "forecast.py": "8757dace1ae38a43fef8929bdb51b8c29717e3bda9db499cbb142c291a3c9b3c",
+      "graph.py": "b795d313bc2a7a2262b4131b0270adc8b4fab48b3aacde08e1add371b5f2b425",
+      "ledger.py": "8f959f20904293747e511362fbc57b3ad77e3c94bad3912e0b80bc597d12890a",
+      "policy.py": "5b3c78eeec847a60bfe75c76f53724f6ba09e651677d7156d68728dbdd4402ab",
+      "protection.py": "adba281e84a6a78d506f73173a9f04c2ef9bbe307c1e9577c27202c9bf036023",
+      "reserve.py": "4e9349714023603e71c05598bd48de4525f38c47b121aad658dae31e6c5b9a70",
+      "risk.py": "92fb985ad57182a8b344d22fd4ad740943704dd5020ca71c776340c21f6aa4d9",
+      "rng.py": "70d0ba4a6b7ddbc1b54cdf9bc8167bb974f9f4d8f39a8eefc335b1da39443bef",
+      "scenario.py": "dece400fe2eff422c9add0bdcf560dcc107062306b80d14d687447aa36c79dc5",
+      "security.py": "0e76bb14200a5f359ce72479bbab933727f8bd5e3bd7bed5ad693aaa160fa99c",
+      "tariff.py": "0ce203415aa4c0ebb65cba08e942550c8261811ee5f2a1b4474d8459b8ef482b",
+      "world.py": "6b91e05b7e9cb4bfb13abfc35bee288e51071f09241f6892f57e71594047dff7",
+      "__init__.py": "4aac556f2a6456c14e6c7a6fb7085ae449b29533c28c4ac0b707a31d5aa82ca1"
+    },
+    "integration": {
+      "agents.py": "4051048c633f75ae4a04a5084efe25df795dda936177337ad07359b969271c35",
+      "risk_graph.py": "c4706777bca714a82c89fb49a55a51d70fe70a89365eaed910dda208754cb562",
+      "run_compare.py": "d33cea1c589f1cb5a276f65ab225ec33483d9ae2ee59e719ee5eff8789b8ffc0"
+    }
+  },
+  "case": {
+    "scenario": "S0",
+    "seed": 5,
+    "config": {
+      "A_inf_days": 30.0,
+      "A_wear_days": 1095.0,
+      "T_rep_hours": 24.0,
+      "adv_attack_day": null,
+      "adv_bad_fraction": 0.0,
+      "adv_colluding_owners": 2,
+      "adv_false_claim_fraction": 0.0,
+      "adv_key_compromise_day": null,
+      "adv_pair_leak": 0.3,
+      "adv_rate_multiplier": 0.3,
+      "adv_silent_multiplier": 20.0,
+      "adv_sybil_share": 0.05,
+      "adv_wave_days": 30.0,
+      "adv_wave_width_days": 0.25,
+      "adv_whitewash_fraction": 0.0,
+      "adv_whitewash_gap_days": 1.0,
+      "adversary_enabled": false,
+      "age_unit_days": 30.0,
+      "alarm_step_hours": 24,
+      "alpha_hw": [
+        0.3,
+        0.0,
+        -0.2
+      ],
+      "audit_interval_days": 1,
+      "audit_noise": 0.005,
+      "audits_per_epoch": 1,
+      "b_inf": 2.0,
+      "b_wear": 1.0,
+      "beta_hw": [
+        0.3,
+        0.0,
+        -0.2
+      ],
+      "beta_region_sd": 0.15,
+      "block_growth_per_year": 0.0,
+      "blocks_per_epoch": 1,
+      "capacity_mean_fragments": 1000.0,
+      "capacity_sd": 0.5,
+      "churn_A_days": 60.0,
+      "churn_base": 0.00045662100456621003,
+      "churn_extra_new": 0.008333333333333333,
+      "cr_cascade_delay_hours": 6.0,
+      "cr_cascade_p": 0.3,
+      "cr_cascade_rho": 5.0,
+      "cr_cascade_s": 0.6,
+      "cr_exodus_W_days": 21.0,
+      "cr_exodus_multiplier": 30.0,
+      "cr_exodus_period_days": 30.0,
+      "cr_exodus_pi": 0.8,
+      "cr_exodus_q": 0.5,
+      "cr_exodus_rate": 0.2,
+      "cr_exodus_rho": 5.0,
+      "cr_exodus_rho_join": 0.3,
+      "cr_exodus_s": 0.5,
+      "cr_fire_rate": 0.05,
+      "cr_software_L_mean_hours": 12.0,
+      "cr_software_W_days": 5.0,
+      "cr_software_pi": 0.5,
+      "cr_software_q": 0.5,
+      "cr_software_rate": 1.0,
+      "cr_software_rho": 5.0,
+      "cr_software_s": 0.8,
+      "cr_software_total_share": 0.05,
+      "cr_software_trigger_days": 3.0,
+      "cr_storm_W_days": 3.0,
+      "cr_storm_pi": 0.7,
+      "cr_storm_q": 0.5,
+      "cr_storm_rate": 0.5,
+      "cr_storm_rho": 5.0,
+      "cr_storm_s": 0.6,
+      "cr_sybil_enabled": false,
+      "cr_wear_W_days": 30.0,
+      "cr_wear_p_death": 0.3,
+      "cr_wear_period_days": 30.0,
+      "cr_wear_pi": 0.9,
+      "cr_wear_q": 0.5,
+      "cr_wear_rate": 0.1,
+      "cr_wear_rho": 10.0,
+      "cr_wear_s": 0.8,
+      "crises_enabled": false,
+      "dev_capacity_mean": 50.0,
+      "dev_home_providers": 4,
+      "dev_hw_probs": [
+        0.7,
+        0.0,
+        0.3
+      ],
+      "dev_m_churn": 10.0,
+      "dev_m_dur": 2.0,
+      "dev_m_micro": 3.0,
+      "dev_m_rate": 6.0,
+      "dev_m_silent": 3.0,
+      "dev_multi_share": 0.1,
+      "dev_ratio": 2.0,
+      "devices_enabled": false,
+      "franchise_d_hours": 0.25,
+      "graph_K_rho": 10.0,
+      "graph_b_join": 0.2,
+      "graph_b_subnet": 0.6,
+      "graph_b_wallet": 0.95,
+      "graph_cluster_cut": 0.5,
+      "graph_join_window_days": 1.0,
+      "graph_snapshot_days": 30,
+      "graph_store_min": 0.2,
+      "heterogeneity_a": 0.5,
+      "horizon_days": 45,
+      "hw_classes": [
+        "consumer_hdd",
+        "enterprise_hdd",
+        "ssd"
+      ],
+      "hw_probs": [
+        0.5,
+        0.3,
+        0.2
+      ],
+      "initial_age_mean_days": 365.0,
+      "k": 2,
+      "kappa_age": 0.8,
+      "lognorm_median_hours": 2.0,
+      "lognorm_sigma": 1.6,
+      "mean_event_rate": 0.03333333333333333,
+      "micro_info_b": 0.5,
+      "micro_mean_minutes": 3.0,
+      "micro_noise_sd": 0.5,
+      "micro_rate": 1.0,
+      "mism_q_factor": 2.0,
+      "mism_s_factor": 0.5,
+      "n_dc": 8,
+      "n_initial_nodes": 24,
+      "n_providers": 4,
+      "n_regions": 3,
+      "node_join_rate": 0.1,
+      "object_size": 1.0,
+      "operator_join_gap_days": 10.0,
+      "operator_same_dc_p": 0.7,
+      "operator_same_subnet_p": 0.5,
+      "operator_size_p": 0.6,
+      "ping_interval_minutes": 5.0,
+      "ping_noise": 0.001,
+      "pre_gamma": 2.0,
+      "pre_k_W": 4.0,
+      "pre_sigma_W": 1.0,
+      "pre_u0": 0.5,
+      "repair_hours": 2.0,
+      "seed": 5,
+      "severity_node_sd": 0.3,
+      "shock_rate_per_year": [
+        0.5,
+        0.3333333333333333,
+        0.1
+      ],
+      "shock_scale_hours": [
+        6.0,
+        4.0,
+        3.0
+      ],
+      "shock_shape": 0.8,
+      "shock_total_share": 0.1,
+      "shocks_enabled": false,
+      "silent_rate": 0.000547945205479452,
+      "storm_hours": 12.0,
+      "storm_multiplier": 40.0,
+      "sw_release_every_days": 60.0,
+      "sw_update_delay_days": 10.0,
+      "track_objects": 300,
+      "train_days": 22,
+      "transfer_rate_size_per_hour": null,
+      "weibull_scale_hours": 5.0,
+      "weibull_shape": 0.6,
+      "world_mode": "matched"
+    },
+    "settings": {
+      "n": 3,
+      "block_days": 7,
+      "reserve_horizon_days": 30,
+      "loss_limit": 0.001,
+      "availability_limit": 0.08,
+      "candidate_limit": 16,
+      "swap_rounds": 2,
+      "repair_mode": "fixed"
+    },
+    "world_unchanged": true,
+    "common_random_numbers": true,
+    "world_hashes": {
+      "nodes": "ba4ab9c28014ecaca72d2be2087df3bbda1af58f5c61dcb9e2c9999ec54c0964",
+      "outages": "629f5d47378968a5411881dce01aec52201af2766b2f7620315dbbe6abf214be",
+      "silent": "64949d8e432c52e33a1b44e5446743d9d615cbd5b02200dae33b74d3f59f89e0"
+    },
+    "input_hashes": {
+      "observed": "f1dda94dd0dab15c1e8b1ba116504aea187e52dd7c433944b6ecc75bfed391a8",
+      "audits": "443963cd2acd80cfb3e78da3cf04dcf0908290dff99b9f1fbe2f3900aa1804fe",
+      "objects": "32af11206a61155ed7324360c171d8c34035995d897fbb9face93871ea1a894e",
+      "capacity": "8cd80604280f59063a969edbc589f332f140d00d794673a69dbf7762762788e5"
+    },
+    "variants": {
+      "classic": {
+        "name": "TARIS Classic",
+        "objects": 45,
+        "lost_objects": 0,
+        "repair_operations": 4,
+        "repair_traffic": 6.0,
+        "fragment_days": 3101.0,
+        "final_fragments": 135,
+        "object_unavailability_mean_before_loss": 4.882565672024825e-05,
+        "unavailability_objects_evaluated": 45,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 0,
+          "object_days": 1035.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.07637323284246511,
+          "unavailability_share": 7.379056313281654e-05
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.00035875579253996653,
+          "unavailability_share": 1.299839828043357e-06
+        },
+        "short_placements": 0,
+        "risk_fits": 5,
+        "graph_stats": null,
+        "placement_risk": {
+          "checked": 31,
+          "feasible": 0,
+          "violations": 31,
+          "unscored": 14,
+          "extra_fragments": 0,
+          "max_placed_n": 3,
+          "max_best_upper": 0.0004150556272769345,
+          "max_dropped": 1.2094218054787062e-09
+        },
+        "seconds": 1.1246645000064746,
+        "losses": [],
+        "numerical_finite": true,
+        "runtime_warnings": {},
+        "graph_decisions": [],
+        "placement_decisions": [],
+        "repair_requests": [],
+        "initial_placements": [
+          {
+            "obj": 0,
+            "nodes": [
+              14,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 1,
+            "nodes": [
+              16,
+              2,
+              0
+            ]
+          },
+          {
+            "obj": 2,
+            "nodes": [
+              5,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 3,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 4,
+            "nodes": [
+              0,
+              1,
+              14
+            ]
+          },
+          {
+            "obj": 5,
+            "nodes": [
+              16,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 6,
+            "nodes": [
+              15,
+              6,
+              0
+            ]
+          },
+          {
+            "obj": 7,
+            "nodes": [
+              15,
+              14,
+              0
+            ]
+          },
+          {
+            "obj": 8,
+            "nodes": [
+              5,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 9,
+            "nodes": [
+              7,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 10,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 11,
+            "nodes": [
+              7,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 12,
+            "nodes": [
+              0,
+              10,
+              2
+            ]
+          },
+          {
+            "obj": 13,
+            "nodes": [
+              3,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 14,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 15,
+            "nodes": [
+              16,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 16,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 17,
+            "nodes": [
+              16,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 18,
+            "nodes": [
+              10,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 19,
+            "nodes": [
+              10,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 20,
+            "nodes": [
+              0,
+              15,
+              8
+            ]
+          },
+          {
+            "obj": 21,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 22,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 23,
+            "nodes": [
+              13,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 24,
+            "nodes": [
+              15,
+              16,
+              0
+            ]
+          },
+          {
+            "obj": 25,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 26,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 27,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 28,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 29,
+            "nodes": [
+              14,
+              8,
+              1
+            ]
+          },
+          {
+            "obj": 30,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 31,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 32,
+            "nodes": [
+              8,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 33,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 34,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 35,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 36,
+            "nodes": [
+              0,
+              16,
+              15
+            ]
+          },
+          {
+            "obj": 37,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 38,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 39,
+            "nodes": [
+              13,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 40,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 41,
+            "nodes": [
+              13,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 42,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 43,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 44,
+            "nodes": [
+              0,
+              15,
+              8
+            ]
+          }
+        ]
+      },
+      "graph": {
+        "name": "TARIS-G",
+        "objects": 45,
+        "lost_objects": 0,
+        "repair_operations": 3,
+        "repair_traffic": 4.5,
+        "fragment_days": 3099.0,
+        "final_fragments": 134,
+        "object_unavailability_mean_before_loss": 0.0006237439618996942,
+        "unavailability_objects_evaluated": 45,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 0,
+          "object_days": 1035.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 1.2021784144216423,
+          "unavailability_share": 0.0011615250380885432
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.016909898920353328,
+          "unavailability_share": 6.12677497114251e-05
+        },
+        "short_placements": 0,
+        "risk_fits": 0,
+        "graph_stats": {
+          "calls": 50,
+          "accepted_swaps": 11,
+          "actuarial_rejections": 0,
+          "availability_rejections": 0,
+          "unavailability_exceeded": 0,
+          "cold_calls": 0
+        },
+        "placement_risk": null,
+        "seconds": 1.1347415000200272,
+        "losses": [],
+        "numerical_finite": true,
+        "runtime_warnings": {},
+        "graph_decisions": [
+          {
+            "kind": "candidate_refinement",
+            "time": 0.0,
+            "held": [],
+            "chosen": [
+              2,
+              17,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 1.0,
+            "held": [],
+            "chosen": [
+              17,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 2.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 3.0,
+            "held": [],
+            "chosen": [
+              17,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 4.0,
+            "held": [
+              0,
+              17
+            ],
+            "chosen": [
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 4.0,
+            "held": [
+              0,
+              17
+            ],
+            "chosen": [
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 4.0,
+            "held": [],
+            "chosen": [
+              0,
+              15,
+              8
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 5.0,
+            "held": [
+              0,
+              17
+            ],
+            "chosen": [
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 5.0,
+            "held": [
+              0,
+              17
+            ],
+            "chosen": [
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 5.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 6.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 7.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 8.0,
+            "held": [],
+            "chosen": [
+              6,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 9.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 10.0,
+            "held": [],
+            "chosen": [
+              18,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 11.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 12.0,
+            "held": [
+              0,
+              1
+            ],
+            "chosen": [
+              13
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 12.0,
+            "held": [],
+            "chosen": [
+              0,
+              13,
+              1
+            ],
+            "graph_before": 0.0009718172983479105,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 13.0,
+            "held": [],
+            "chosen": [
+              3,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              13,
+              0,
+              1
+            ],
+            "graph_before": 0.0008503401360544217,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              13,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              3,
+              0,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              2,
+              0,
+              7
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              3,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              16,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              17,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              1
+            ],
+            "graph_before": 0.0016666666666666668,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              0,
+              10,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.0004691531785127844,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.001388888888888889,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              8,
+              4,
+              1
+            ],
+            "graph_before": 0.001782971253017336,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              13,
+              2,
+              0
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              13,
+              0,
+              2
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              13,
+              0,
+              2
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              7,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          }
+        ],
+        "placement_decisions": [
+          {
+            "obj": 0,
+            "time": 0.0,
+            "nodes": [
+              2,
+              17,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 1,
+            "time": 1.0,
+            "nodes": [
+              17,
+              2,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 2,
+            "time": 2.0,
+            "nodes": [
+              4,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 3,
+            "time": 3.0,
+            "nodes": [
+              17,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 4,
+            "time": 4.0,
+            "nodes": [
+              0,
+              15,
+              8
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 5,
+            "time": 5.0,
+            "nodes": [
+              16,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 6,
+            "time": 6.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 7,
+            "time": 7.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 8,
+            "time": 8.0,
+            "nodes": [
+              6,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 9,
+            "time": 9.0,
+            "nodes": [
+              8,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 10,
+            "time": 10.0,
+            "nodes": [
+              18,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 11,
+            "time": 11.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 12,
+            "time": 12.0,
+            "nodes": [
+              0,
+              13,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 13,
+            "time": 13.0,
+            "nodes": [
+              3,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 14,
+            "time": 14.0,
+            "nodes": [
+              13,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 15,
+            "time": 15.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 16,
+            "time": 16.0,
+            "nodes": [
+              13,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 17,
+            "time": 17.0,
+            "nodes": [
+              3,
+              0,
+              2
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 18,
+            "time": 18.0,
+            "nodes": [
+              2,
+              0,
+              7
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 19,
+            "time": 19.0,
+            "nodes": [
+              3,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 20,
+            "time": 20.0,
+            "nodes": [
+              16,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 21,
+            "time": 21.0,
+            "nodes": [
+              7,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 22,
+            "time": 22.0,
+            "nodes": [
+              17,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 23,
+            "time": 23.0,
+            "nodes": [
+              10,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 24,
+            "time": 24.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 25,
+            "time": 25.0,
+            "nodes": [
+              0,
+              10,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 26,
+            "time": 26.0,
+            "nodes": [
+              12,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 27,
+            "time": 27.0,
+            "nodes": [
+              7,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 28,
+            "time": 28.0,
+            "nodes": [
+              7,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 29,
+            "time": 29.0,
+            "nodes": [
+              8,
+              4,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 30,
+            "time": 30.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 31,
+            "time": 31.0,
+            "nodes": [
+              8,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 32,
+            "time": 32.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 33,
+            "time": 33.0,
+            "nodes": [
+              14,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 34,
+            "time": 34.0,
+            "nodes": [
+              13,
+              2,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 35,
+            "time": 35.0,
+            "nodes": [
+              13,
+              0,
+              2
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 36,
+            "time": 36.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 37,
+            "time": 37.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 38,
+            "time": 38.0,
+            "nodes": [
+              7,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 39,
+            "time": 39.0,
+            "nodes": [
+              13,
+              0,
+              2
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 40,
+            "time": 40.0,
+            "nodes": [
+              7,
+              2,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 41,
+            "time": 41.0,
+            "nodes": [
+              14,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 42,
+            "time": 42.0,
+            "nodes": [
+              15,
+              14,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 43,
+            "time": 43.0,
+            "nodes": [
+              15,
+              14,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 44,
+            "time": 44.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          }
+        ],
+        "repair_requests": [
+          {
+            "obj": 0,
+            "time": 4.0,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ]
+          },
+          {
+            "obj": 1,
+            "time": 4.0,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ]
+          },
+          {
+            "obj": 0,
+            "time": 5.0,
+            "indices": [
+              0
+            ],
+            "targets": [
+              1
+            ]
+          },
+          {
+            "obj": 1,
+            "time": 5.0,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ]
+          },
+          {
+            "obj": 8,
+            "time": 12.0,
+            "indices": [
+              0
+            ],
+            "targets": [
+              13
+            ]
+          }
+        ],
+        "initial_placements": [
+          {
+            "obj": 0,
+            "nodes": [
+              2,
+              17,
+              0
+            ]
+          },
+          {
+            "obj": 1,
+            "nodes": [
+              17,
+              2,
+              0
+            ]
+          },
+          {
+            "obj": 2,
+            "nodes": [
+              4,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 3,
+            "nodes": [
+              17,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 4,
+            "nodes": [
+              0,
+              15,
+              8
+            ]
+          },
+          {
+            "obj": 5,
+            "nodes": [
+              16,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 6,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 7,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 8,
+            "nodes": [
+              6,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 9,
+            "nodes": [
+              8,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 10,
+            "nodes": [
+              18,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 11,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 12,
+            "nodes": [
+              0,
+              13,
+              1
+            ]
+          },
+          {
+            "obj": 13,
+            "nodes": [
+              3,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 14,
+            "nodes": [
+              13,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 15,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 16,
+            "nodes": [
+              13,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 17,
+            "nodes": [
+              3,
+              0,
+              2
+            ]
+          },
+          {
+            "obj": 18,
+            "nodes": [
+              2,
+              0,
+              7
+            ]
+          },
+          {
+            "obj": 19,
+            "nodes": [
+              3,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 20,
+            "nodes": [
+              16,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 21,
+            "nodes": [
+              7,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 22,
+            "nodes": [
+              17,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 23,
+            "nodes": [
+              10,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 24,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 25,
+            "nodes": [
+              0,
+              10,
+              15
+            ]
+          },
+          {
+            "obj": 26,
+            "nodes": [
+              12,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 27,
+            "nodes": [
+              7,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 28,
+            "nodes": [
+              7,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 29,
+            "nodes": [
+              8,
+              4,
+              1
+            ]
+          },
+          {
+            "obj": 30,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 31,
+            "nodes": [
+              8,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 32,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 33,
+            "nodes": [
+              14,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 34,
+            "nodes": [
+              13,
+              2,
+              0
+            ]
+          },
+          {
+            "obj": 35,
+            "nodes": [
+              13,
+              0,
+              2
+            ]
+          },
+          {
+            "obj": 36,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 37,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 38,
+            "nodes": [
+              7,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 39,
+            "nodes": [
+              13,
+              0,
+              2
+            ]
+          },
+          {
+            "obj": 40,
+            "nodes": [
+              7,
+              2,
+              0
+            ]
+          },
+          {
+            "obj": 41,
+            "nodes": [
+              14,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 42,
+            "nodes": [
+              15,
+              14,
+              0
+            ]
+          },
+          {
+            "obj": 43,
+            "nodes": [
+              15,
+              14,
+              0
+            ]
+          },
+          {
+            "obj": 44,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          }
+        ]
+      },
+      "hybrid": {
+        "name": "TARIS-Hybrid",
+        "objects": 45,
+        "lost_objects": 0,
+        "repair_operations": 4,
+        "repair_traffic": 6.0,
+        "fragment_days": 3101.0,
+        "final_fragments": 135,
+        "object_unavailability_mean_before_loss": 4.5230389195322304e-05,
+        "unavailability_objects_evaluated": 45,
+        "full_exposure": {
+          "objects": 45,
+          "lost_objects": 0,
+          "object_days": 1035.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.070038999073327,
+          "unavailability_share": 6.767053050562995e-05
+        },
+        "post_warmup_cohort": {
+          "objects": 23,
+          "lost_objects": 0,
+          "object_days": 276.0,
+          "lost_object_days": 0.0,
+          "unavailable_object_days": 0.0011822065671367454,
+          "unavailability_share": 4.283357127307049e-06
+        },
+        "short_placements": 0,
+        "risk_fits": 5,
+        "graph_stats": {
+          "calls": 204,
+          "accepted_swaps": 75,
+          "actuarial_rejections": 161,
+          "availability_rejections": 0,
+          "unavailability_exceeded": 0,
+          "cold_calls": 0
+        },
+        "placement_risk": {
+          "checked": 31,
+          "feasible": 0,
+          "violations": 31,
+          "unscored": 14,
+          "extra_fragments": 0,
+          "max_placed_n": 3,
+          "max_best_upper": 0.00031435146158451154,
+          "max_dropped": 1.2094218054787062e-09
+        },
+        "seconds": 4.215012400003616,
+        "losses": [],
+        "numerical_finite": true,
+        "runtime_warnings": {},
+        "graph_decisions": [
+          {
+            "kind": "candidate_refinement",
+            "time": 0.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 1.0,
+            "held": [],
+            "chosen": [
+              16,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 2.0,
+            "held": [],
+            "chosen": [
+              5,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 3.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 4.0,
+            "held": [
+              0,
+              16
+            ],
+            "chosen": [
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 4.0,
+            "held": [],
+            "chosen": [
+              0,
+              1,
+              6
+            ],
+            "graph_before": 0.0022675736961451243,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 5.0,
+            "held": [],
+            "chosen": [
+              16,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 6.0,
+            "held": [],
+            "chosen": [
+              15,
+              6,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 7.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 8.0,
+            "held": [],
+            "chosen": [
+              3,
+              1,
+              0
+            ],
+            "graph_before": 0.0013605442176870747,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 9.0,
+            "held": [],
+            "chosen": [
+              7,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 10.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 11.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 12.0,
+            "held": [
+              0,
+              1
+            ],
+            "chosen": [
+              13
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 12.0,
+            "held": [
+              0,
+              15
+            ],
+            "chosen": [
+              7
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 12.0,
+            "held": [],
+            "chosen": [
+              8,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 13.0,
+            "held": [],
+            "chosen": [
+              3,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": false,
+            "actuarial_reference_loss": null
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011162398036640765
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              0,
+              1,
+              13
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005461016450388433
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              9,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00036334237509115676
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              12,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001265674978023048
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              1,
+              7,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001244580128286578
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 14.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              1
+            ],
+            "graph_before": 0.0008503401360544217,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005077412104830918
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012360090231800032
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              18,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003632465079328043
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001115193062991998
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              7,
+              1,
+              0
+            ],
+            "graph_before": 0.0008003201280512204,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00036324147219049703
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              0,
+              16,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011152204415469766
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 15.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011152204415469766
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              17,
+              1,
+              0
+            ],
+            "graph_before": 0.0023148148148148147,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011847776156742032
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              7,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012291089276058155
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011145262295101962
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              0,
+              7,
+              1
+            ],
+            "graph_before": 0.0007558578987150415,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003631737470897312
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              17,
+              1,
+              0
+            ],
+            "graph_before": 0.0023148148148148147,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011847776156742032
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 16.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012291089276058155
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              4,
+              0,
+              1
+            ],
+            "graph_before": 0.006578947368421052,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0012308416234270388
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012397633086844986
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              16,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011137715472460475
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              17,
+              0,
+              1
+            ],
+            "graph_before": 0.0021929824561403508,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011795949263244937
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              1,
+              7,
+              0
+            ],
+            "graph_before": 0.0007160759040458288,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003631022963278494
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 17.0,
+            "held": [],
+            "chosen": [
+              9,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.001216361076470855
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              2,
+              0,
+              7
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0011017088927823418
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              13,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005792167318020879
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.000121968472504319
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011155849815549754
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.000111558463206368
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 18.0,
+            "held": [],
+            "chosen": [
+              7,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012196618702803532
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [
+              0,
+              15
+            ],
+            "chosen": [
+              8
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011171249690123543
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011171249690123543
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003654773567709135
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012545313565505648
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              8,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011171022712960103
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011171022166288736
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 19.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003654773567709135
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              0,
+              18,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.000363583283654622
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              0,
+              15,
+              8
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011186813034782374
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              15,
+              8,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011186813034782374
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              0,
+              6,
+              1
+            ],
+            "graph_before": 0.002512368583797155,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003635807158936279
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              7,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0010726425944015544
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 20.0,
+            "held": [],
+            "chosen": [
+              3,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00036758649092067134
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              7,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0016630036504854972
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001424362557181239
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              2,
+              6,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0009424799883920363
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004517902972701335
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00018551358377075678
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 21.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00019152722899468423
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001767075097214449
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013809223569602837
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00043470173081394393
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005592992259925104
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              15,
+              10,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017815320145303168
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 22.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001869223620060056
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              12,
+              1,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0007416049242572457
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005586309419438685
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017994906973932472
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0005442176870748299,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017378048109667637
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              15,
+              16,
+              0
+            ],
+            "graph_before": 0.0005442176870748299,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017378048109667637
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 23.0,
+            "held": [],
+            "chosen": [
+              3,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003396371697341247
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              15,
+              16,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013589772674271443
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017693745755503675
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00044975986098196594
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0016025641025641025,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00039390304027581125
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005582102470942643
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 24.0,
+            "held": [],
+            "chosen": [
+              15,
+              10,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017826424480230728
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              0,
+              8,
+              15
+            ],
+            "graph_before": 0.0015432098765432098,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003091834973248687
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0015432098765432098,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00033274585191807543
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0015432098765432098,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003935354923645031
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0005039052658100277,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00016363123761306932
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005579386603703075
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 25.0,
+            "held": [],
+            "chosen": [
+              14,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017424010189752504
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017320745741993275
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001720441855643664
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001301978375028211
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              15
+            ],
+            "graph_before": 0.001488095238095238,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003199901565985978
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.001488095238095238,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002563417906592038
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 26.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017514154901039847
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              15
+            ],
+            "graph_before": 0.0014367816091954023,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003317203961833161
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0014367816091954023,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003078471153333899
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013315236881884644
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              5,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004362562204017662
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005690997752180942
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 27.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0004691531785127844,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00016228888005668694
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              15
+            ],
+            "graph_before": 0.001388888888888889,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003216394926420617
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              7,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005667395696854631
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              12,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00032721954218530464
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002566522780919442
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              0,
+              15,
+              14
+            ],
+            "graph_before": 0.0018424036281179139,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003349977944606034
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 28.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              2
+            ],
+            "graph_before": 0.001388888888888889,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005229478256598444
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              6,
+              4,
+              1
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005726140801986032
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              7,
+              3,
+              15
+            ],
+            "graph_before": 0.001782971253017336,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004797343978967517
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              1,
+              4,
+              10
+            ],
+            "graph_before": 0.001782971253017336,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.000955608669998411
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              14,
+              12,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004503190566268673
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              10,
+              8,
+              1
+            ],
+            "graph_before": 0.0004388852315119596,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004196902541315044
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 29.0,
+            "held": [],
+            "chosen": [
+              3,
+              15,
+              16
+            ],
+            "graph_before": 0.0004388852315119596,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00043312470415973097
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002577975805890713
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00030019978178438806
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              16,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00048488197864855477
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00029413300109159076
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              14,
+              0,
+              15
+            ],
+            "graph_before": 0.0017272534013605442,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00033470614232732125
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 30.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003132822449996265
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002716800686365226
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              15,
+              7,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003785148454929993
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002766747206908444
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002495163531325319
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00030459914106674044
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 31.0,
+            "held": [],
+            "chosen": [
+              9,
+              0,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0010571956327222855
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              7,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0005471724729430563
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              0,
+              16,
+              2
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004661780617211078
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00038316839159950513
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              7,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003075399907343628
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              15,
+              8,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00027226293794866937
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 32.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00029026777485817955
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0026041666666666665,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003331037397337108
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002947774825044313
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              2,
+              10,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00048225803566097624
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025605093226529287
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              0,
+              14,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002923932616368689
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 33.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0017272534013605442,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00030578033508775265
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              2
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004369633886324857
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025167011943552
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              10,
+              0,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004663877035192285
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00028082518646497346
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              16,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0004301963179752195
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 34.0,
+            "held": [],
+            "chosen": [
+              0,
+              7,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003206306031238834
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012481067831609654
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012342519966063897
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              8,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00028386911707937426
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001228471234644036
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0001362220423617952
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 35.0,
+            "held": [],
+            "chosen": [
+              14,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003076436598572302
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              15
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010525738972172055
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013521545196651125
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              15,
+              17,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00018353510414721044
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012291870120612888
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              15,
+              16,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.000135728298843533
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 36.0,
+            "held": [],
+            "chosen": [
+              17,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00018353510414721044
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              16,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025444064369888004
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010308028403040118
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00015390605859849792
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012248106115667033
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              6,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00036713034898364495
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 37.0,
+            "held": [],
+            "chosen": [
+              2,
+              16,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025444064369888004
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00011726303188319033
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010142559603125441
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              13,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00028503948143456057
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              16,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025055415314912565
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              17,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00022313744585299205
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 38.0,
+            "held": [],
+            "chosen": [
+              15,
+              5,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003082392460874231
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012201101084347185
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              15,
+              17,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00017411794942612732
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.00042517006802721087,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012201101084347185
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              10,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00015283649718519134
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              16,
+              0,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00025575606761329126
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 39.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013321775445917
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              6,
+              1,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0013020833333333333,
+            "estimated_unavailability": 0.0013020833333333333,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00020444059567715928
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0003146621489528992
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00018660125743097974
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010501825813118533
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              6,
+              1,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0013020833333333333,
+            "estimated_unavailability": 0.0013020833333333333,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00020444059567715928
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 40.0,
+            "held": [],
+            "chosen": [
+              10,
+              2,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002827390361902628
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0004222972972972973,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00012001929971754334
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00015477115609072693
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013076157451017063
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              15,
+              14,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013076157451017063
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00015234250383605824
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 41.0,
+            "held": [],
+            "chosen": [
+              19,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002863969823817824
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 4.4899703047079604e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              15,
+              8,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 5.177568311391005e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              7,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010797324583871918
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              2,
+              13,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00014952034142348027
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              0,
+              16,
+              2
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00013157516728563997
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 42.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 4.4899703047079604e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.00041946308724832214,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 5.323788124970882e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              14,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 5.3136151930486354e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 9.236675801618341e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              8,
+              2,
+              0
+            ],
+            "graph_before": 0.0026041666666666665,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00016949383636255587
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              17,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010637557518618561
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 43.0,
+            "held": [],
+            "chosen": [
+              8,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 5.1694528188364685e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              17,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010668061565632831
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              16,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 9.352501085270001e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              8,
+              0,
+              15
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.00010376315335717592
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              0,
+              15,
+              8
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 5.13529656249487e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              6,
+              15,
+              0
+            ],
+            "graph_before": 0.0,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 7.247562665534583e-05
+          },
+          {
+            "kind": "candidate_refinement",
+            "time": 44.0,
+            "held": [],
+            "chosen": [
+              4,
+              15,
+              0
+            ],
+            "graph_before": 0.0013020833333333333,
+            "graph_after": 0.0,
+            "estimated_unavailability": 0.0,
+            "availability_target_exceeded": false,
+            "actuarial_guard_active": true,
+            "actuarial_reference_loss": 0.0002876567136802967
+          }
+        ],
+        "placement_decisions": [
+          {
+            "obj": 0,
+            "time": 0.0,
+            "nodes": [
+              14,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 1,
+            "time": 1.0,
+            "nodes": [
+              16,
+              2,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 2,
+            "time": 2.0,
+            "nodes": [
+              5,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 3,
+            "time": 3.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 4,
+            "time": 4.0,
+            "nodes": [
+              0,
+              1,
+              6
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 5,
+            "time": 5.0,
+            "nodes": [
+              16,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 6,
+            "time": 6.0,
+            "nodes": [
+              15,
+              6,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 7,
+            "time": 7.0,
+            "nodes": [
+              15,
+              14,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 8,
+            "time": 8.0,
+            "nodes": [
+              3,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 9,
+            "time": 9.0,
+            "nodes": [
+              7,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 10,
+            "time": 10.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 11,
+            "time": 11.0,
+            "nodes": [
+              7,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 12,
+            "time": 12.0,
+            "nodes": [
+              8,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 13,
+            "time": 13.0,
+            "nodes": [
+              3,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 14,
+            "time": 14.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 15,
+            "time": 15.0,
+            "nodes": [
+              16,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 16,
+            "time": 16.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 17,
+            "time": 17.0,
+            "nodes": [
+              16,
+              1,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 18,
+            "time": 18.0,
+            "nodes": [
+              10,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 19,
+            "time": 19.0,
+            "nodes": [
+              10,
+              0,
+              1
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 20,
+            "time": 20.0,
+            "nodes": [
+              0,
+              15,
+              8
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 21,
+            "time": 21.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 22,
+            "time": 22.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 23,
+            "time": 23.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 24,
+            "time": 24.0,
+            "nodes": [
+              15,
+              16,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 25,
+            "time": 25.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 26,
+            "time": 26.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 27,
+            "time": 27.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 28,
+            "time": 28.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 29,
+            "time": 29.0,
+            "nodes": [
+              3,
+              15,
+              16
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 30,
+            "time": 30.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 31,
+            "time": 31.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 32,
+            "time": 32.0,
+            "nodes": [
+              15,
+              8,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 33,
+            "time": 33.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 34,
+            "time": 34.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 35,
+            "time": 35.0,
+            "nodes": [
+              8,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 36,
+            "time": 36.0,
+            "nodes": [
+              16,
+              0,
+              15
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 37,
+            "time": 37.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 38,
+            "time": 38.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 39,
+            "time": 39.0,
+            "nodes": [
+              10,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 40,
+            "time": 40.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 41,
+            "time": 41.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 42,
+            "time": 42.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 43,
+            "time": 43.0,
+            "nodes": [
+              8,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          },
+          {
+            "obj": 44,
+            "time": 44.0,
+            "nodes": [
+              16,
+              15,
+              0
+            ],
+            "graph_score": 0.0,
+            "estimated_unavailability": 0.0
+          }
+        ],
+        "repair_requests": [
+          {
+            "obj": 1,
+            "time": 4.0,
+            "indices": [
+              1
+            ],
+            "targets": [
+              1
+            ]
+          },
+          {
+            "obj": 4,
+            "time": 12.0,
+            "indices": [
+              2
+            ],
+            "targets": [
+              13
+            ]
+          },
+          {
+            "obj": 6,
+            "time": 12.0,
+            "indices": [
+              1
+            ],
+            "targets": [
+              7
+            ]
+          },
+          {
+            "obj": 2,
+            "time": 19.0,
+            "indices": [
+              0
+            ],
+            "targets": [
+              8
+            ]
+          }
+        ],
+        "initial_placements": [
+          {
+            "obj": 0,
+            "nodes": [
+              14,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 1,
+            "nodes": [
+              16,
+              2,
+              0
+            ]
+          },
+          {
+            "obj": 2,
+            "nodes": [
+              5,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 3,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 4,
+            "nodes": [
+              0,
+              1,
+              6
+            ]
+          },
+          {
+            "obj": 5,
+            "nodes": [
+              16,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 6,
+            "nodes": [
+              15,
+              6,
+              0
+            ]
+          },
+          {
+            "obj": 7,
+            "nodes": [
+              15,
+              14,
+              0
+            ]
+          },
+          {
+            "obj": 8,
+            "nodes": [
+              3,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 9,
+            "nodes": [
+              7,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 10,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 11,
+            "nodes": [
+              7,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 12,
+            "nodes": [
+              8,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 13,
+            "nodes": [
+              3,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 14,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 15,
+            "nodes": [
+              16,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 16,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 17,
+            "nodes": [
+              16,
+              1,
+              0
+            ]
+          },
+          {
+            "obj": 18,
+            "nodes": [
+              10,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 19,
+            "nodes": [
+              10,
+              0,
+              1
+            ]
+          },
+          {
+            "obj": 20,
+            "nodes": [
+              0,
+              15,
+              8
+            ]
+          },
+          {
+            "obj": 21,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 22,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 23,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 24,
+            "nodes": [
+              15,
+              16,
+              0
+            ]
+          },
+          {
+            "obj": 25,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 26,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 27,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 28,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 29,
+            "nodes": [
+              3,
+              15,
+              16
+            ]
+          },
+          {
+            "obj": 30,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 31,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 32,
+            "nodes": [
+              15,
+              8,
+              0
+            ]
+          },
+          {
+            "obj": 33,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 34,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 35,
+            "nodes": [
+              8,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 36,
+            "nodes": [
+              16,
+              0,
+              15
+            ]
+          },
+          {
+            "obj": 37,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 38,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 39,
+            "nodes": [
+              10,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 40,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 41,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 42,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 43,
+            "nodes": [
+              8,
+              15,
+              0
+            ]
+          },
+          {
+            "obj": 44,
+            "nodes": [
+              16,
+              15,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    "realized_shocks": 0,
+    "realized_destructive_shocks": 0
+  }
+}

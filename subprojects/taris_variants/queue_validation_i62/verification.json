@@ -1,0 +1,11 @@
+{
+  "schema": "taris-queue-validation-verification/1",
+  "worlds": 3,
+  "executions": 108,
+  "summary_rows": 36,
+  "paired_contrasts": 72,
+  "unknowns_preserved": true,
+  "plot_inputs_verified": true,
+  "source_hash": "dc92700d54f6471b4407450d46782f3baab1b73367f66d370d9e5b771b827f49",
+  "results_hash": "c470120649429050a6aa6f8b55b738ddbfaf22911973ad26748adccfe918e0fe"
+}

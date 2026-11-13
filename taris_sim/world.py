@@ -28,12 +28,27 @@ class World:
         self.interventions = [dict(x) for x in interventions]
         self._build_clusters()
         self._build_nodes()
+        self.adversary = None
+        if cfg.cr_sybil_enabled and not cfg.adversary_enabled:
+            raise ValueError("cr_sybil_enabled требует adversary_enabled")
+        if cfg.adversary_enabled:
+            from .adversary import Adversary
+            self.adversary = Adversary(self)
+            self.adversary.append_nodes()
         self._build_lifetimes()
         self._calibrate()
+        if self.adversary is not None:
+            if self.adversary.append_whitewash():
+                self._build_lifetimes()
+                self.beta0 = 0.0  # _calibrate интегрирует rate; повторный вызов начинается с нулевого сдвига
+                self._calibrate()
+            self.adversary.funding_signals()
         self.crisis = None
         manual_crises = [x for x in self.interventions if x["kind"] == "crisis"]
         if cfg.crises_enabled or manual_crises:
             self._apply_crises(library=cfg.crises_enabled, manual=manual_crises)
+        if self.adversary is not None:
+            self.adversary.apply_lifetimes()
         self._build_outages()
         self._build_silent_losses()
         if self.crisis is not None:
@@ -173,6 +188,8 @@ class World:
         # по базовой жизни: кризисы (пункт 3.9) не должны менять калибровку
         # и только по узлам в дата-центрах: устройства пользователей (3.10) не должны «оздоравливать» остальные узлы
         srv = ~nd["is_device"].to_numpy()
+        if "adversarial" in nd:
+            srv &= ~nd["adversarial"].to_numpy(dtype=bool)
         expo = (nd["alive_to_base"] - nd["alive_from"]).clip(lower=0).to_numpy()
         e0 = self.expected_own_counts(life_end="alive_to_base")
         self.beta0 = float(np.log(c.mean_event_rate * expo[srv].sum() / e0[srv].sum()))
@@ -197,6 +214,8 @@ class World:
         node_idx = np.asarray(node_idx)
         # возраст — от исходной регистрации: отмена регистрации кризисом не должна менять потоки (3.9)
         join = nd["join_t_base"] if "join_t_base" in nd else nd["join_t"]
+        if "risk_join_t" in nd:
+            join = nd["risk_join_t"]
         age = np.asarray(t) - join.to_numpy()[node_idx]
         return (np.exp(self.beta0 + nd["lin_pred"].to_numpy()[node_idx])
                 * nd["theta"].to_numpy()[node_idx] * self.age_factor(age) * nd["m_rate"].to_numpy()[node_idx])
@@ -259,8 +278,9 @@ class World:
         for i, j0 in enumerate(nd["join_t"].to_numpy()):
             g = R.stream(c.seed, R.CHURN, i)
             start = max(0.0, j0)
-            lam_max = float(self.churn_rate_node(i, start - j0)) * 1.0001
-            ts = self._thin(g, lambda t: self.churn_rate_node(i, t - j0), start, H, lam_max, first_only=True)
+            risk_join = float(nd["risk_join_t"].iat[i]) if "risk_join_t" in nd else j0
+            lam_max = float(self.churn_rate_node(i, start - risk_join)) * 1.0001
+            ts = self._thin(g, lambda t: self.churn_rate_node(i, t - risk_join), start, H, lam_max, first_only=True)
             if len(ts):
                 leave[i] = ts[0]
         # Базовая жизнь — без кризисов. Все потоки узла генерируются на ней и потом обрезаются

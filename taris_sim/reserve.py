@@ -35,6 +35,8 @@ class TrueRates:
         c, nd = world.cfg, world.nodes
         self.phi = np.array([world.true_phi(i) for i in range(len(nd))])
         self.join = (nd["join_t_base"] if "join_t_base" in nd else nd["join_t"]).to_numpy()
+        if "risk_join_t" in nd:
+            self.join = nd["risk_join_t"].to_numpy()
         self.m_churn = nd["m_churn"].to_numpy()
         self.lam_sil = nd["lam_silent"].to_numpy()
         self.member = {ct: nd[ct].to_numpy() for ct in CLUSTER_TYPES}
@@ -113,21 +115,42 @@ def p_loss_window_shocks(q, k: int, masks, h, max_shocks: int = 2) -> tuple[floa
     q = np.asarray(q, float)
     n, h = len(q), np.asarray(h, float)
     masks = [np.asarray(m, bool) for m in masks]
-    total = 0.0
+    # Разные наборы отказавших кластеров иногда поражают один и тот же набор
+    # фрагментов (например, вложенные региональные и провайдерские маски).
+    # Суммируем их вероятности вместе, чтобы не повторять пуассон-биномиальную рекурсию.
+    scenario_mass = {}
+    cluster_bits = []
+    for mask in masks:
+        code = 0
+        for i in np.flatnonzero(mask):
+            code |= 1 << int(i)
+        cluster_bits.append(code)
     for r in range(max_shocks + 1):
         for H in combinations(range(len(h)), r):
             sel = np.zeros(len(h), bool)
             sel[list(H)] = True
             ph = float(np.prod(h[sel]) * np.prod(1.0 - h[~sel]))
-            hit = np.zeros(n, bool)
+            hit_code = 0
             for c in H:
-                hit |= masks[c]
-            need = n - k + 1 - int(hit.sum())            # сколько ещё гибелей среди остальных узлов губит объект
-            if need <= 0:
-                total += ph
-            else:
-                G = poisson_binomial(q[~hit])
-                total += ph * float(G[need:].sum())
+                hit_code |= cluster_bits[c]
+            scenario_mass[hit_code] = scenario_mass.get(hit_code, 0.0) + ph
+
+    total = 0.0
+    for hit_code, ph in scenario_mass.items():
+        hit_idx = []
+        code = hit_code
+        while code:
+            bit = code & -code
+            hit_idx.append(bit.bit_length() - 1)
+            code ^= bit
+        hit = np.zeros(n, bool)
+        hit[hit_idx] = True
+        need = n - k + 1 - len(hit_idx)                # сколько ещё гибелей среди остальных узлов губит объект
+        if need <= 0:
+            total += ph
+        else:
+            G = poisson_binomial(q[~hit])
+            total += ph * float(G[need:].sum())
     dropped = float(poisson_binomial(h)[max_shocks + 1:].sum())
     return total, dropped
 
@@ -139,6 +162,32 @@ def window_probs(rates, nodes, t: float, tau: float):
     masks = [m for *_, m in cl]
     h = np.array([1.0 - np.exp(-eta * tau) for _, _, eta, _ in cl])
     return q, masks, h
+
+
+def placement_loss_probability(rates, nodes, t: float, tau: float, k: int,
+                              max_shocks: int = 2) -> tuple[float, float]:
+    """Консервативная оценка потери набора за окно уязвимости для ограничения размещения.
+
+    Возвращает вероятность с добавленной сверху массой сценариев с числом одновременных шоков > max_shocks,
+    а также саму отброшенную массу. Это верхняя граница в рамках модели независимых шоков кластеров.
+    """
+    q, masks, h = window_probs(rates, nodes, t, tau)
+    p, dropped = p_loss_window_shocks(q, k, masks, h, max_shocks=max_shocks)
+    return min(1.0, p + dropped), dropped
+
+
+def placement_risk_metrics(rates, nodes, t: float, tau: float, k: int,
+                           max_shocks: int = 2) -> tuple[float, float, float]:
+    """Вероятность потери, отброшенная масса и риск-стоимость набора из одного расчёта интенсивностей."""
+    q, masks, h = window_probs(rates, nodes, t, tau)
+    p, dropped = p_loss_window_shocks(q, k, masks, h, max_shocks=max_shocks)
+    p_upper = min(1.0, p + dropped)
+    # Восстанавливаем интенсивности из вероятностей окна, чтобы не вычислять rates повторно.
+    cost = float((-np.log1p(-np.minimum(q, 1.0 - 1e-15))).sum() / tau)
+    if len(h):
+        eta = -np.log1p(-np.minimum(h, 1.0 - 1e-15)) / tau
+        cost += float(sum(float(e) * int(mask.sum()) for e, mask in zip(eta, masks)))
+    return p_upper, dropped, cost
 
 
 def window_tau(cfg) -> float:

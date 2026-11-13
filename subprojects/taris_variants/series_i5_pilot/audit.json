@@ -1,0 +1,517 @@
+{
+  "schema": "taris-stress-series-audit/1",
+  "worlds": 1,
+  "executions": 18,
+  "inputs": {
+    "s40_close.json": "9942e36da22127d1150221d9b76aeafd18917d9e1869b44f1fb31a488a28f1f0",
+    "s40_control.json": "77f13b77ea95a22e997a2d42a4b124d9c30d5f3a7f2212089c0c3209dadc675f",
+    "s40_far.json": "4cdb4b6dfd196ba0be9a66a6d05ed67796aefd5eeb488c67bd91f3168cc2fcd3"
+  },
+  "common_past_verified": true,
+  "interventions_verified": true,
+  "source_hash": "0586a24474f9635c64a9b8bd8b50894809374a6b04c1360dff1c2cc50c6779ad",
+  "rows": [
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 200,
+      "buffers": 11,
+      "jobs": 12,
+      "block_attempts": 496,
+      "irrecoverable_objects": 7,
+      "serviced_volume": {
+        "read_block": 10.99999999999136,
+        "write_block": 10.000000000016826,
+        "close_proof": 0.10999999999989996,
+        "proof": 0.0049999999999954525
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 1,
+        "distinct_observed_jobs": 1,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 1
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 203,
+      "buffers": 17,
+      "jobs": 19,
+      "block_attempts": 642,
+      "irrecoverable_objects": 8,
+      "serviced_volume": {
+        "read_block": 16.99999999998863,
+        "write_block": 11.56250000001694,
+        "close_proof": 0.16999999999984539,
+        "proof": 0.01999999999998181
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 0,
+        "distinct_observed_jobs": 0,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 0
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 201,
+      "buffers": 13,
+      "jobs": 14,
+      "block_attempts": 561,
+      "irrecoverable_objects": 6,
+      "serviced_volume": {
+        "read_block": 13.062499999992212,
+        "write_block": 11.000000000015916,
+        "close_proof": 0.12999999999988177,
+        "proof": 0.0049999999999954525
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 1,
+        "distinct_observed_jobs": 1,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 1
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 7,
+      "jobs": 12,
+      "block_attempts": 331,
+      "irrecoverable_objects": 8,
+      "serviced_volume": {
+        "read_block": 8.937500000000028,
+        "write_block": 5.891249999999974,
+        "proof": 0.0049999999999997165,
+        "close_proof": 0.06000000000000255
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 185,
+        "distinct_observed_jobs": 12,
+        "censored_rows": 78,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 183
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 192,
+      "buffers": 8,
+      "jobs": 17,
+      "block_attempts": 366,
+      "irrecoverable_objects": 8,
+      "serviced_volume": {
+        "read_block": 9.81250000000004,
+        "write_block": 6.544999999999978,
+        "close_proof": 0.07000000000000114
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 232,
+        "distinct_observed_jobs": 17,
+        "censored_rows": 137,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 219
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "close",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 190,
+      "buffers": 7,
+      "jobs": 14,
+      "block_attempts": 341,
+      "irrecoverable_objects": 7,
+      "serviced_volume": {
+        "read_block": 8.50000000000002,
+        "write_block": 6.408749999999985,
+        "proof": 0.0049999999999997165,
+        "close_proof": 0.06000000000000086
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 201,
+        "distinct_observed_jobs": 14,
+        "censored_rows": 100,
+        "censored_positive_work_rows": 28,
+        "observed_repair_rows": 199
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 182,
+      "buffers": 2,
+      "jobs": 4,
+      "block_attempts": 64,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 1.9999999999995453,
+        "write_block": 1.0000000000004547,
+        "close_proof": 0.01999999999998181,
+        "proof": 0.03499999999996817
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 0,
+        "distinct_observed_jobs": 0,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 0
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 188,
+      "buffers": 8,
+      "jobs": 11,
+      "block_attempts": 258,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 7.999999999996817,
+        "write_block": 4.062500000003297,
+        "close_proof": 0.07999999999992724,
+        "proof": 0.04499999999995907
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 0,
+        "distinct_observed_jobs": 0,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 0
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 4,
+      "jobs": 7,
+      "block_attempts": 128,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 4.000000000000455,
+        "write_block": 1.9999999999995453,
+        "close_proof": 0.03999999999996362,
+        "proof": 0.03499999999996817
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 0,
+        "distinct_observed_jobs": 0,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 0
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 182,
+      "buffers": 3,
+      "jobs": 7,
+      "block_attempts": 106,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 3.5624999999999876,
+        "write_block": 1.5312500000000095,
+        "proof": 0.03499999999999972,
+        "close_proof": 0.030000000000000856
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 14,
+        "distinct_observed_jobs": 6,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 10
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 186,
+      "buffers": 7,
+      "jobs": 12,
+      "block_attempts": 239,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 8.488500000000068,
+        "write_block": 3.249999999999921,
+        "close_proof": 0.07000000000000454,
+        "proof": 0.03500000000000057
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 104,
+        "distinct_observed_jobs": 11,
+        "censored_rows": 42,
+        "censored_positive_work_rows": 15,
+        "observed_repair_rows": 82
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "control",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 183,
+      "buffers": 5,
+      "jobs": 9,
+      "block_attempts": 176,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 5.8749999999999885,
+        "write_block": 2.562499999999983,
+        "proof": 0.03499999999999972,
+        "close_proof": 0.05000000000000142
+      },
+      "disk_error_notices": 0,
+      "point_destructions_verified": 0,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 29,
+        "distinct_observed_jobs": 8,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 21
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 229,
+      "buffers": 42,
+      "jobs": 45,
+      "block_attempts": 1459,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 42.12499999996305,
+        "write_block": 24.531250000043258,
+        "close_proof": 0.419999999999618,
+        "proof": 0.04499999999995907
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 1,
+        "distinct_observed_jobs": 1,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 1
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 232,
+      "buffers": 44,
+      "jobs": 47,
+      "block_attempts": 1540,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 44.187499999963904,
+        "write_block": 26.031250000043258,
+        "close_proof": 0.4399999999995998,
+        "proof": 0.029999999999972715
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 1,
+        "distinct_observed_jobs": 1,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 1
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "ample",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 228,
+      "buffers": 42,
+      "jobs": 45,
+      "block_attempts": 1457,
+      "irrecoverable_objects": 0,
+      "serviced_volume": {
+        "read_block": 42.06249999996584,
+        "write_block": 24.500000000040473,
+        "close_proof": 0.419999999999618,
+        "proof": 0.014999999999986358
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 0,
+        "distinct_observed_jobs": 0,
+        "censored_rows": 0,
+        "censored_positive_work_rows": 0,
+        "observed_repair_rows": 0
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "classic",
+      "objects": 45,
+      "copies": 186,
+      "buffers": 7,
+      "jobs": 21,
+      "block_attempts": 300,
+      "irrecoverable_objects": 8,
+      "serviced_volume": {
+        "read_block": 10.409250000000029,
+        "write_block": 4.18749999999997,
+        "proof": 0.0049999999999997165,
+        "close_proof": 0.07000000000000199
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 221,
+        "distinct_observed_jobs": 21,
+        "censored_rows": 65,
+        "censored_positive_work_rows": 16,
+        "observed_repair_rows": 200
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "graph",
+      "objects": 45,
+      "copies": 187,
+      "buffers": 7,
+      "jobs": 20,
+      "block_attempts": 271,
+      "irrecoverable_objects": 8,
+      "serviced_volume": {
+        "read_block": 9.736999999999988,
+        "write_block": 3.624999999999946,
+        "close_proof": 0.07000000000000284
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 238,
+        "distinct_observed_jobs": 20,
+        "censored_rows": 109,
+        "censored_positive_work_rows": 21,
+        "observed_repair_rows": 226
+      }
+    },
+    {
+      "seed": 40,
+      "mode": "far",
+      "profile": "constrained",
+      "variant": "hybrid",
+      "objects": 45,
+      "copies": 188,
+      "buffers": 7,
+      "jobs": 21,
+      "block_attempts": 307,
+      "irrecoverable_objects": 6,
+      "serviced_volume": {
+        "read_block": 9.920500000000018,
+        "write_block": 4.656249999999983,
+        "proof": 0.0049999999999997165,
+        "close_proof": 0.07000000000000199
+      },
+      "disk_error_notices": 16,
+      "point_destructions_verified": 16,
+      "observations": {
+        "snapshots": 45,
+        "job_snapshot_rows": 220,
+        "distinct_observed_jobs": 20,
+        "censored_rows": 64,
+        "censored_positive_work_rows": 16,
+        "observed_repair_rows": 201
+      }
+    }
+  ]
+}

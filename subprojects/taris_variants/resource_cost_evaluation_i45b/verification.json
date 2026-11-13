@@ -1,0 +1,10 @@
+{
+  "runs_checked": 72,
+  "price_calculations_checked": 432,
+  "summaries_checked": 144,
+  "original_inputs_unchanged": true,
+  "units_and_arithmetic_verified": true,
+  "unknown_loss_and_future_liability_preserved": true,
+  "plot_input_verified": true,
+  "verifier_source_hash": "1d006000b350270baa9563f2b3bd6a99dab160c3d4c4f182b826a14255901dae"
+}

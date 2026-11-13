@@ -1,0 +1,3197 @@
+{
+  "schema": "taris-continuation-check/1",
+  "random_worlds": 0,
+  "identical_past_snapshots": true,
+  "uncensored": true,
+  "cases": [
+    {
+      "time": 0.09,
+      "interruption": false,
+      "snapshot": {
+        "schema": "taris-queue-observation/2",
+        "time": 0.09,
+        "jobs": [
+          {
+            "id": 0,
+            "kind": "repair",
+            "submitted": 0.0,
+            "started": 0.0,
+            "obj": 0,
+            "indices": [
+              0
+            ],
+            "nodes": [
+              3
+            ]
+          }
+        ],
+        "waiting": [],
+        "active_job": 0,
+        "parked_job": null,
+        "full_buffer_objects": [],
+        "planned_channel_phase": {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5
+        },
+        "block_acknowledgements": [
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 0,
+            "time": 0.08463541666666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 1,
+            "time": 0.08593749999999999,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 2,
+            "time": 0.08723958333333331,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 3,
+            "time": 0.08854166666666664,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 4,
+            "time": 0.08984374999999997,
+            "ok": true
+          }
+        ],
+        "queue_settings": {
+          "rate_size_per_hour": 2.0,
+          "max_jobs": 8,
+          "buffer_capacity_size": 1.0,
+          "proof_fraction": 0.01,
+          "proof_setup_hours": 0.05
+        },
+        "transport_settings": {
+          "stripes": 16,
+          "retry_hours": 1.0
+        },
+        "object_sizes": [
+          {
+            "obj": 0,
+            "size": 1.0
+          }
+        ],
+        "k": 2,
+        "local_memory": [
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 0,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08463541666666666
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 1,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08593749999999999
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 2,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08723958333333331
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 3,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08854166666666664
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 4,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08984374999999997
+          }
+        ],
+        "closing_acknowledgements": [],
+        "memory_notifications": []
+      },
+      "conditional": {
+        "schema": "taris-conditional-work/1",
+        "time": 0.09,
+        "mode": "trust_ack",
+        "jobs": [
+          {
+            "job": 0,
+            "obj": 0,
+            "read_volume": 0.6875,
+            "write_volume": 0.5,
+            "closing_proof_volume": 0.01,
+            "volume": 1.1975,
+            "targets": [
+              {
+                "idx": 0,
+                "node": 3,
+                "last_ack_blocks": 0,
+                "credited_blocks": 0,
+                "write_volume": 0.5
+              }
+            ]
+          }
+        ],
+        "known_repair_volume": 1.1975,
+        "conditional_repair_transfer_cost": 0.11975000000000001,
+        "uninterrupted_transfer_hours": 0.59875,
+        "unknown_proof_jobs": [],
+        "whole_queue_volume": 1.1975,
+        "expected_future_cost": null,
+        "expected_loss_cost": null,
+        "completion_time": null,
+        "full_actuarial_reserve": null
+      },
+      "actual_future_served": 1.1899999999999988,
+      "already_served_unacknowledged": 0.007500000000001199,
+      "extra_vs_uninterrupted": 0.0,
+      "failed_blocks": 0,
+      "unfinished_jobs": 0,
+      "segments": [
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08333333333333333,
+          "end": 0.08463541666666666,
+          "volume": 0.0625,
+          "stripe": 0,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08463541666666666,
+          "end": 0.08593749999999999,
+          "volume": 0.0625,
+          "stripe": 1,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08593749999999999,
+          "end": 0.08723958333333331,
+          "volume": 0.0625,
+          "stripe": 2,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08723958333333331,
+          "end": 0.08854166666666664,
+          "volume": 0.0625,
+          "stripe": 3,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08854166666666664,
+          "end": 0.08984374999999997,
+          "volume": 0.0625,
+          "stripe": 4,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.0911458333333333,
+          "end": 0.09244791666666663,
+          "volume": 0.0625,
+          "stripe": 6,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09244791666666663,
+          "end": 0.09374999999999996,
+          "volume": 0.0625,
+          "stripe": 7,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09374999999999996,
+          "end": 0.09505208333333329,
+          "volume": 0.0625,
+          "stripe": 8,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09505208333333329,
+          "end": 0.09635416666666662,
+          "volume": 0.0625,
+          "stripe": 9,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09635416666666662,
+          "end": 0.09765624999999994,
+          "volume": 0.0625,
+          "stripe": 10,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09765624999999994,
+          "end": 0.09895833333333327,
+          "volume": 0.0625,
+          "stripe": 11,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09895833333333327,
+          "end": 0.1002604166666666,
+          "volume": 0.0625,
+          "stripe": 12,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.1002604166666666,
+          "end": 0.10156249999999993,
+          "volume": 0.0625,
+          "stripe": 13,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10156249999999993,
+          "end": 0.10286458333333326,
+          "volume": 0.0625,
+          "stripe": 14,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10286458333333326,
+          "end": 0.10416666666666659,
+          "volume": 0.0625,
+          "stripe": 15,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10416666666666659,
+          "end": 0.10481770833333326,
+          "volume": 0.03125,
+          "stripe": 0,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10481770833333326,
+          "end": 0.10546874999999993,
+          "volume": 0.03125,
+          "stripe": 1,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10546874999999993,
+          "end": 0.1061197916666666,
+          "volume": 0.03125,
+          "stripe": 2,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1061197916666666,
+          "end": 0.10677083333333327,
+          "volume": 0.03125,
+          "stripe": 3,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10677083333333327,
+          "end": 0.10742187499999994,
+          "volume": 0.03125,
+          "stripe": 4,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10742187499999994,
+          "end": 0.10807291666666662,
+          "volume": 0.03125,
+          "stripe": 5,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10807291666666662,
+          "end": 0.10872395833333329,
+          "volume": 0.03125,
+          "stripe": 6,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10872395833333329,
+          "end": 0.10937499999999996,
+          "volume": 0.03125,
+          "stripe": 7,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10937499999999996,
+          "end": 0.11002604166666663,
+          "volume": 0.03125,
+          "stripe": 8,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11002604166666663,
+          "end": 0.1106770833333333,
+          "volume": 0.03125,
+          "stripe": 9,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1106770833333333,
+          "end": 0.11132812499999997,
+          "volume": 0.03125,
+          "stripe": 10,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11132812499999997,
+          "end": 0.11197916666666664,
+          "volume": 0.03125,
+          "stripe": 11,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11197916666666664,
+          "end": 0.11263020833333331,
+          "volume": 0.03125,
+          "stripe": 12,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11263020833333331,
+          "end": 0.11328124999999999,
+          "volume": 0.03125,
+          "stripe": 13,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11328124999999999,
+          "end": 0.11393229166666666,
+          "volume": 0.03125,
+          "stripe": 14,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11393229166666666,
+          "end": 0.11458333333333333,
+          "volume": 0.03125,
+          "stripe": 15,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "close_proof",
+          "start": 0.11666666666666667,
+          "end": 0.116875,
+          "volume": 0.01,
+          "sources": [
+            1,
+            2
+          ]
+        }
+      ],
+      "block_results": [
+        {
+          "job": 0,
+          "segment": 0,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 1,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 2,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 3,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 4,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 5,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 6,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 7,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 8,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 9,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 10,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 11,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 12,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 13,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 14,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 15,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 16,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 17,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 18,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 19,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 20,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 21,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 22,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 23,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 24,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 25,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 26,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 27,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 28,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 29,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 30,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 31,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "time": 0.105,
+      "interruption": false,
+      "snapshot": {
+        "schema": "taris-queue-observation/2",
+        "time": 0.105,
+        "jobs": [
+          {
+            "id": 0,
+            "kind": "repair",
+            "submitted": 0.0,
+            "started": 0.0,
+            "obj": 0,
+            "indices": [
+              0
+            ],
+            "nodes": [
+              3
+            ]
+          }
+        ],
+        "waiting": [],
+        "active_job": 0,
+        "parked_job": null,
+        "full_buffer_objects": [
+          0
+        ],
+        "planned_channel_phase": {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10481770833333326,
+          "end": 0.10546874999999993,
+          "volume": 0.03125,
+          "stripe": 1,
+          "idx": 0,
+          "node": 3
+        },
+        "block_acknowledgements": [
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 0,
+            "time": 0.08463541666666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 1,
+            "time": 0.08593749999999999,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 2,
+            "time": 0.08723958333333331,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 3,
+            "time": 0.08854166666666664,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 4,
+            "time": 0.08984374999999997,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 5,
+            "time": 0.0911458333333333,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 6,
+            "time": 0.09244791666666663,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 7,
+            "time": 0.09374999999999996,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 8,
+            "time": 0.09505208333333329,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 9,
+            "time": 0.09635416666666662,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 10,
+            "time": 0.09765624999999994,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 11,
+            "time": 0.09895833333333327,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 12,
+            "time": 0.1002604166666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 13,
+            "time": 0.10156249999999993,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 14,
+            "time": 0.10286458333333326,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 15,
+            "time": 0.10416666666666659,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 0,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10481770833333326,
+            "ok": true
+          }
+        ],
+        "queue_settings": {
+          "rate_size_per_hour": 2.0,
+          "max_jobs": 8,
+          "buffer_capacity_size": 1.0,
+          "proof_fraction": 0.01,
+          "proof_setup_hours": 0.05
+        },
+        "transport_settings": {
+          "stripes": 16,
+          "retry_hours": 1.0
+        },
+        "object_sizes": [
+          {
+            "obj": 0,
+            "size": 1.0
+          }
+        ],
+        "k": 2,
+        "local_memory": [
+          {
+            "obj": 0,
+            "job": 0,
+            "kind": "full",
+            "size": 1.0,
+            "confirmed_at": 0.10416666666666659
+          }
+        ],
+        "closing_acknowledgements": [],
+        "memory_notifications": []
+      },
+      "conditional": {
+        "schema": "taris-conditional-work/1",
+        "time": 0.105,
+        "mode": "trust_ack",
+        "jobs": [
+          {
+            "job": 0,
+            "obj": 0,
+            "read_volume": 0.0,
+            "write_volume": 0.46875,
+            "closing_proof_volume": 0.01,
+            "volume": 0.47875,
+            "targets": [
+              {
+                "idx": 0,
+                "node": 3,
+                "last_ack_blocks": 1,
+                "credited_blocks": 1,
+                "write_volume": 0.46875
+              }
+            ]
+          }
+        ],
+        "known_repair_volume": 0.47875,
+        "conditional_repair_transfer_cost": 0.047875,
+        "uninterrupted_transfer_hours": 0.239375,
+        "unknown_proof_jobs": [],
+        "whole_queue_volume": 0.47875,
+        "expected_future_cost": null,
+        "expected_loss_cost": null,
+        "completion_time": null,
+        "full_actuarial_reserve": null
+      },
+      "actual_future_served": 0.4699999999999967,
+      "already_served_unacknowledged": 0.008750000000003304,
+      "extra_vs_uninterrupted": 0.0,
+      "failed_blocks": 0,
+      "unfinished_jobs": 0,
+      "segments": [
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08333333333333333,
+          "end": 0.08463541666666666,
+          "volume": 0.0625,
+          "stripe": 0,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08463541666666666,
+          "end": 0.08593749999999999,
+          "volume": 0.0625,
+          "stripe": 1,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08593749999999999,
+          "end": 0.08723958333333331,
+          "volume": 0.0625,
+          "stripe": 2,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08723958333333331,
+          "end": 0.08854166666666664,
+          "volume": 0.0625,
+          "stripe": 3,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08854166666666664,
+          "end": 0.08984374999999997,
+          "volume": 0.0625,
+          "stripe": 4,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.0911458333333333,
+          "end": 0.09244791666666663,
+          "volume": 0.0625,
+          "stripe": 6,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09244791666666663,
+          "end": 0.09374999999999996,
+          "volume": 0.0625,
+          "stripe": 7,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09374999999999996,
+          "end": 0.09505208333333329,
+          "volume": 0.0625,
+          "stripe": 8,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09505208333333329,
+          "end": 0.09635416666666662,
+          "volume": 0.0625,
+          "stripe": 9,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09635416666666662,
+          "end": 0.09765624999999994,
+          "volume": 0.0625,
+          "stripe": 10,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09765624999999994,
+          "end": 0.09895833333333327,
+          "volume": 0.0625,
+          "stripe": 11,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09895833333333327,
+          "end": 0.1002604166666666,
+          "volume": 0.0625,
+          "stripe": 12,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.1002604166666666,
+          "end": 0.10156249999999993,
+          "volume": 0.0625,
+          "stripe": 13,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10156249999999993,
+          "end": 0.10286458333333326,
+          "volume": 0.0625,
+          "stripe": 14,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10286458333333326,
+          "end": 0.10416666666666659,
+          "volume": 0.0625,
+          "stripe": 15,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10416666666666659,
+          "end": 0.10481770833333326,
+          "volume": 0.03125,
+          "stripe": 0,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10481770833333326,
+          "end": 0.10546874999999993,
+          "volume": 0.03125,
+          "stripe": 1,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10546874999999993,
+          "end": 0.1061197916666666,
+          "volume": 0.03125,
+          "stripe": 2,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1061197916666666,
+          "end": 0.10677083333333327,
+          "volume": 0.03125,
+          "stripe": 3,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10677083333333327,
+          "end": 0.10742187499999994,
+          "volume": 0.03125,
+          "stripe": 4,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10742187499999994,
+          "end": 0.10807291666666662,
+          "volume": 0.03125,
+          "stripe": 5,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10807291666666662,
+          "end": 0.10872395833333329,
+          "volume": 0.03125,
+          "stripe": 6,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10872395833333329,
+          "end": 0.10937499999999996,
+          "volume": 0.03125,
+          "stripe": 7,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10937499999999996,
+          "end": 0.11002604166666663,
+          "volume": 0.03125,
+          "stripe": 8,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11002604166666663,
+          "end": 0.1106770833333333,
+          "volume": 0.03125,
+          "stripe": 9,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1106770833333333,
+          "end": 0.11132812499999997,
+          "volume": 0.03125,
+          "stripe": 10,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11132812499999997,
+          "end": 0.11197916666666664,
+          "volume": 0.03125,
+          "stripe": 11,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11197916666666664,
+          "end": 0.11263020833333331,
+          "volume": 0.03125,
+          "stripe": 12,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11263020833333331,
+          "end": 0.11328124999999999,
+          "volume": 0.03125,
+          "stripe": 13,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11328124999999999,
+          "end": 0.11393229166666666,
+          "volume": 0.03125,
+          "stripe": 14,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11393229166666666,
+          "end": 0.11458333333333333,
+          "volume": 0.03125,
+          "stripe": 15,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "close_proof",
+          "start": 0.11666666666666667,
+          "end": 0.116875,
+          "volume": 0.01,
+          "sources": [
+            1,
+            2
+          ]
+        }
+      ],
+      "block_results": [
+        {
+          "job": 0,
+          "segment": 0,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 1,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 2,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 3,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 4,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 5,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 6,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 7,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 8,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 9,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 10,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 11,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 12,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 13,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 14,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 15,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 16,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 17,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 18,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 19,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 20,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 21,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 22,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 23,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 24,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 25,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 26,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 27,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 28,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 29,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 30,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 31,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "time": 0.11,
+      "interruption": false,
+      "snapshot": {
+        "schema": "taris-queue-observation/2",
+        "time": 0.11,
+        "jobs": [
+          {
+            "id": 0,
+            "kind": "repair",
+            "submitted": 0.0,
+            "started": 0.0,
+            "obj": 0,
+            "indices": [
+              0
+            ],
+            "nodes": [
+              3
+            ]
+          }
+        ],
+        "waiting": [],
+        "active_job": 0,
+        "parked_job": null,
+        "full_buffer_objects": [
+          0
+        ],
+        "planned_channel_phase": {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10937499999999996,
+          "end": 0.11002604166666663,
+          "volume": 0.03125,
+          "stripe": 8,
+          "idx": 0,
+          "node": 3
+        },
+        "block_acknowledgements": [
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 0,
+            "time": 0.08463541666666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 1,
+            "time": 0.08593749999999999,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 2,
+            "time": 0.08723958333333331,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 3,
+            "time": 0.08854166666666664,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 4,
+            "time": 0.08984374999999997,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 5,
+            "time": 0.0911458333333333,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 6,
+            "time": 0.09244791666666663,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 7,
+            "time": 0.09374999999999996,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 8,
+            "time": 0.09505208333333329,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 9,
+            "time": 0.09635416666666662,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 10,
+            "time": 0.09765624999999994,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 11,
+            "time": 0.09895833333333327,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 12,
+            "time": 0.1002604166666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 13,
+            "time": 0.10156249999999993,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 14,
+            "time": 0.10286458333333326,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 15,
+            "time": 0.10416666666666659,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 0,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10481770833333326,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 1,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10546874999999993,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 2,
+            "idx": 0,
+            "node": 3,
+            "time": 0.1061197916666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 3,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10677083333333327,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 4,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10742187499999994,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 5,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10807291666666662,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 6,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10872395833333329,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "write_block",
+            "stripe": 7,
+            "idx": 0,
+            "node": 3,
+            "time": 0.10937499999999996,
+            "ok": true
+          }
+        ],
+        "queue_settings": {
+          "rate_size_per_hour": 2.0,
+          "max_jobs": 8,
+          "buffer_capacity_size": 1.0,
+          "proof_fraction": 0.01,
+          "proof_setup_hours": 0.05
+        },
+        "transport_settings": {
+          "stripes": 16,
+          "retry_hours": 1.0
+        },
+        "object_sizes": [
+          {
+            "obj": 0,
+            "size": 1.0
+          }
+        ],
+        "k": 2,
+        "local_memory": [
+          {
+            "obj": 0,
+            "job": 0,
+            "kind": "full",
+            "size": 1.0,
+            "confirmed_at": 0.10416666666666659
+          }
+        ],
+        "closing_acknowledgements": [],
+        "memory_notifications": []
+      },
+      "conditional": {
+        "schema": "taris-conditional-work/1",
+        "time": 0.11,
+        "mode": "trust_ack",
+        "jobs": [
+          {
+            "job": 0,
+            "obj": 0,
+            "read_volume": 0.0,
+            "write_volume": 0.25,
+            "closing_proof_volume": 0.01,
+            "volume": 0.26,
+            "targets": [
+              {
+                "idx": 0,
+                "node": 3,
+                "last_ack_blocks": 8,
+                "credited_blocks": 8,
+                "write_volume": 0.25
+              }
+            ]
+          }
+        ],
+        "known_repair_volume": 0.26,
+        "conditional_repair_transfer_cost": 0.026000000000000002,
+        "uninterrupted_transfer_hours": 0.13,
+        "unknown_proof_jobs": [],
+        "whole_queue_volume": 0.26,
+        "expected_future_cost": null,
+        "expected_loss_cost": null,
+        "completion_time": null,
+        "full_actuarial_reserve": null
+      },
+      "actual_future_served": 0.22999999999999818,
+      "already_served_unacknowledged": 0.030000000000001813,
+      "extra_vs_uninterrupted": -2.7755575615628914e-17,
+      "failed_blocks": 0,
+      "unfinished_jobs": 0,
+      "segments": [
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08333333333333333,
+          "end": 0.08463541666666666,
+          "volume": 0.0625,
+          "stripe": 0,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08463541666666666,
+          "end": 0.08593749999999999,
+          "volume": 0.0625,
+          "stripe": 1,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08593749999999999,
+          "end": 0.08723958333333331,
+          "volume": 0.0625,
+          "stripe": 2,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08723958333333331,
+          "end": 0.08854166666666664,
+          "volume": 0.0625,
+          "stripe": 3,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08854166666666664,
+          "end": 0.08984374999999997,
+          "volume": 0.0625,
+          "stripe": 4,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.0911458333333333,
+          "end": 0.09244791666666663,
+          "volume": 0.0625,
+          "stripe": 6,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09244791666666663,
+          "end": 0.09374999999999996,
+          "volume": 0.0625,
+          "stripe": 7,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09374999999999996,
+          "end": 0.09505208333333329,
+          "volume": 0.0625,
+          "stripe": 8,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09505208333333329,
+          "end": 0.09635416666666662,
+          "volume": 0.0625,
+          "stripe": 9,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09635416666666662,
+          "end": 0.09765624999999994,
+          "volume": 0.0625,
+          "stripe": 10,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09765624999999994,
+          "end": 0.09895833333333327,
+          "volume": 0.0625,
+          "stripe": 11,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.09895833333333327,
+          "end": 0.1002604166666666,
+          "volume": 0.0625,
+          "stripe": 12,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.1002604166666666,
+          "end": 0.10156249999999993,
+          "volume": 0.0625,
+          "stripe": 13,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10156249999999993,
+          "end": 0.10286458333333326,
+          "volume": 0.0625,
+          "stripe": 14,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.10286458333333326,
+          "end": 0.10416666666666659,
+          "volume": 0.0625,
+          "stripe": 15,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10416666666666659,
+          "end": 0.10481770833333326,
+          "volume": 0.03125,
+          "stripe": 0,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10481770833333326,
+          "end": 0.10546874999999993,
+          "volume": 0.03125,
+          "stripe": 1,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10546874999999993,
+          "end": 0.1061197916666666,
+          "volume": 0.03125,
+          "stripe": 2,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1061197916666666,
+          "end": 0.10677083333333327,
+          "volume": 0.03125,
+          "stripe": 3,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10677083333333327,
+          "end": 0.10742187499999994,
+          "volume": 0.03125,
+          "stripe": 4,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10742187499999994,
+          "end": 0.10807291666666662,
+          "volume": 0.03125,
+          "stripe": 5,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10807291666666662,
+          "end": 0.10872395833333329,
+          "volume": 0.03125,
+          "stripe": 6,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10872395833333329,
+          "end": 0.10937499999999996,
+          "volume": 0.03125,
+          "stripe": 7,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.10937499999999996,
+          "end": 0.11002604166666663,
+          "volume": 0.03125,
+          "stripe": 8,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11002604166666663,
+          "end": 0.1106770833333333,
+          "volume": 0.03125,
+          "stripe": 9,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1106770833333333,
+          "end": 0.11132812499999997,
+          "volume": 0.03125,
+          "stripe": 10,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11132812499999997,
+          "end": 0.11197916666666664,
+          "volume": 0.03125,
+          "stripe": 11,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11197916666666664,
+          "end": 0.11263020833333331,
+          "volume": 0.03125,
+          "stripe": 12,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11263020833333331,
+          "end": 0.11328124999999999,
+          "volume": 0.03125,
+          "stripe": 13,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11328124999999999,
+          "end": 0.11393229166666666,
+          "volume": 0.03125,
+          "stripe": 14,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.11393229166666666,
+          "end": 0.11458333333333333,
+          "volume": 0.03125,
+          "stripe": 15,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "close_proof",
+          "start": 0.11666666666666667,
+          "end": 0.116875,
+          "volume": 0.01,
+          "sources": [
+            1,
+            2
+          ]
+        }
+      ],
+      "block_results": [
+        {
+          "job": 0,
+          "segment": 0,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 1,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 2,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 3,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 4,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 5,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 6,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 7,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 8,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 9,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 10,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 11,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 12,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 13,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 14,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 15,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 16,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 17,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 18,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 19,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 20,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 21,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 22,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 23,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 24,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 25,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 26,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 27,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 28,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 29,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 30,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 31,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "time": 0.09,
+      "interruption": true,
+      "snapshot": {
+        "schema": "taris-queue-observation/2",
+        "time": 0.09,
+        "jobs": [
+          {
+            "id": 0,
+            "kind": "repair",
+            "submitted": 0.0,
+            "started": 0.0,
+            "obj": 0,
+            "indices": [
+              0
+            ],
+            "nodes": [
+              3
+            ]
+          }
+        ],
+        "waiting": [],
+        "active_job": 0,
+        "parked_job": null,
+        "full_buffer_objects": [],
+        "planned_channel_phase": {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5
+        },
+        "block_acknowledgements": [
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 0,
+            "time": 0.08463541666666666,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 1,
+            "time": 0.08593749999999999,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 2,
+            "time": 0.08723958333333331,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 3,
+            "time": 0.08854166666666664,
+            "ok": true
+          },
+          {
+            "job": 0,
+            "phase": "read_block",
+            "stripe": 4,
+            "time": 0.08984374999999997,
+            "ok": true
+          }
+        ],
+        "queue_settings": {
+          "rate_size_per_hour": 2.0,
+          "max_jobs": 8,
+          "buffer_capacity_size": 1.0,
+          "proof_fraction": 0.01,
+          "proof_setup_hours": 0.05
+        },
+        "transport_settings": {
+          "stripes": 16,
+          "retry_hours": 1.0
+        },
+        "object_sizes": [
+          {
+            "obj": 0,
+            "size": 1.0
+          }
+        ],
+        "k": 2,
+        "local_memory": [
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 0,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08463541666666666
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 1,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08593749999999999
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 2,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08723958333333331
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 3,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08854166666666664
+          },
+          {
+            "obj": 0,
+            "job": 0,
+            "stripe": 4,
+            "size": 0.0625,
+            "kind": "decoded_block",
+            "confirmed_at": 0.08984374999999997
+          }
+        ],
+        "closing_acknowledgements": [],
+        "memory_notifications": []
+      },
+      "conditional": {
+        "schema": "taris-conditional-work/1",
+        "time": 0.09,
+        "mode": "trust_ack",
+        "jobs": [
+          {
+            "job": 0,
+            "obj": 0,
+            "read_volume": 0.6875,
+            "write_volume": 0.5,
+            "closing_proof_volume": 0.01,
+            "volume": 1.1975,
+            "targets": [
+              {
+                "idx": 0,
+                "node": 3,
+                "last_ack_blocks": 0,
+                "credited_blocks": 0,
+                "write_volume": 0.5
+              }
+            ]
+          }
+        ],
+        "known_repair_volume": 1.1975,
+        "conditional_repair_transfer_cost": 0.11975000000000001,
+        "uninterrupted_transfer_hours": 0.59875,
+        "unknown_proof_jobs": [],
+        "whole_queue_volume": 1.1975,
+        "expected_future_cost": null,
+        "expected_loss_cost": null,
+        "completion_time": null,
+        "full_actuarial_reserve": null
+      },
+      "actual_future_served": 1.2524999999999988,
+      "already_served_unacknowledged": 0.007500000000001199,
+      "extra_vs_uninterrupted": 0.0625,
+      "failed_blocks": 1,
+      "unfinished_jobs": 0,
+      "segments": [
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08333333333333333,
+          "end": 0.08463541666666666,
+          "volume": 0.0625,
+          "stripe": 0,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08463541666666666,
+          "end": 0.08593749999999999,
+          "volume": 0.0625,
+          "stripe": 1,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08593749999999999,
+          "end": 0.08723958333333331,
+          "volume": 0.0625,
+          "stripe": 2,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08723958333333331,
+          "end": 0.08854166666666664,
+          "volume": 0.0625,
+          "stripe": 3,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08854166666666664,
+          "end": 0.08984374999999997,
+          "volume": 0.0625,
+          "stripe": 4,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.08984374999999997,
+          "end": 0.0911458333333333,
+          "volume": 0.0625,
+          "stripe": 5,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13281249999999997,
+          "end": 0.13411458333333331,
+          "volume": 0.0625,
+          "stripe": 5,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13411458333333331,
+          "end": 0.13541666666666666,
+          "volume": 0.0625,
+          "stripe": 6,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13541666666666666,
+          "end": 0.13671875,
+          "volume": 0.0625,
+          "stripe": 7,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13671875,
+          "end": 0.13802083333333334,
+          "volume": 0.0625,
+          "stripe": 8,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13802083333333334,
+          "end": 0.13932291666666669,
+          "volume": 0.0625,
+          "stripe": 9,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.13932291666666669,
+          "end": 0.14062500000000003,
+          "volume": 0.0625,
+          "stripe": 10,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.14062500000000003,
+          "end": 0.14192708333333337,
+          "volume": 0.0625,
+          "stripe": 11,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.14192708333333337,
+          "end": 0.1432291666666667,
+          "volume": 0.0625,
+          "stripe": 12,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.1432291666666667,
+          "end": 0.14453125000000006,
+          "volume": 0.0625,
+          "stripe": 13,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.14453125000000006,
+          "end": 0.1458333333333334,
+          "volume": 0.0625,
+          "stripe": 14,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "read_block",
+          "start": 0.1458333333333334,
+          "end": 0.14713541666666674,
+          "volume": 0.0625,
+          "stripe": 15,
+          "sources": [
+            1,
+            2
+          ],
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.14713541666666674,
+          "end": 0.1477864583333334,
+          "volume": 0.03125,
+          "stripe": 0,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1477864583333334,
+          "end": 0.14843750000000006,
+          "volume": 0.03125,
+          "stripe": 1,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.14843750000000006,
+          "end": 0.1490885416666667,
+          "volume": 0.03125,
+          "stripe": 2,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1490885416666667,
+          "end": 0.14973958333333337,
+          "volume": 0.03125,
+          "stripe": 3,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.14973958333333337,
+          "end": 0.15039062500000003,
+          "volume": 0.03125,
+          "stripe": 4,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15039062500000003,
+          "end": 0.15104166666666669,
+          "volume": 0.03125,
+          "stripe": 5,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15104166666666669,
+          "end": 0.15169270833333334,
+          "volume": 0.03125,
+          "stripe": 6,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15169270833333334,
+          "end": 0.15234375,
+          "volume": 0.03125,
+          "stripe": 7,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15234375,
+          "end": 0.15299479166666666,
+          "volume": 0.03125,
+          "stripe": 8,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15299479166666666,
+          "end": 0.15364583333333331,
+          "volume": 0.03125,
+          "stripe": 9,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15364583333333331,
+          "end": 0.15429687499999997,
+          "volume": 0.03125,
+          "stripe": 10,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15429687499999997,
+          "end": 0.15494791666666663,
+          "volume": 0.03125,
+          "stripe": 11,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15494791666666663,
+          "end": 0.1555989583333333,
+          "volume": 0.03125,
+          "stripe": 12,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1555989583333333,
+          "end": 0.15624999999999994,
+          "volume": 0.03125,
+          "stripe": 13,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.15624999999999994,
+          "end": 0.1569010416666666,
+          "volume": 0.03125,
+          "stripe": 14,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "write_block",
+          "start": 0.1569010416666666,
+          "end": 0.15755208333333326,
+          "volume": 0.03125,
+          "stripe": 15,
+          "idx": 0,
+          "node": 3,
+          "disk_generation": 0,
+          "memory_generation": 0
+        },
+        {
+          "job": 0,
+          "phase": "close_proof",
+          "start": 0.15963541666666659,
+          "end": 0.15984374999999992,
+          "volume": 0.01,
+          "sources": [
+            1,
+            2
+          ]
+        }
+      ],
+      "block_results": [
+        {
+          "job": 0,
+          "segment": 0,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 1,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 2,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 3,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 4,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 5,
+          "ok": false
+        },
+        {
+          "job": 0,
+          "segment": 6,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 7,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 8,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 9,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 10,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 11,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 12,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 13,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 14,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 15,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 16,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 17,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 18,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 19,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 20,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 21,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 22,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 23,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 24,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 25,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 26,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 27,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 28,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 29,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 30,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 31,
+          "ok": true
+        },
+        {
+          "job": 0,
+          "segment": 32,
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "source_hashes": {
+    "subprojects\\taris_variants\\check_continuation.py": "86592a51b5509081db9ddbd2697af4eead7209d131a42046b64ed801187e1ee1",
+    "subprojects\\taris_variants\\conditional_work.py": "a87c3d1650fa3928748e4e076f5e3da2b8baf10dadaf77206e6d52b9ff1b24e8",
+    "subprojects\\taris_variants\\observable_memory.py": "8c19e2e7234af1f042ff9a407070970327527b4dc7a0f08abaaa3fac83a96643",
+    "subprojects\\taris_variants\\observable_queue.py": "0e3f6d94b732ac43f2dec53059df7593c0871a92d70674565c3d17d9648f7de2"
+  }
+}

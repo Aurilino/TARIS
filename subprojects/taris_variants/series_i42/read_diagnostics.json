@@ -1,0 +1,61 @@
+{
+  "schema": "taris-queue-read-diagnostics/1",
+  "scope": "external_post_run",
+  "rows": [
+    {
+      "profile": "ample",
+      "variant": "classic",
+      "completed_read_attempts": 24,
+      "successful_reads": 22,
+      "failed_reads": 2,
+      "only_micro_outages": 2,
+      "includes_micro_outage": 2
+    },
+    {
+      "profile": "ample",
+      "variant": "graph",
+      "completed_read_attempts": 15,
+      "successful_reads": 14,
+      "failed_reads": 1,
+      "only_micro_outages": 1,
+      "includes_micro_outage": 1
+    },
+    {
+      "profile": "ample",
+      "variant": "hybrid",
+      "completed_read_attempts": 33,
+      "successful_reads": 28,
+      "failed_reads": 5,
+      "only_micro_outages": 5,
+      "includes_micro_outage": 5
+    },
+    {
+      "profile": "constrained",
+      "variant": "classic",
+      "completed_read_attempts": 28,
+      "failed_reads": 28,
+      "only_micro_outages": 23,
+      "includes_micro_outage": 28,
+      "includes_other_outage": 5
+    },
+    {
+      "profile": "constrained",
+      "variant": "graph",
+      "completed_read_attempts": 28,
+      "failed_reads": 28,
+      "only_micro_outages": 27,
+      "includes_micro_outage": 28,
+      "includes_other_outage": 1
+    },
+    {
+      "profile": "constrained",
+      "variant": "hybrid",
+      "completed_read_attempts": 28,
+      "failed_reads": 28,
+      "only_micro_outages": 23,
+      "includes_micro_outage": 28,
+      "includes_other_outage": 5
+    }
+  ],
+  "note": "Причины могут пересекаться; only_micro_outages исключает уничтожение и другие простои."
+}

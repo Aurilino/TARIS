@@ -1,0 +1,5006 @@
+{
+  "schema": "taris-search-comparison/1",
+  "generated_seed_base": 7100,
+  "inputs": [
+    {
+      "name": "synchronous_schedule",
+      "description": "Три машины выключены одновременно треть суток",
+      "nodes": [
+        "A",
+        "B",
+        "C"
+      ],
+      "availability": [
+        {
+          "probability": "1/3",
+          "affected": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        {
+          "probability": "2/3",
+          "affected": []
+        }
+      ],
+      "loss": [
+        {
+          "probability": "1",
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      }
+    },
+    {
+      "name": "staggered_schedule",
+      "description": "По очереди недоступна одна машина; для сборки нужны две",
+      "nodes": [
+        "A",
+        "B",
+        "C"
+      ],
+      "availability": [
+        {
+          "probability": "1/3",
+          "affected": [
+            "A"
+          ]
+        },
+        {
+          "probability": "1/3",
+          "affected": [
+            "B"
+          ]
+        },
+        {
+          "probability": "1/3",
+          "affected": [
+            "C"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "1",
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      }
+    },
+    {
+      "name": "same_graph_X",
+      "description": "Парный граф совпадает с Y, но риск объекта выше",
+      "nodes": [
+        "A",
+        "B",
+        "C"
+      ],
+      "availability": [
+        {
+          "probability": "1/4",
+          "affected": []
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "1",
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      }
+    },
+    {
+      "name": "same_graph_Y",
+      "description": "Тот же парный граф, меньший риск объекта",
+      "nodes": [
+        "A",
+        "B",
+        "C"
+      ],
+      "availability": [
+        {
+          "probability": "1/4",
+          "affected": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "A"
+          ]
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "B"
+          ]
+        },
+        {
+          "probability": "1/4",
+          "affected": [
+            "C"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "1",
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      }
+    },
+    {
+      "name": "shared_site_and_independent_node",
+      "description": "S и A теряются вместе с вероятностью 2%; B независимо с вероятностью 4%",
+      "nodes": [
+        "S",
+        "A",
+        "B"
+      ],
+      "availability": [
+        {
+          "probability": "1",
+          "affected": []
+        }
+      ],
+      "loss": [
+        {
+          "probability": "0.9408",
+          "affected": []
+        },
+        {
+          "probability": "0.0192",
+          "affected": [
+            "S",
+            "A"
+          ]
+        },
+        {
+          "probability": "0.0392",
+          "affected": [
+            "B"
+          ]
+        },
+        {
+          "probability": "0.0008",
+          "affected": [
+            "S",
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "request": {
+        "k": 1,
+        "availability_limit": "0",
+        "loss_limit": "0.001"
+      }
+    },
+    {
+      "name": "local_minimum",
+      "nodes": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "availability": [
+        {
+          "probability": "0.85",
+          "affected": []
+        },
+        {
+          "probability": "0.01",
+          "affected": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "C"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "D"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": 1,
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "1",
+        "loss_limit": 0
+      }
+    },
+    {
+      "name": "extra_chunk_trap",
+      "nodes": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "availability": [
+        {
+          "probability": "0.85",
+          "affected": []
+        },
+        {
+          "probability": "0.01",
+          "affected": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "C"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "D"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": 1,
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 3,
+        "availability_limit": "0",
+        "loss_limit": 0
+      }
+    },
+    {
+      "name": "missed_solution_trap",
+      "nodes": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "availability": [
+        {
+          "probability": "0.85",
+          "affected": []
+        },
+        {
+          "probability": "0.01",
+          "affected": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "probability": "0.02",
+          "affected": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "C"
+          ]
+        },
+        {
+          "probability": "0.03",
+          "affected": [
+            "D"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": 1,
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "0",
+        "loss_limit": 0
+      }
+    },
+    {
+      "name": "generated_00",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "7/130",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/13",
+          "affected": [
+            "N00",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/130",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/65",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/26",
+          "affected": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "4/65",
+          "affected": [
+            "N00",
+            "N01",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/65",
+          "affected": [
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "4/65",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/130",
+          "affected": [
+            "N01",
+            "N03"
+          ]
+        },
+        {
+          "probability": "9/130",
+          "affected": [
+            "N00",
+            "N01",
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "2/65",
+          "affected": [
+            "N00",
+            "N01"
+          ]
+        },
+        {
+          "probability": "1/65",
+          "affected": []
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "2/235",
+          "affected": [
+            "N02"
+          ]
+        },
+        {
+          "probability": "4/235",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/470",
+          "affected": [
+            "N00",
+            "N01"
+          ]
+        },
+        {
+          "probability": "3/235",
+          "affected": []
+        },
+        {
+          "probability": "1/235",
+          "affected": []
+        },
+        {
+          "probability": "1/235",
+          "affected": [
+            "N00",
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/470",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/470",
+          "affected": []
+        },
+        {
+          "probability": "1/470",
+          "affected": [
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/47",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/235",
+          "affected": [
+            "N01",
+            "N02",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/470",
+          "affected": [
+            "N02"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_01",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "5/164",
+          "affected": [
+            "N01",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/164",
+          "affected": [
+            "N00",
+            "N01",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "5/82",
+          "affected": [
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "2/41",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/82",
+          "affected": [
+            "N00",
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "5/82",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/164",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/82",
+          "affected": [
+            "N01",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "2/41",
+          "affected": []
+        },
+        {
+          "probability": "7/164",
+          "affected": [
+            "N00",
+            "N02",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "9/164",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "7/164",
+          "affected": [
+            "N00",
+            "N03",
+            "N04",
+            "N05",
+            "N06"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/144",
+          "affected": [
+            "N00",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/180",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/144",
+          "affected": [
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/720",
+          "affected": [
+            "N00",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/144",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/90",
+          "affected": [
+            "N00",
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/144",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "7/720",
+          "affected": []
+        },
+        {
+          "probability": "1/144",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/72",
+          "affected": [
+            "N01",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/90",
+          "affected": []
+        },
+        {
+          "probability": "1/80",
+          "affected": [
+            "N00",
+            "N01"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_02",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "2/57",
+          "affected": [
+            "N01",
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "4/57",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/19",
+          "affected": [
+            "N00",
+            "N01",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/38",
+          "affected": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/19",
+          "affected": [
+            "N00",
+            "N01",
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "2/57",
+          "affected": [
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "2/57",
+          "affected": [
+            "N00",
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "5/57",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/114",
+          "affected": [
+            "N00",
+            "N02",
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/114",
+          "affected": [
+            "N00",
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/38",
+          "affected": [
+            "N01",
+            "N02",
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/38",
+          "affected": [
+            "N06"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/78",
+          "affected": [
+            "N00",
+            "N03",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/78",
+          "affected": [
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/260",
+          "affected": [
+            "N00",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/78",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "3/260",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/390",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/130",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/390",
+          "affected": []
+        },
+        {
+          "probability": "1/78",
+          "affected": [
+            "N01",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/260",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/780",
+          "affected": [
+            "N00",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/130",
+          "affected": [
+            "N01",
+            "N03",
+            "N05"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_03",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/32",
+          "affected": [
+            "N00",
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/16",
+          "affected": [
+            "N00",
+            "N01",
+            "N06"
+          ]
+        },
+        {
+          "probability": "3/80",
+          "affected": [
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N00",
+            "N02",
+            "N06"
+          ]
+        },
+        {
+          "probability": "7/160",
+          "affected": [
+            "N01",
+            "N04",
+            "N05",
+            "N07",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/80",
+          "affected": [
+            "N01",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/32",
+          "affected": [
+            "N05",
+            "N08"
+          ]
+        },
+        {
+          "probability": "7/160",
+          "affected": [
+            "N01",
+            "N03",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/32",
+          "affected": [
+            "N01",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N01",
+            "N02",
+            "N03",
+            "N05",
+            "N06",
+            "N07",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/32",
+          "affected": [
+            "N00",
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N08"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "7/510",
+          "affected": []
+        },
+        {
+          "probability": "2/255",
+          "affected": []
+        },
+        {
+          "probability": "1/510",
+          "affected": [
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/85",
+          "affected": [
+            "N03",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/255",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/170",
+          "affected": [
+            "N02",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/255",
+          "affected": []
+        },
+        {
+          "probability": "2/255",
+          "affected": [
+            "N03",
+            "N04",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/85",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/85",
+          "affected": []
+        },
+        {
+          "probability": "1/170",
+          "affected": [
+            "N05",
+            "N06",
+            "N07"
+          ]
+        },
+        {
+          "probability": "7/510",
+          "affected": [
+            "N01",
+            "N03"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_04",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08",
+        "N09"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "3/140",
+          "affected": [
+            "N01"
+          ]
+        },
+        {
+          "probability": "3/70",
+          "affected": [
+            "N00",
+            "N02",
+            "N03",
+            "N05",
+            "N06",
+            "N07",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/140",
+          "affected": [
+            "N09"
+          ]
+        },
+        {
+          "probability": "2/35",
+          "affected": [
+            "N02",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/35",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/20",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/140",
+          "affected": [
+            "N01",
+            "N02",
+            "N04",
+            "N06",
+            "N07"
+          ]
+        },
+        {
+          "probability": "3/70",
+          "affected": [
+            "N00",
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/14",
+          "affected": [
+            "N02",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "2/35",
+          "affected": [
+            "N01",
+            "N04",
+            "N05",
+            "N08"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "3/410",
+          "affected": [
+            "N00",
+            "N01",
+            "N08"
+          ]
+        },
+        {
+          "probability": "9/820",
+          "affected": [
+            "N09"
+          ]
+        },
+        {
+          "probability": "1/164",
+          "affected": [
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "3/410",
+          "affected": [
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/410",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/82",
+          "affected": [
+            "N01",
+            "N02"
+          ]
+        },
+        {
+          "probability": "9/820",
+          "affected": [
+            "N00",
+            "N01",
+            "N02",
+            "N04",
+            "N06",
+            "N09"
+          ]
+        },
+        {
+          "probability": "1/164",
+          "affected": [
+            "N02",
+            "N08"
+          ]
+        },
+        {
+          "probability": "9/820",
+          "affected": []
+        },
+        {
+          "probability": "1/820",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/82",
+          "affected": [
+            "N04",
+            "N09"
+          ]
+        },
+        {
+          "probability": "3/410",
+          "affected": [
+            "N05"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_05",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "9/142",
+          "affected": [
+            "N00",
+            "N01",
+            "N05"
+          ]
+        },
+        {
+          "probability": "9/142",
+          "affected": [
+            "N00",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/71",
+          "affected": [
+            "N00",
+            "N05"
+          ]
+        },
+        {
+          "probability": "4/71",
+          "affected": [
+            "N00",
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/142",
+          "affected": [
+            "N00",
+            "N01",
+            "N03",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/142",
+          "affected": []
+        },
+        {
+          "probability": "4/71",
+          "affected": []
+        },
+        {
+          "probability": "3/142",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "4/71",
+          "affected": [
+            "N01",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/71",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/142",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/142",
+          "affected": []
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/65",
+          "affected": [
+            "N00",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/104",
+          "affected": []
+        },
+        {
+          "probability": "1/520",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/65",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/260",
+          "affected": [
+            "N01",
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/130",
+          "affected": [
+            "N02"
+          ]
+        },
+        {
+          "probability": "9/520",
+          "affected": []
+        },
+        {
+          "probability": "1/260",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/520",
+          "affected": [
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/520",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "3/520",
+          "affected": []
+        },
+        {
+          "probability": "1/260",
+          "affected": [
+            "N03",
+            "N04",
+            "N05"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_06",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/26",
+          "affected": [
+            "N00",
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/52",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "2/39",
+          "affected": [
+            "N02",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "7/156",
+          "affected": [
+            "N02",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "7/156",
+          "affected": [
+            "N00",
+            "N03",
+            "N06"
+          ]
+        },
+        {
+          "probability": "7/156",
+          "affected": [
+            "N02",
+            "N03"
+          ]
+        },
+        {
+          "probability": "7/156",
+          "affected": [
+            "N02",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/26",
+          "affected": [
+            "N01",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/52",
+          "affected": []
+        },
+        {
+          "probability": "5/156",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/52",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/39",
+          "affected": [
+            "N00",
+            "N01",
+            "N03"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/540",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/60",
+          "affected": [
+            "N00",
+            "N03",
+            "N04",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/108",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/540",
+          "affected": [
+            "N01",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/60",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/540",
+          "affected": []
+        },
+        {
+          "probability": "1/108",
+          "affected": [
+            "N01",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/270",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "2/135",
+          "affected": [
+            "N01",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "2/135",
+          "affected": [
+            "N01"
+          ]
+        },
+        {
+          "probability": "1/270",
+          "affected": [
+            "N00",
+            "N01",
+            "N02",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/180",
+          "affected": []
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_07",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/126",
+          "affected": [
+            "N01",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/21",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "2/63",
+          "affected": [
+            "N01",
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/21",
+          "affected": [
+            "N02",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/126",
+          "affected": [
+            "N01",
+            "N03",
+            "N04",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/14",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/126",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "4/63",
+          "affected": [
+            "N01",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/21",
+          "affected": [
+            "N02",
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/18",
+          "affected": [
+            "N01"
+          ]
+        },
+        {
+          "probability": "1/42",
+          "affected": [
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/18",
+          "affected": [
+            "N01",
+            "N03",
+            "N04"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "3/340",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/136",
+          "affected": [
+            "N00",
+            "N07"
+          ]
+        },
+        {
+          "probability": "9/680",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "7/680",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/170",
+          "affected": [
+            "N01",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/170",
+          "affected": [
+            "N01",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/340",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/68",
+          "affected": [
+            "N01",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/170",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/136",
+          "affected": [
+            "N01",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/68",
+          "affected": [
+            "N02",
+            "N04",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/340",
+          "affected": [
+            "N00",
+            "N03",
+            "N04"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_08",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "3/62",
+          "affected": [
+            "N01",
+            "N03",
+            "N05",
+            "N08"
+          ]
+        },
+        {
+          "probability": "7/124",
+          "affected": [
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "2/31",
+          "affected": [
+            "N01",
+            "N02",
+            "N04",
+            "N07"
+          ]
+        },
+        {
+          "probability": "7/124",
+          "affected": [
+            "N03",
+            "N04",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "9/124",
+          "affected": [
+            "N00",
+            "N01",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/124",
+          "affected": [
+            "N00",
+            "N06",
+            "N07"
+          ]
+        },
+        {
+          "probability": "3/124",
+          "affected": [
+            "N01",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/31",
+          "affected": [
+            "N00",
+            "N03",
+            "N04",
+            "N05",
+            "N07",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/62",
+          "affected": [
+            "N01",
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/31",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/124",
+          "affected": [
+            "N00",
+            "N01",
+            "N03",
+            "N05",
+            "N06",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/62",
+          "affected": [
+            "N05",
+            "N06",
+            "N07"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/115",
+          "affected": [
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/230",
+          "affected": [
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/230",
+          "affected": [
+            "N01",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/460",
+          "affected": [
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/230",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/460",
+          "affected": [
+            "N02",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/460",
+          "affected": [
+            "N00",
+            "N01",
+            "N04"
+          ]
+        },
+        {
+          "probability": "2/115",
+          "affected": [
+            "N03",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/46",
+          "affected": [
+            "N04",
+            "N05",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/460",
+          "affected": [
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "9/460",
+          "affected": [
+            "N04",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/460",
+          "affected": [
+            "N07"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_09",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08",
+        "N09"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/110",
+          "affected": [
+            "N02",
+            "N04",
+            "N05",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/11",
+          "affected": [
+            "N06",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/110",
+          "affected": [
+            "N03",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "3/55",
+          "affected": [
+            "N00",
+            "N01",
+            "N04",
+            "N06",
+            "N08"
+          ]
+        },
+        {
+          "probability": "2/55",
+          "affected": [
+            "N00",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/55",
+          "affected": [
+            "N03",
+            "N05",
+            "N09"
+          ]
+        },
+        {
+          "probability": "3/55",
+          "affected": [
+            "N00",
+            "N03",
+            "N07",
+            "N09"
+          ]
+        },
+        {
+          "probability": "1/110",
+          "affected": [
+            "N01",
+            "N04",
+            "N07"
+          ]
+        },
+        {
+          "probability": "7/110",
+          "affected": [
+            "N00",
+            "N01",
+            "N04",
+            "N07",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/22",
+          "affected": [
+            "N01",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "2/55",
+          "affected": [
+            "N01",
+            "N02",
+            "N05",
+            "N07",
+            "N09"
+          ]
+        },
+        {
+          "probability": "3/55",
+          "affected": [
+            "N03",
+            "N05",
+            "N06",
+            "N07",
+            "N08",
+            "N09"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/165",
+          "affected": []
+        },
+        {
+          "probability": "1/165",
+          "affected": [
+            "N02",
+            "N09"
+          ]
+        },
+        {
+          "probability": "1/66",
+          "affected": [
+            "N02",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/220",
+          "affected": [
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/330",
+          "affected": [
+            "N01",
+            "N03",
+            "N06",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/165",
+          "affected": [
+            "N00",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "2/165",
+          "affected": [
+            "N00",
+            "N02",
+            "N08"
+          ]
+        },
+        {
+          "probability": "3/220",
+          "affected": [
+            "N01",
+            "N02",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "3/220",
+          "affected": [
+            "N02",
+            "N07",
+            "N09"
+          ]
+        },
+        {
+          "probability": "1/330",
+          "affected": [
+            "N02",
+            "N05",
+            "N07"
+          ]
+        },
+        {
+          "probability": "1/132",
+          "affected": [
+            "N00",
+            "N05",
+            "N08"
+          ]
+        },
+        {
+          "probability": "1/110",
+          "affected": [
+            "N00",
+            "N01",
+            "N04",
+            "N07"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_10",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "3/112",
+          "affected": [
+            "N00",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/112",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "9/112",
+          "affected": []
+        },
+        {
+          "probability": "1/112",
+          "affected": [
+            "N00",
+            "N02",
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "3/56",
+          "affected": [
+            "N04",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/112",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/112",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "5/112",
+          "affected": [
+            "N00",
+            "N01",
+            "N05"
+          ]
+        },
+        {
+          "probability": "5/112",
+          "affected": []
+        },
+        {
+          "probability": "1/14",
+          "affected": [
+            "N00",
+            "N03"
+          ]
+        },
+        {
+          "probability": "3/56",
+          "affected": [
+            "N00",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "3/56",
+          "affected": [
+            "N01"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "1/80",
+          "affected": [
+            "N01"
+          ]
+        },
+        {
+          "probability": "1/480",
+          "affected": [
+            "N01",
+            "N02",
+            "N03"
+          ]
+        },
+        {
+          "probability": "1/160",
+          "affected": []
+        },
+        {
+          "probability": "1/48",
+          "affected": []
+        },
+        {
+          "probability": "1/240",
+          "affected": [
+            "N00",
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/480",
+          "affected": [
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/480",
+          "affected": [
+            "N00",
+            "N04"
+          ]
+        },
+        {
+          "probability": "7/480",
+          "affected": [
+            "N01"
+          ]
+        },
+        {
+          "probability": "1/160",
+          "affected": [
+            "N05"
+          ]
+        },
+        {
+          "probability": "1/120",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/60",
+          "affected": []
+        },
+        {
+          "probability": "1/240",
+          "affected": [
+            "N00"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    },
+    {
+      "name": "generated_11",
+      "nodes": [
+        "N00",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06"
+      ],
+      "availability": [
+        {
+          "probability": "1/2",
+          "affected": []
+        },
+        {
+          "probability": "1/15",
+          "affected": [
+            "N01",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/24",
+          "affected": [
+            "N00",
+            "N02",
+            "N03",
+            "N04",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/30",
+          "affected": [
+            "N00",
+            "N01",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/40",
+          "affected": [
+            "N00",
+            "N01",
+            "N02",
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/30",
+          "affected": [
+            "N01",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/40",
+          "affected": [
+            "N00"
+          ]
+        },
+        {
+          "probability": "1/40",
+          "affected": [
+            "N01",
+            "N03",
+            "N05",
+            "N06"
+          ]
+        },
+        {
+          "probability": "7/120",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/15",
+          "affected": [
+            "N06"
+          ]
+        },
+        {
+          "probability": "1/60",
+          "affected": []
+        },
+        {
+          "probability": "1/30",
+          "affected": [
+            "N00",
+            "N02",
+            "N06"
+          ]
+        },
+        {
+          "probability": "3/40",
+          "affected": [
+            "N01",
+            "N05"
+          ]
+        }
+      ],
+      "loss": [
+        {
+          "probability": "9/10",
+          "affected": []
+        },
+        {
+          "probability": "9/680",
+          "affected": [
+            "N00",
+            "N06"
+          ]
+        },
+        {
+          "probability": "3/680",
+          "affected": []
+        },
+        {
+          "probability": "1/85",
+          "affected": [
+            "N00",
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/680",
+          "affected": []
+        },
+        {
+          "probability": "1/136",
+          "affected": []
+        },
+        {
+          "probability": "1/68",
+          "affected": [
+            "N02",
+            "N03",
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/680",
+          "affected": [
+            "N00",
+            "N02"
+          ]
+        },
+        {
+          "probability": "7/680",
+          "affected": [
+            "N02"
+          ]
+        },
+        {
+          "probability": "1/136",
+          "affected": []
+        },
+        {
+          "probability": "1/85",
+          "affected": [
+            "N03",
+            "N05"
+          ]
+        },
+        {
+          "probability": "9/680",
+          "affected": [
+            "N04"
+          ]
+        },
+        {
+          "probability": "1/340",
+          "affected": [
+            "N04"
+          ]
+        }
+      ],
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      }
+    }
+  ],
+  "summary": {
+    "1": {
+      "cases": 20,
+      "outcomes": {
+        "same_optimum": 15,
+        "worse_same_size": 1,
+        "extra_chunks": 1,
+        "missed_feasible": 1,
+        "both_without_solution": 2
+      },
+      "exact_checked": 1320,
+      "heuristic_checked": 530,
+      "exact_seconds": 0.22224630002165213,
+      "graph_seconds_including_preparation": 0.11965690006036311
+    },
+    "3": {
+      "cases": 20,
+      "outcomes": {
+        "same_optimum": 18,
+        "worse_same_size": 0,
+        "extra_chunks": 0,
+        "missed_feasible": 0,
+        "both_without_solution": 2
+      },
+      "exact_checked": 1320,
+      "heuristic_checked": 634,
+      "exact_seconds": 0.22746279992861673,
+      "graph_seconds_including_preparation": 0.18958599990583025
+    }
+  },
+  "comparisons": [
+    {
+      "name": "synchronous_schedule",
+      "seed_count": 1,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "proven_infeasible_in_scope",
+        "checked": 4,
+        "feasible_at_min_n": 0,
+        "best": null,
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "not_found",
+        "checked": 4,
+        "feasible_seen_at_returned_n": 0,
+        "best": null,
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 2,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 5,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "both_without_solution",
+      "extra_chunks": null,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.00034279999090358615,
+      "graph_seconds_including_preparation": 0.0007024999940767884
+    },
+    {
+      "name": "synchronous_schedule",
+      "seed_count": 3,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "proven_infeasible_in_scope",
+        "checked": 4,
+        "feasible_at_min_n": 0,
+        "best": null,
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "not_found",
+        "checked": 4,
+        "feasible_seen_at_returned_n": 0,
+        "best": null,
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 6,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 15,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "both_without_solution",
+      "extra_chunks": null,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.0002550000208429992,
+      "graph_seconds_including_preparation": 0.0010368999792262912
+    },
+    {
+      "name": "staggered_schedule",
+      "seed_count": 1,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 4,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "1"
+        },
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 4,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "1"
+        },
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 2,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 5,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.00036520001594908535,
+      "graph_seconds_including_preparation": 0.0008060999971348792
+    },
+    {
+      "name": "staggered_schedule",
+      "seed_count": 3,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "availability_limit": "0",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 4,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "1"
+        },
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 4,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "1"
+        },
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 6,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 15,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0002625000197440386,
+      "graph_seconds_including_preparation": 0.0009966999932657927
+    },
+    {
+      "name": "same_graph_X",
+      "seed_count": 1,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "proven_infeasible_in_scope",
+        "checked": 1,
+        "feasible_at_min_n": 0,
+        "best": null,
+        "min_n": 3,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "not_found",
+        "checked": 1,
+        "feasible_seen_at_returned_n": 0,
+        "best": null,
+        "min_n": 3,
+        "max_n": 3,
+        "starts": 1,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 3,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "both_without_solution",
+      "extra_chunks": null,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.00015700000221841037,
+      "graph_seconds_including_preparation": 0.00038809998659417033
+    },
+    {
+      "name": "same_graph_X",
+      "seed_count": 3,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "proven_infeasible_in_scope",
+        "checked": 1,
+        "feasible_at_min_n": 0,
+        "best": null,
+        "min_n": 3,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "not_found",
+        "checked": 1,
+        "feasible_seen_at_returned_n": 0,
+        "best": null,
+        "min_n": 3,
+        "max_n": 3,
+        "starts": 3,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 9,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "both_without_solution",
+      "extra_chunks": null,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.00013649999164044857,
+      "graph_seconds_including_preparation": 0.00048519999836571515
+    },
+    {
+      "name": "same_graph_Y",
+      "seed_count": 1,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 1,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "1/4",
+          "loss_risk": "0",
+          "graph_score": "3/4",
+          "own_availability_sum": "3/2"
+        },
+        "min_n": 3,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 1,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "1/4",
+          "loss_risk": "0",
+          "graph_score": "3/4",
+          "own_availability_sum": "3/2"
+        },
+        "min_n": 3,
+        "max_n": 3,
+        "starts": 1,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 3,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.00015050001093186438,
+      "graph_seconds_including_preparation": 0.0002835000050254166
+    },
+    {
+      "name": "same_graph_Y",
+      "seed_count": 3,
+      "node_count": 3,
+      "request": {
+        "k": 2,
+        "min_n": 3,
+        "max_n": 3,
+        "availability_limit": "1/2",
+        "loss_limit": "0"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 1,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "1/4",
+          "loss_risk": "0",
+          "graph_score": "3/4",
+          "own_availability_sum": "3/2"
+        },
+        "min_n": 3,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 1,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "availability_risk": "1/4",
+          "loss_risk": "0",
+          "graph_score": "3/4",
+          "own_availability_sum": "3/2"
+        },
+        "min_n": 3,
+        "max_n": 3,
+        "starts": 3,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 9,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.00012930002412758768,
+      "graph_seconds_including_preparation": 0.00044249999336898327
+    },
+    {
+      "name": "shared_site_and_independent_node",
+      "seed_count": 1,
+      "node_count": 3,
+      "request": {
+        "k": 1,
+        "availability_limit": "0",
+        "loss_limit": "0.001"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 2,
+        "best": {
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/1250",
+          "graph_score": "0",
+          "own_availability_sum": "0"
+        },
+        "min_n": 1,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 6,
+        "feasible_seen_at_returned_n": 2,
+        "best": {
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/1250",
+          "graph_score": "0",
+          "own_availability_sum": "0"
+        },
+        "min_n": 1,
+        "max_n": 3,
+        "starts": 2,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 2,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0003071999817620963,
+      "graph_seconds_including_preparation": 0.000763899995945394
+    },
+    {
+      "name": "shared_site_and_independent_node",
+      "seed_count": 3,
+      "node_count": 3,
+      "request": {
+        "k": 1,
+        "availability_limit": "0",
+        "loss_limit": "0.001"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 2,
+        "best": {
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/1250",
+          "graph_score": "0",
+          "own_availability_sum": "0"
+        },
+        "min_n": 1,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 6,
+        "feasible_seen_at_returned_n": 2,
+        "best": {
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/1250",
+          "graph_score": "0",
+          "own_availability_sum": "0"
+        },
+        "min_n": 1,
+        "max_n": 3,
+        "starts": 6,
+        "accepted_swaps": 4,
+        "growth_candidates_scored": 6,
+        "graph_pairs_prepared": 3
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0003392999933566898,
+      "graph_seconds_including_preparation": 0.0014605999749619514
+    },
+    {
+      "name": "local_minimum",
+      "seed_count": 1,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "1",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 6,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 5,
+        "feasible_seen_at_returned_n": 5,
+        "best": {
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "availability_risk": "1/100",
+          "loss_risk": "0",
+          "graph_score": "1/100",
+          "own_availability_sum": "1/10"
+        },
+        "min_n": 2,
+        "max_n": 2,
+        "starts": 1,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 3,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "worse_same_size",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "1/100",
+      "exact_seconds": 0.0006496999994851649,
+      "graph_seconds_including_preparation": 0.0008252000261563808
+    },
+    {
+      "name": "local_minimum",
+      "seed_count": 3,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "1",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 6,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 6,
+        "feasible_seen_at_returned_n": 6,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2,
+        "starts": 3,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 9,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0005593999812845141,
+      "graph_seconds_including_preparation": 0.001491400005761534
+    },
+    {
+      "name": "extra_chunk_trap",
+      "seed_count": 1,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 3,
+        "availability_limit": "0",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 9,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "A",
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "1/25",
+          "own_availability_sum": "19/100"
+        },
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 2,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 8,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "extra_chunks",
+      "extra_chunks": 1,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.000603299995418638,
+      "graph_seconds_including_preparation": 0.001806799991754815
+    },
+    {
+      "name": "extra_chunk_trap",
+      "seed_count": 3,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 3,
+        "availability_limit": "0",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 3
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 6,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 3,
+        "starts": 3,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 9,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0006127999804448336,
+      "graph_seconds_including_preparation": 0.001343100011581555
+    },
+    {
+      "name": "missed_solution_trap",
+      "seed_count": 1,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "0",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2
+      },
+      "heuristic": {
+        "status": "not_found",
+        "checked": 5,
+        "feasible_seen_at_returned_n": 0,
+        "best": null,
+        "min_n": 2,
+        "max_n": 2,
+        "starts": 1,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 3,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "missed_feasible",
+      "extra_chunks": null,
+      "graph_score_gap_same_size": null,
+      "exact_seconds": 0.0004008999967481941,
+      "graph_seconds_including_preparation": 0.0006394000083673745
+    },
+    {
+      "name": "missed_solution_trap",
+      "seed_count": 3,
+      "node_count": 4,
+      "request": {
+        "k": 1,
+        "min_n": 2,
+        "max_n": 2,
+        "availability_limit": "0",
+        "loss_limit": 0
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 6,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 6,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "C",
+            "D"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "7/50"
+        },
+        "min_n": 2,
+        "max_n": 2,
+        "starts": 3,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 9,
+        "graph_pairs_prepared": 6
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0004215999797452241,
+      "graph_seconds_including_preparation": 0.0010392999975010753
+    },
+    {
+      "name": "generated_00",
+      "seed_count": 1,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 50,
+        "feasible_at_min_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/235",
+          "graph_score": "18/65",
+          "own_availability_sum": "93/130"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 35,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/235",
+          "graph_score": "18/65",
+          "own_availability_sum": "93/130"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 3,
+        "accepted_swaps": 2,
+        "growth_candidates_scored": 26,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.007072400010656565,
+      "graph_seconds_including_preparation": 0.008072299999184906
+    },
+    {
+      "name": "generated_00",
+      "seed_count": 3,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 50,
+        "feasible_at_min_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/235",
+          "graph_score": "18/65",
+          "own_availability_sum": "93/130"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 40,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/235",
+          "graph_score": "18/65",
+          "own_availability_sum": "93/130"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 9,
+        "accepted_swaps": 6,
+        "growth_candidates_scored": 78,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.008203299978049472,
+      "graph_seconds_including_preparation": 0.0152873000188265
+    },
+    {
+      "name": "generated_01",
+      "seed_count": 1,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 56,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N05"
+          ],
+          "availability_risk": "5/164",
+          "loss_risk": "0",
+          "graph_score": "5/164",
+          "own_availability_sum": "13/41"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 28,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N05"
+          ],
+          "availability_risk": "5/164",
+          "loss_risk": "0",
+          "graph_score": "5/164",
+          "own_availability_sum": "13/41"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 2,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 17,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.0083769999910146,
+      "graph_seconds_including_preparation": 0.0078028999851085246
+    },
+    {
+      "name": "generated_01",
+      "seed_count": 3,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 56,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N05"
+          ],
+          "availability_risk": "5/164",
+          "loss_risk": "0",
+          "graph_score": "5/164",
+          "own_availability_sum": "13/41"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 28,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N05"
+          ],
+          "availability_risk": "5/164",
+          "loss_risk": "0",
+          "graph_score": "5/164",
+          "own_availability_sum": "13/41"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 6,
+        "accepted_swaps": 3,
+        "growth_candidates_scored": 51,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.00888509998912923,
+      "graph_seconds_including_preparation": 0.008225300000049174
+    },
+    {
+      "name": "generated_02",
+      "seed_count": 1,
+      "node_count": 8,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 84,
+        "feasible_at_min_n": 4,
+        "best": {
+          "nodes": [
+            "N04",
+            "N05",
+            "N07"
+          ],
+          "availability_risk": "1/38",
+          "loss_risk": "0",
+          "graph_score": "1/38",
+          "own_availability_sum": "1/2"
+        },
+        "min_n": 2,
+        "max_n": 8
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 42,
+        "feasible_seen_at_returned_n": 3,
+        "best": {
+          "nodes": [
+            "N04",
+            "N05",
+            "N07"
+          ],
+          "availability_risk": "1/38",
+          "loss_risk": "0",
+          "graph_score": "1/38",
+          "own_availability_sum": "1/2"
+        },
+        "min_n": 2,
+        "max_n": 8,
+        "starts": 2,
+        "accepted_swaps": 2,
+        "growth_candidates_scored": 20,
+        "graph_pairs_prepared": 28
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.010121700004674494,
+      "graph_seconds_including_preparation": 0.008379600010812283
+    },
+    {
+      "name": "generated_02",
+      "seed_count": 3,
+      "node_count": 8,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 84,
+        "feasible_at_min_n": 4,
+        "best": {
+          "nodes": [
+            "N04",
+            "N05",
+            "N07"
+          ],
+          "availability_risk": "1/38",
+          "loss_risk": "0",
+          "graph_score": "1/38",
+          "own_availability_sum": "1/2"
+        },
+        "min_n": 2,
+        "max_n": 8
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 52,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "N04",
+            "N05",
+            "N07"
+          ],
+          "availability_risk": "1/38",
+          "loss_risk": "0",
+          "graph_score": "1/38",
+          "own_availability_sum": "1/2"
+        },
+        "min_n": 2,
+        "max_n": 8,
+        "starts": 6,
+        "accepted_swaps": 6,
+        "growth_candidates_scored": 60,
+        "graph_pairs_prepared": 28
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.010429799993289635,
+      "graph_seconds_including_preparation": 0.011578499979805201
+    },
+    {
+      "name": "generated_03",
+      "seed_count": 1,
+      "node_count": 9,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 120,
+        "feasible_at_min_n": 2,
+        "best": {
+          "nodes": [
+            "N00",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "3/40",
+          "loss_risk": "0",
+          "graph_score": "3/40",
+          "own_availability_sum": "9/20"
+        },
+        "min_n": 2,
+        "max_n": 9
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 45,
+        "feasible_seen_at_returned_n": 2,
+        "best": {
+          "nodes": [
+            "N00",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "3/40",
+          "loss_risk": "0",
+          "graph_score": "3/40",
+          "own_availability_sum": "9/20"
+        },
+        "min_n": 2,
+        "max_n": 9,
+        "starts": 2,
+        "accepted_swaps": 2,
+        "growth_candidates_scored": 23,
+        "graph_pairs_prepared": 36
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.02008909999858588,
+      "graph_seconds_including_preparation": 0.007763800007523969
+    },
+    {
+      "name": "generated_03",
+      "seed_count": 3,
+      "node_count": 9,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 120,
+        "feasible_at_min_n": 2,
+        "best": {
+          "nodes": [
+            "N00",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "3/40",
+          "loss_risk": "0",
+          "graph_score": "3/40",
+          "own_availability_sum": "9/20"
+        },
+        "min_n": 2,
+        "max_n": 9
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 55,
+        "feasible_seen_at_returned_n": 2,
+        "best": {
+          "nodes": [
+            "N00",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "3/40",
+          "loss_risk": "0",
+          "graph_score": "3/40",
+          "own_availability_sum": "9/20"
+        },
+        "min_n": 2,
+        "max_n": 9,
+        "starts": 6,
+        "accepted_swaps": 5,
+        "growth_candidates_scored": 69,
+        "graph_pairs_prepared": 36
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.016750599985243753,
+      "graph_seconds_including_preparation": 0.018451399984769523
+    },
+    {
+      "name": "generated_04",
+      "seed_count": 1,
+      "node_count": 10,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 165,
+        "feasible_at_min_n": 12,
+        "best": {
+          "nodes": [
+            "N03",
+            "N08",
+            "N09"
+          ],
+          "availability_risk": "3/70",
+          "loss_risk": "0",
+          "graph_score": "3/70",
+          "own_availability_sum": "3/14"
+        },
+        "min_n": 2,
+        "max_n": 10
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 72,
+        "feasible_seen_at_returned_n": 9,
+        "best": {
+          "nodes": [
+            "N03",
+            "N08",
+            "N09"
+          ],
+          "availability_risk": "3/70",
+          "loss_risk": "0",
+          "graph_score": "3/70",
+          "own_availability_sum": "3/14"
+        },
+        "min_n": 2,
+        "max_n": 10,
+        "starts": 2,
+        "accepted_swaps": 3,
+        "growth_candidates_scored": 26,
+        "graph_pairs_prepared": 45
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.020795399992493913,
+      "graph_seconds_including_preparation": 0.015027499990537763
+    },
+    {
+      "name": "generated_04",
+      "seed_count": 3,
+      "node_count": 10,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 165,
+        "feasible_at_min_n": 12,
+        "best": {
+          "nodes": [
+            "N03",
+            "N08",
+            "N09"
+          ],
+          "availability_risk": "3/70",
+          "loss_risk": "0",
+          "graph_score": "3/70",
+          "own_availability_sum": "3/14"
+        },
+        "min_n": 2,
+        "max_n": 10
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 83,
+        "feasible_seen_at_returned_n": 9,
+        "best": {
+          "nodes": [
+            "N03",
+            "N08",
+            "N09"
+          ],
+          "availability_risk": "3/70",
+          "loss_risk": "0",
+          "graph_score": "3/70",
+          "own_availability_sum": "3/14"
+        },
+        "min_n": 2,
+        "max_n": 10,
+        "starts": 6,
+        "accepted_swaps": 8,
+        "growth_candidates_scored": 78,
+        "graph_pairs_prepared": 45
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.024862400023266673,
+      "graph_seconds_including_preparation": 0.0200370000093244
+    },
+    {
+      "name": "generated_05",
+      "seed_count": 1,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 50,
+        "feasible_at_min_n": 8,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "3/142",
+          "loss_risk": "0",
+          "graph_score": "25/142",
+          "own_availability_sum": "33/71"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 31,
+        "feasible_seen_at_returned_n": 7,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "3/142",
+          "loss_risk": "0",
+          "graph_score": "25/142",
+          "own_availability_sum": "33/71"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 3,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 26,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.006568099983269349,
+      "graph_seconds_including_preparation": 0.006842500006314367
+    },
+    {
+      "name": "generated_05",
+      "seed_count": 3,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 50,
+        "feasible_at_min_n": 8,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "3/142",
+          "loss_risk": "0",
+          "graph_score": "25/142",
+          "own_availability_sum": "33/71"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 33,
+        "feasible_seen_at_returned_n": 7,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "availability_risk": "3/142",
+          "loss_risk": "0",
+          "graph_score": "25/142",
+          "own_availability_sum": "33/71"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 9,
+        "accepted_swaps": 3,
+        "growth_candidates_scored": 78,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.006372100004227832,
+      "graph_seconds_including_preparation": 0.00915789999999106
+    },
+    {
+      "name": "generated_06",
+      "seed_count": 1,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 56,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N02"
+          ],
+          "availability_risk": "5/78",
+          "loss_risk": "1/270",
+          "graph_score": "5/78",
+          "own_availability_sum": "71/156"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 30,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N02"
+          ],
+          "availability_risk": "5/78",
+          "loss_risk": "1/270",
+          "graph_score": "5/78",
+          "own_availability_sum": "71/156"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 2,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 17,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.006833499995991588,
+      "graph_seconds_including_preparation": 0.005835399992065504
+    },
+    {
+      "name": "generated_06",
+      "seed_count": 3,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 56,
+        "feasible_at_min_n": 1,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N02"
+          ],
+          "availability_risk": "5/78",
+          "loss_risk": "1/270",
+          "graph_score": "5/78",
+          "own_availability_sum": "71/156"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 39,
+        "feasible_seen_at_returned_n": 1,
+        "best": {
+          "nodes": [
+            "N00",
+            "N01",
+            "N02"
+          ],
+          "availability_risk": "5/78",
+          "loss_risk": "1/270",
+          "graph_score": "5/78",
+          "own_availability_sum": "71/156"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 6,
+        "accepted_swaps": 5,
+        "growth_candidates_scored": 51,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.006860399997094646,
+      "graph_seconds_including_preparation": 0.00934579997556284
+    },
+    {
+      "name": "generated_07",
+      "seed_count": 1,
+      "node_count": 8,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 84,
+        "feasible_at_min_n": 7,
+        "best": {
+          "nodes": [
+            "N00",
+            "N06",
+            "N07"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/136",
+          "graph_score": "0",
+          "own_availability_sum": "23/126"
+        },
+        "min_n": 2,
+        "max_n": 8
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 29,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N06",
+            "N07"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/136",
+          "graph_score": "0",
+          "own_availability_sum": "23/126"
+        },
+        "min_n": 2,
+        "max_n": 8,
+        "starts": 2,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 20,
+        "graph_pairs_prepared": 28
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.013578800018876791,
+      "graph_seconds_including_preparation": 0.007451500016031787
+    },
+    {
+      "name": "generated_07",
+      "seed_count": 3,
+      "node_count": 8,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 84,
+        "feasible_at_min_n": 7,
+        "best": {
+          "nodes": [
+            "N00",
+            "N06",
+            "N07"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/136",
+          "graph_score": "0",
+          "own_availability_sum": "23/126"
+        },
+        "min_n": 2,
+        "max_n": 8
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 34,
+        "feasible_seen_at_returned_n": 4,
+        "best": {
+          "nodes": [
+            "N00",
+            "N06",
+            "N07"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/136",
+          "graph_score": "0",
+          "own_availability_sum": "23/126"
+        },
+        "min_n": 2,
+        "max_n": 8,
+        "starts": 6,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 60,
+        "graph_pairs_prepared": 28
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.014375200000358745,
+      "graph_seconds_including_preparation": 0.01072530000237748
+    },
+    {
+      "name": "generated_08",
+      "seed_count": 1,
+      "node_count": 9,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 120,
+        "feasible_at_min_n": 7,
+        "best": {
+          "nodes": [
+            "N02",
+            "N06",
+            "N08"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "8/31"
+        },
+        "min_n": 2,
+        "max_n": 9
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 34,
+        "feasible_seen_at_returned_n": 5,
+        "best": {
+          "nodes": [
+            "N02",
+            "N06",
+            "N08"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "8/31"
+        },
+        "min_n": 2,
+        "max_n": 9,
+        "starts": 2,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 23,
+        "graph_pairs_prepared": 36
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.020876200025668368,
+      "graph_seconds_including_preparation": 0.007642900018254295
+    },
+    {
+      "name": "generated_08",
+      "seed_count": 3,
+      "node_count": 9,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 120,
+        "feasible_at_min_n": 7,
+        "best": {
+          "nodes": [
+            "N02",
+            "N06",
+            "N08"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "8/31"
+        },
+        "min_n": 2,
+        "max_n": 9
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 40,
+        "feasible_seen_at_returned_n": 5,
+        "best": {
+          "nodes": [
+            "N02",
+            "N06",
+            "N08"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "0",
+          "graph_score": "0",
+          "own_availability_sum": "8/31"
+        },
+        "min_n": 2,
+        "max_n": 9,
+        "starts": 6,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 69,
+        "graph_pairs_prepared": 36
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.020092799997655675,
+      "graph_seconds_including_preparation": 0.011359700001776218
+    },
+    {
+      "name": "generated_09",
+      "seed_count": 1,
+      "node_count": 10,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 375,
+        "feasible_at_min_n": 91,
+        "best": {
+          "nodes": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "1/110",
+          "loss_risk": "0",
+          "graph_score": "9/55",
+          "own_availability_sum": "31/55"
+        },
+        "min_n": 2,
+        "max_n": 10
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 83,
+        "feasible_seen_at_returned_n": 19,
+        "best": {
+          "nodes": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "1/110",
+          "loss_risk": "0",
+          "graph_score": "9/55",
+          "own_availability_sum": "31/55"
+        },
+        "min_n": 2,
+        "max_n": 10,
+        "starts": 3,
+        "accepted_swaps": 2,
+        "growth_candidates_scored": 50,
+        "graph_pairs_prepared": 45
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.08088819999829866,
+      "graph_seconds_including_preparation": 0.02198109999881126
+    },
+    {
+      "name": "generated_09",
+      "seed_count": 3,
+      "node_count": 10,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 375,
+        "feasible_at_min_n": 91,
+        "best": {
+          "nodes": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "1/110",
+          "loss_risk": "0",
+          "graph_score": "9/55",
+          "own_availability_sum": "31/55"
+        },
+        "min_n": 2,
+        "max_n": 10
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 121,
+        "feasible_seen_at_returned_n": 35,
+        "best": {
+          "nodes": [
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "availability_risk": "1/110",
+          "loss_risk": "0",
+          "graph_score": "9/55",
+          "own_availability_sum": "31/55"
+        },
+        "min_n": 2,
+        "max_n": 10,
+        "starts": 9,
+        "accepted_swaps": 7,
+        "growth_candidates_scored": 150,
+        "graph_pairs_prepared": 45
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.08465289999730885,
+      "graph_seconds_including_preparation": 0.036935499985702336
+    },
+    {
+      "name": "generated_10",
+      "seed_count": 1,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 35,
+        "feasible_at_min_n": 10,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/480",
+          "graph_score": "0",
+          "own_availability_sum": "13/56"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 19,
+        "feasible_seen_at_returned_n": 8,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/480",
+          "graph_score": "0",
+          "own_availability_sum": "13/56"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 2,
+        "accepted_swaps": 0,
+        "growth_candidates_scored": 14,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.005521300015971065,
+      "graph_seconds_including_preparation": 0.004263700015144423
+    },
+    {
+      "name": "generated_10",
+      "seed_count": 3,
+      "node_count": 6,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 35,
+        "feasible_at_min_n": 10,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/480",
+          "graph_score": "0",
+          "own_availability_sum": "13/56"
+        },
+        "min_n": 2,
+        "max_n": 6
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 22,
+        "feasible_seen_at_returned_n": 8,
+        "best": {
+          "nodes": [
+            "N01",
+            "N02",
+            "N04"
+          ],
+          "availability_risk": "0",
+          "loss_risk": "1/480",
+          "graph_score": "0",
+          "own_availability_sum": "13/56"
+        },
+        "min_n": 2,
+        "max_n": 6,
+        "starts": 6,
+        "accepted_swaps": 1,
+        "growth_candidates_scored": 42,
+        "graph_pairs_prepared": 15
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.006022999994456768,
+      "graph_seconds_including_preparation": 0.007340899988776073
+    },
+    {
+      "name": "generated_11",
+      "seed_count": 1,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 91,
+        "feasible_at_min_n": 17,
+        "best": {
+          "nodes": [
+            "N02",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "availability_risk": "1/15",
+          "loss_risk": "0",
+          "graph_score": "31/120",
+          "own_availability_sum": "13/20"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 47,
+        "feasible_seen_at_returned_n": 10,
+        "best": {
+          "nodes": [
+            "N02",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "availability_risk": "1/15",
+          "loss_risk": "0",
+          "graph_score": "31/120",
+          "own_availability_sum": "13/20"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 3,
+        "accepted_swaps": 2,
+        "growth_candidates_scored": 32,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.01854799999273382,
+      "graph_seconds_including_preparation": 0.012378200015518814
+    },
+    {
+      "name": "generated_11",
+      "seed_count": 3,
+      "node_count": 7,
+      "request": {
+        "k": 2,
+        "availability_limit": "0.08",
+        "loss_limit": "0.01"
+      },
+      "exact": {
+        "status": "optimal_in_scope",
+        "checked": 91,
+        "feasible_at_min_n": 17,
+        "best": {
+          "nodes": [
+            "N02",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "availability_risk": "1/15",
+          "loss_risk": "0",
+          "graph_score": "31/120",
+          "own_availability_sum": "13/20"
+        },
+        "min_n": 2,
+        "max_n": 7
+      },
+      "heuristic": {
+        "status": "feasible_found",
+        "checked": 53,
+        "feasible_seen_at_returned_n": 10,
+        "best": {
+          "nodes": [
+            "N02",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "availability_risk": "1/15",
+          "loss_risk": "0",
+          "graph_score": "31/120",
+          "own_availability_sum": "13/20"
+        },
+        "min_n": 2,
+        "max_n": 7,
+        "starts": 9,
+        "accepted_swaps": 7,
+        "growth_candidates_scored": 96,
+        "graph_pairs_prepared": 21
+      },
+      "outcome": "same_optimum",
+      "extra_chunks": 0,
+      "graph_score_gap_same_size": "0",
+      "exact_seconds": 0.017238799977349117,
+      "graph_seconds_including_preparation": 0.022845700004836544
+    }
+  ]
+}
